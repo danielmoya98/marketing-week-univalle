@@ -1,0 +1,19 @@
+---
+// MobileDock.astro — Barra de acción flotante inferior para dispositivos móviles
+---
+<div class="dock night" id="dock">
+  <a class="btn btn--orange" href="/inscribir">Inscribe a tu grupo</a>
+</div>
+
+<script>
+  const dock = document.getElementById('dock');
+  function dockUpd() {
+    if (!dock) return;
+    const y = window.scrollY;
+    const f = document.getElementById('inscripcion')?.getBoundingClientRect();
+    const near = f ? (f.top < window.innerHeight && f.bottom > 0) : false;
+    dock.classList.toggle('is-on', y > 700 && !near);
+  }
+  window.addEventListener('scroll', dockUpd, { passive: true });
+  dockUpd();
+</script>

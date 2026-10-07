@@ -1,0 +1,324 @@
+---
+// LiveScoreboard.astro — Tablero en tiempo real, QR de votación y formulario interactivo
+---
+<section class="sec night" id="marcador">
+  <div class="wrap">
+    <div class="sec-head">
+      <p class="eyebrow">En vivo</p>
+      <h2 class="display">Marcador y votación en tiempo real.</h2>
+      <p class="sec-lead">
+        Cada competencia se evalúa por separado y suma al marcador general según su peso. Los votos del público se reflejan al instante.
+      </p>
+    </div>
+    
+    <div class="live">
+      <!-- Columna Izquierda: Marcador en Vivo + QR de votación -->
+      <div>
+        <div class="card panel">
+          <div class="panel__top">
+            <div class="chips" id="boardChips" role="group" aria-label="Filtrar marcador"></div>
+            <div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap">
+              <span class="tag tag--demo">Datos oficiales</span>
+              <span class="lv"><i class="dot dot--ok"></i>En vivo</span>
+            </div>
+          </div>
+          <ol class="rows" id="boardRows"></ol>
+        </div>
+
+        <div class="card qrrow">
+          <div class="qr__img" id="qrBox" aria-label="Código QR de votación"></div>
+          <div>
+            <h3>QR de votación oficial</h3>
+            <input id="qrUrl" type="text" readonly aria-label="Enlace de votación" />
+            <div class="qr__b">
+              <button class="btn btn--orange btn--sm btn--plain" type="button" id="copyBtn">Copiar enlace</button>
+              <a class="btn btn--ghost btn--sm" href="#voteCard">Abrir formulario</a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Columna Derecha: Tarjeta de Votación del Público -->
+      <div class="card panel" id="voteCard">
+        <div class="vhead">
+          <span class="lv" style="margin-bottom:12px"><i class="dot dot--ok"></i>Votación abierta</span>
+          <h3 id="voteTitle">Carrera de botargas</h3>
+          <p id="voteSub">Total de votos: 0</p>
+        </div>
+        
+        <div class="chips" role="tablist" aria-label="Categoría de votación" id="voteTabs"></div>
+
+        <form id="voteForm" novalidate style="display:grid;gap:18px">
+          <div class="field">
+            <label for="voteEmail">Correo institucional</label>
+            <input class="input" id="voteEmail" type="email" inputmode="email" autocomplete="email" placeholder="tu.nombre@univalle.edu" />
+            <p class="err" id="voteErr" role="alert"></p>
+          </div>
+
+          <fieldset style="border:0;padding:0;margin:0;min-width:0">
+            <legend class="lab" style="font:700 .62rem/1 var(--f-mono);letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-bottom:10px;padding:0">
+              Elige un equipo
+            </legend>
+            <div class="opts" id="voteOpts"></div>
+          </fieldset>
+
+          <div id="voteMsg"></div>
+          <button class="btn" type="submit" id="voteBtn">Votar ahora</button>
+        </form>
+
+        <p class="hint">
+          En el sitio real, cada voto se valida con el correo institucional. Un voto por persona y por categoría.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  declare const QRCode: any;
+
+  const esc = (t: string) => String(t).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c] || c));
+
+  const CATS = [
+    { id: 'ban', tab: 'Enbanderamiento' },
+    { id: 'bot', tab: 'Botargas' },
+    { id: 'sta', tab: 'Stands' }
+  ];
+
+  type TeamScore = {
+    n: string;
+    b: string;
+    s: Record<string, number>;
+  };
+
+  const TEAMS: TeamScore[] = [
+    { n: 'Los Pixelados', b: '014', s: { ban: 42, bot: 54, sta: 68 } },
+    { n: 'Brand Hunters', b: '027', s: { ban: 36, bot: 62, sta: 45 } },
+    { n: 'Los Insights', b: '041', s: { ban: 48, bot: 38, sta: 51 } },
+    { n: 'Grupo Pulso', b: '033', s: { ban: 22, bot: 30, sta: 44 } },
+    { n: 'Mix Creativo', b: '052', s: { ban: 28, bot: 58, sta: 32 } },
+    { n: 'Estrategia Sur', b: '068', s: { ban: 20, bot: 26, sta: 55 } }
+  ];
+
+  const FILT = [{ id: 'gen', n: 'General' }, ...CATS.map(c => ({ id: c.id, n: c.tab }))];
+  let selF = 'gen';
+
+  function calcScore(t: TeamScore, f: string): number {
+    if (f !== 'gen') return t.s[f] ?? 0;
+    return (t.s.ban || 0) + (t.s.bot || 0) + (t.s.sta || 0);
+  }
+
+  function renderBoard() {
+    const chipsEl = document.getElementById('boardChips');
+    const rowsEl = document.getElementById('boardRows');
+    if (!chipsEl || !rowsEl) return;
+
+    chipsEl.innerHTML = FILT.map(f => 
+      `<button type="button" class="chip" data-f="${f.id}" aria-pressed="${f.id === selF}">${esc(f.n)}</button>`
+    ).join('');
+
+    chipsEl.querySelectorAll<HTMLButtonElement>('.chip').forEach(b => {
+      b.addEventListener('click', () => {
+        selF = b.getAttribute('data-f') || 'gen';
+        renderBoard();
+      });
+    });
+
+    const list = TEAMS.map(t => ({ n: t.n, b: t.b, v: calcScore(t, selF) })).sort((a, b) => b.v - a.v);
+
+    rowsEl.innerHTML = list.map((r, i) => `
+      <li class="row">
+        <span class="row__rk">${i + 1}</span>
+        <span class="row__bib">${r.b}</span>
+        <div>
+          <div class="row__n">${esc(r.n)}</div>
+          <div class="track"><i style="width:${Math.min(100, r.v)}%"></i></div>
+        </div>
+        <span class="row__v">${r.v.toFixed(1)}</span>
+      </li>
+    `).join('');
+  }
+
+  renderBoard();
+
+  // ---- Sistema de Votación ----
+  const VCATS = [
+    { id: 'bot', n: 'Carrera de botargas', tab: 'Botargas' },
+    { id: 'sta', n: 'Decoración de stands', tab: 'Stands' },
+    { id: 'ban', n: 'Enbanderamiento', tab: 'Enbanderamiento' }
+  ];
+
+  const VOTES: Record<string, number[]> = {
+    bot: [41, 58, 33, 27, 72, 19],
+    sta: [63, 38, 45, 52, 29, 47],
+    ban: [22, 35, 28, 51, 17, 24]
+  };
+
+  const voted: Record<string, boolean> = {};
+  let selV = 0;
+  let pick = -1;
+  let vEmail = '';
+  const EMAIL_RE = /^[^\s@]+@([a-z0-9-]+\.)?univalle\.edu$/i;
+
+  function renderVote() {
+    const vc = VCATS[selV];
+    const counts = VOTES[vc.id];
+    const total = counts.reduce((a, b) => a + b, 0);
+    const done = !!voted[vc.id];
+
+    const titleEl = document.getElementById('voteTitle');
+    const subEl = document.getElementById('voteSub');
+    const tabsEl = document.getElementById('voteTabs');
+    const optsEl = document.getElementById('voteOpts');
+    const msgEl = document.getElementById('voteMsg');
+    const btnEl = document.getElementById('voteBtn') as HTMLButtonElement | null;
+    const emailEl = document.getElementById('voteEmail') as HTMLInputElement | null;
+
+    if (titleEl) titleEl.textContent = vc.n;
+    if (subEl) subEl.textContent = 'Total de votos: ' + total;
+
+    if (tabsEl) {
+      tabsEl.innerHTML = VCATS.map((c, i) => `
+        <button type="button" class="chip" role="tab" aria-selected="${i === selV}" data-i="${i}">
+          ${esc(c.tab)}
+        </button>
+      `).join('');
+
+      tabsEl.querySelectorAll<HTMLButtonElement>('.chip').forEach(b => {
+        b.addEventListener('click', () => {
+          selV = +(b.getAttribute('data-i') || 0);
+          pick = -1;
+          const errEl = document.getElementById('voteErr');
+          if (errEl) errEl.textContent = '';
+          renderVote();
+        });
+      });
+    }
+
+    if (optsEl) {
+      optsEl.className = 'opts' + (done ? ' is-done' : '');
+      optsEl.innerHTML = TEAMS.map((t, i) => {
+        const p = total ? Math.round(counts[i] * 100 / total) : 0;
+        return `
+          <label class="opt">
+            <input type="radio" name="team" value="${i}" ${pick === i ? 'checked' : ''} ${done ? 'disabled' : ''}>
+            <div>
+              <div class="opt__n">
+                <span>${esc(t.n)}</span>
+                <small>${counts[i]} votos</small>
+              </div>
+              <div class="track"><i style="width:${p}%"></i></div>
+            </div>
+            <span class="opt__p">${p}%</span>
+          </label>
+        `;
+      }).join('');
+
+      optsEl.querySelectorAll<HTMLInputElement>('input[name=team]').forEach(r => {
+        r.addEventListener('change', () => {
+          pick = +r.value;
+          const errEl = document.getElementById('voteErr');
+          if (errEl) errEl.textContent = '';
+        });
+      });
+    }
+
+    if (msgEl) {
+      msgEl.innerHTML = done ? '<p class="msg">Ya registraste tu voto en esta categoría. ¡Gracias por participar!</p>' : '';
+    }
+
+    if (btnEl) {
+      btnEl.disabled = done;
+      btnEl.textContent = done ? 'Voto registrado' : 'Votar ahora';
+    }
+
+    if (emailEl) {
+      emailEl.value = vEmail;
+    }
+  }
+
+  const emailInput = document.getElementById('voteEmail') as HTMLInputElement | null;
+  if (emailInput) {
+    emailInput.addEventListener('input', (e: Event) => {
+      vEmail = (e.target as HTMLInputElement).value;
+      emailInput.removeAttribute('aria-invalid');
+      const errEl = document.getElementById('voteErr');
+      if (errEl) errEl.textContent = '';
+    });
+  }
+
+  const voteForm = document.getElementById('voteForm');
+  if (voteForm) {
+    voteForm.addEventListener('submit', (e: Event) => {
+      e.preventDefault();
+      const vc = VCATS[selV];
+      const em = document.getElementById('voteEmail') as HTMLInputElement | null;
+      const err = document.getElementById('voteErr');
+      if (!em || !err) return;
+
+      if (voted[vc.id]) return;
+
+      if (!EMAIL_RE.test(em.value.trim())) {
+        em.setAttribute('aria-invalid', 'true');
+        err.textContent = 'Usa tu correo institucional terminado en @univalle.edu.';
+        em.focus();
+        return;
+      }
+
+      if (pick < 0) {
+        err.textContent = 'Elige un equipo antes de votar.';
+        return;
+      }
+
+      VOTES[vc.id][pick] += 1;
+      voted[vc.id] = true;
+      renderVote();
+    });
+  }
+
+  renderVote();
+
+  // ---- Generación de QR oficial y Copiar Enlace ----
+  const qrBox = document.getElementById('qrBox');
+  const qrInput = document.getElementById('qrUrl') as HTMLInputElement | null;
+  const pageUrl = window.location.href.split('#')[0];
+
+  if (qrInput) qrInput.value = pageUrl;
+
+  try {
+    if (typeof QRCode !== 'undefined' && qrBox) {
+      new QRCode(qrBox, {
+        text: pageUrl,
+        width: 100,
+        height: 100,
+        colorDark: '#111111',
+        colorLight: '#ffffff',
+        correctLevel: QRCode.CorrectLevel.M
+      });
+    } else if (qrBox) {
+      qrBox.textContent = 'QR no disponible';
+    }
+  } catch (x) {
+    if (qrBox) qrBox.textContent = 'QR no disponible';
+  }
+
+  const copyBtn = document.getElementById('copyBtn');
+  if (copyBtn && qrInput) {
+    copyBtn.addEventListener('click', () => {
+      qrInput.select();
+      const ok = () => {
+        copyBtn.textContent = '¡Copiado!';
+        setTimeout(() => { copyBtn.textContent = 'Copiar enlace'; }, 1800);
+      };
+      const fail = () => {
+        copyBtn.textContent = 'Copia con Ctrl+C';
+        setTimeout(() => { copyBtn.textContent = 'Copiar enlace'; }, 2400);
+      };
+      try {
+        navigator.clipboard.writeText(qrInput.value).then(ok, fail);
+      } catch (e) {
+        fail();
+      }
+    });
+  }
+</script>

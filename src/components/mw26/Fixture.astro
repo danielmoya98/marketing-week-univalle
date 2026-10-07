@@ -1,0 +1,196 @@
+---
+// Fixture.astro — Cronograma semanal interactivo con filtros por zona
+---
+<section class="sec fixture-section-relative" id="programa">
+  <!-- Patrón técnico de retícula de micropuntos deportivos -->
+  <div class="fixture-bg-pattern-grid" aria-hidden="true"></div>
+  <div class="wrap" style="position:relative; z-index:2;">
+    <div class="sec-head">
+      <p class="eyebrow">Fixture semanal</p>
+      <h2 class="display">Una semana, cuatro terrenos de juego.</h2>
+      <p class="sec-lead">
+        Marketing Week reúne a los grupos de la carrera para poner en práctica identidad de marca, trabajo en equipo y pensamiento estratégico frente a público real. Filtra por zona y sigue la próxima actividad.
+      </p>
+    </div>
+    <div class="fix">
+      <div>
+        <div class="fix__filters" id="fixFilters" role="group" aria-label="Filtrar por zona"></div>
+        <div id="fixList"></div>
+      </div>
+      <aside class="side">
+        <div class="side__img">
+          <img src="/img/campus.jpg" width="768" height="508" alt="Campus Central con el patio, los edificios y el galpón principal" loading="lazy" />
+        </div>
+        <span class="eyebrow">Punto de encuentro</span>
+        <b>Campus Central · Patio y E-Zone</b>
+        <p>Todas las actividades se concentran en las zonas principales del campus universitario, con acceso libre a estudiantes y docentes.</p>
+      </aside>
+    </div>
+  </div>
+</section>
+
+<style>
+  .fixture-section-relative {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .fixture-bg-pattern-grid {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: 1;
+    opacity: 0.045;
+    background-image: radial-gradient(rgba(13, 14, 16, 0.7) 1.5px, transparent 1.5px);
+    background-size: 26px 26px;
+  }
+
+  :root[data-theme="dark"] .fixture-bg-pattern-grid {
+    opacity: 0.06;
+    background-image: radial-gradient(rgba(244, 243, 239, 0.7) 1.5px, transparent 1.5px);
+  }
+</style>
+
+<script>
+  const TZ = '-04:00';
+  const esc = (t: string) => String(t).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c] || c));
+
+  const DAYS = [
+    {
+      abbr: 'LUN', name: 'Lunes', d: '2026-10-05',
+      acts: [
+        { s: '08:00', e: '10:30', t: 'Inauguración', p: 'Patio', g: 'Apertura', x: 'Presentación de grupos, izada de banderas y arranque oficial de la semana.' },
+        { s: '10:30', e: '12:00', t: 'Enbanderamiento', p: 'Patio', g: 'Enbanderamiento', x: 'Cada grupo presenta su bandera y la planta frente a todo el campus.' }
+      ]
+    },
+    {
+      abbr: 'MAR', name: 'Martes', d: '2026-10-06',
+      acts: [
+        { s: '08:30', e: '12:30', t: 'Armado de stands', p: 'Patio', g: 'Stands', x: 'Montaje y decoración de los stands antes de abrir al público.' },
+        { s: '15:00', e: '17:00', t: 'Feria de stands', p: 'Patio', g: 'Stands', x: 'Stands abiertos al público, con activaciones y votación desde el móvil.' }
+      ]
+    },
+    {
+      abbr: 'MIÉ', name: 'Miércoles', d: '2026-10-07',
+      acts: [
+        { s: '08:30', e: '12:00', t: 'Preparación y pruebas de botargas', p: 'Patio', g: 'Botargas', x: 'Inspección técnica de disfraces, prueba de circuito y animación previa.' },
+        { s: '15:00', e: '17:00', t: 'Carrera de botargas', p: 'Patio', g: 'Botargas', x: 'Circuito de obstáculos en el Patio con la botarga de cada grupo.' }
+      ]
+    },
+    {
+      abbr: 'JUE', name: 'Jueves', d: '2026-10-08',
+      acts: [
+        { s: '10:30', e: '12:00', t: 'Premiación', p: 'E-Zone', g: 'Cierre', x: 'Cierre oficial de la semana y entrega de premios en la E-Zone.' }
+      ]
+    }
+  ];
+
+  type ActItem = {
+    s: string; e: string; t: string; p: string; g: string; x: string;
+    start: Date; end: Date;
+  };
+
+  const parsedDays = DAYS.map(day => ({
+    ...day,
+    acts: day.acts.map(a => ({
+      ...a,
+      start: new Date(`${day.d}T${a.s}:00${TZ}`),
+      end: new Date(`${day.d}T${a.e}:00${TZ}`)
+    }))
+  }));
+
+  const MES = ['ENE','FEB','MAR','ABR','MAY','JUN','JUL','AGO','SEP','OCT','NOV','DIC'];
+  const todayLP = new Date(Date.now() - 4 * 3600e3).toISOString().slice(0, 10);
+  let zoneF = 'all';
+
+  function getNext(): { a: ActItem | null; live: boolean } {
+    const now = new Date();
+    let cur: ActItem | null = null;
+    let nxt: ActItem | null = null;
+
+    for (let i = 0; i < parsedDays.length && !cur; i++) {
+      for (let j = 0; j < parsedDays[i].acts.length; j++) {
+        const a = parsedDays[i].acts[j];
+        if (now >= a.start && now < a.end) {
+          cur = a;
+          break;
+        }
+      }
+    }
+
+    if (!cur) {
+      for (let i = 0; i < parsedDays.length && !nxt; i++) {
+        for (let j = 0; j < parsedDays[i].acts.length; j++) {
+          const a = parsedDays[i].acts[j];
+          if (a.start > now) {
+            nxt = a;
+            break;
+          }
+        }
+      }
+    }
+
+    return { a: cur || nxt, live: !!cur };
+  }
+
+  function renderFix() {
+    const fl = [['all', 'Todas'], ['Patio', 'Patio'], ['E-Zone', 'E-Zone']];
+    const filterContainer = document.getElementById('fixFilters');
+    const listContainer = document.getElementById('fixList');
+    if (!filterContainer || !listContainer) return;
+
+    filterContainer.innerHTML = fl.map(f => 
+      `<button type="button" class="chip" data-f="${f[0]}" aria-pressed="${f[0] === zoneF}">${f[1]}</button>`
+    ).join('');
+
+    filterContainer.querySelectorAll<HTMLButtonElement>('.chip').forEach(b => {
+      b.addEventListener('click', () => {
+        zoneF = b.getAttribute('data-f') || 'all';
+        renderFix();
+        const t = filterContainer.querySelector<HTMLButtonElement>(`.chip[data-f="${zoneF}"]`);
+        if (t) t.focus();
+      });
+    });
+
+    const n = getNext();
+    listContainer.innerHTML = parsedDays.map(day => {
+      const acts = day.acts.filter(a => zoneF === 'all' || a.p === zoneF);
+      if (!acts.length) return '';
+      const st = day.d === todayLP 
+        ? '<span class="tag tag--fill">Hoy</span>' 
+        : (day.d < todayLP ? '<span class="tag">Finalizó</span>' : '');
+      const mm = MES[+day.d.slice(5, 7) - 1];
+
+      return `
+        <div class="day">
+          <div class="day__d">
+            <b>${day.d.slice(8)}</b>
+            <span>${day.abbr} · ${mm}</span>
+            ${st}
+          </div>
+          <div>
+            ${acts.map(a => {
+              const isN = n.a === a;
+              return `
+                <div class="fx${isN ? ' is-next' : ''}">
+                  <div class="fx__t">${a.s}<span>${a.e}</span></div>
+                  <div class="fx__b">
+                    <div class="fx__top">
+                      <h4>${esc(a.t)}</h4>
+                      ${isN ? `<span class="tag tag--fill">${n.live ? 'En curso' : 'Siguiente'}</span>` : ''}
+                      <span class="tag">${esc(a.g)}</span>
+                    </div>
+                    <p>${esc(a.x)}</p>
+                    <span class="fx__z">● ${esc(a.p)}</span>
+                  </div>
+                </div>
+              `;
+            }).join('')}
+          </div>
+        </div>
+      `;
+    }).join('');
+  }
+
+  renderFix();
+</script>

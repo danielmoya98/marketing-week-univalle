@@ -1,0 +1,85 @@
+---
+// Evaluacion.astro — Bento grid con gráfica de ponderación 80/20 y comité evaluador
+---
+<section class="sec" id="jurado">
+  <div class="wrap">
+    <div class="sec-head">
+      <p class="eyebrow">Evaluación</p>
+      <h2 class="display">Cómo se decide un ganador.</h2>
+      <p class="sec-lead">
+        El comité evalúa con criterios claros y el público aporta su voto. Así el resultado no depende de una sola mirada.
+      </p>
+    </div>
+
+    <div class="bento">
+      <!-- Tarjeta 1: Proporción 80/20 -->
+      <div class="card tile tile--ring">
+        <h3>Comité y público</h3>
+        <div class="ring" role="img" aria-label="80 por ciento comité, 20 por ciento voto del público">
+          <b>80/20</b>
+        </div>
+        <div class="legend">
+          <span><i style="background:var(--orange)"></i>Comité 80%</span>
+          <span><i style="background:var(--ink)"></i>Voto del público 20%</span>
+        </div>
+        <p>
+          El voto de la comunidad estudiantil suma directamente en Enbanderamiento, Carrera de botargas y Decoración de stands a través del escaneo de QR.
+        </p>
+      </div>
+
+      <!-- Tarjeta 2: Criterios Globales -->
+      <div class="card tile tile--crit">
+        <h3>Criterios del comité</h3>
+        <div class="crit" id="critGlobal" style="border-top:0;padding-top:0">
+          <div class="crit__r">
+            <span>Creatividad</span>
+            <div class="track"><i style="width:90%"></i></div>
+            <b>30%</b>
+          </div>
+          <div class="crit__r">
+            <span>Coherencia de marca</span>
+            <div class="track"><i style="width:75%"></i></div>
+            <b>25%</b>
+          </div>
+          <div class="crit__r">
+            <span>Ejecución</span>
+            <div class="track"><i style="width:60%"></i></div>
+            <b>20%</b>
+          </div>
+          <div class="crit__r">
+            <span>Trabajo en equipo</span>
+            <div class="track"><i style="width:45%"></i></div>
+            <b>15%</b>
+          </div>
+          <div class="crit__r">
+            <span>Impacto en el público</span>
+            <div class="track"><i style="width:30%"></i></div>
+            <b>10%</b>
+          </div>
+        </div>
+      </div>
+
+      <!-- Jurados / Comité -->
+      <div class="card tile tile--j">
+        <div class="avatar" aria-hidden="true">CA</div>
+        <h3>Comité académico</h3>
+        <p>Docentes de la carrera de Marketing que evalúan estrategia, coherencia de marca y ejecución.</p>
+        <span class="tag tag--demo">Nombres por confirmar</span>
+      </div>
+
+      <div class="card tile tile--j">
+        <div class="avatar" aria-hidden="true">PI</div>
+        <h3>Profesionales invitados</h3>
+        <p>Personas del mundo de la marca y la comunicación que miran los proyectos con ojos de mercado.</p>
+        <span class="tag tag--demo">Nombres por confirmar</span>
+      </div>
+
+      <div class="card tile tile--j">
+        <div class="avatar" aria-hidden="true">VE</div>
+        <h3>Voz estudiantil</h3>
+        <p>Una representación de estudiantes que cuida que las reglas se apliquen igual para todos los grupos.</p>
+        <span class="tag tag--demo">Nombres por confirmar</span>
+      </div>
+    </div>
+  </div>
+</section>

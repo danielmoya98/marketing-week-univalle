@@ -1,0 +1,14 @@
+---
+// MarqueeBand.astro — Banda diagonal infinita con las 4 competencias
+---
+<div class="band" aria-hidden="true">
+  <div class="band__track" id="bandTrack">
+    {Array.from({ length: 6 }).map(() => (
+      <>
+        <span>Enbanderamiento<i></i></span>
+        <span>Carrera de botargas<i></i></span>
+        <span>Decoración de stands<i></i></span>
+      </>
+    ))}
+  </div>
+</div>

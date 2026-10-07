@@ -1,0 +1,431 @@
+---
+import Layout from '../layouts/Layout.astro';
+import QRCode from 'qrcode';
+
+// 1. Obtener la URL Base desde la variable de entorno .env (PUBLIC_SITE_URL)
+const envSiteUrl = import.meta.env.PUBLIC_SITE_URL || 'http://localhost:4321';
+const initialVoteUrl = `${envSiteUrl.replace(/\/$/, '')}/votar`;
+
+// 2. Generar el código QR en el servidor como imagen Data URL para que NUNCA aparezca en blanco al imprimir
+const serverQrDataUrl = await QRCode.toDataURL(initialVoteUrl, {
+  width: 600,
+  margin: 2,
+  color: { dark: '#101010', light: '#FFFFFF' }
+});
+---
+
+<Layout title="Afiche Oficial de Votación QR — Marketing Week Univalle">
+  <div class="poster-page">
+    <!-- Barra superior de control (se oculta automáticamente al imprimir con Ctrl + P) -->
+    <header class="no-print poster-toolbar">
+      <div class="wrap toolbar-inner">
+        <a href="/#votacion" class="btn btn-ghost" style="padding: 8px 16px; min-height: 40px; font-size: 12px;">
+          &larr; Volver a la Landing
+        </a>
+
+        <div class="toolbar-controls">
+          <label class="toolbar-label mono">
+            Dominio / URL Base (desde .env):
+            <input 
+              type="text" 
+              id="posterBaseUrlInput" 
+              class="toolbar-input" 
+              value={envSiteUrl}
+              placeholder="https://tudominio.com"
+            >
+          </label>
+
+          <button type="button" id="downloadPosterPngBtn" class="btn btn-ghost" style="padding: 8px 16px; min-height: 40px; font-size: 12px;">
+            📥 Descargar QR (PNG)
+          </button>
+
+          <button type="button" id="printPosterBtn" class="btn btn-primary" style="padding: 8px 20px; min-height: 40px; font-size: 12px;">
+            🖨️ Imprimir Afiche
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <!-- AFICHE LISTO PARA IMPRIMIR (TAMAÑO A4 / CARTA) -->
+    <main class="poster-wrap">
+      <div class="poster-card" id="printablePoster">
+        <div class="poster-top-decor">
+          <span class="mono">UNIVALLE · MARKETING WEEK 2026</span>
+          <span class="mono">05 — 09 OCTUBRE</span>
+        </div>
+
+        <div class="poster-brand">
+          <h1>Marketing <span>Week</span></h1>
+          <div class="poster-tagline mono">INNOVACIÓN · CREATIVIDAD · COMPETENCIA</div>
+        </div>
+
+        <div class="poster-badge">
+          VOTACIÓN GENERAL OFICIAL
+        </div>
+
+        <div class="poster-qr-container">
+          <div class="poster-qr-frame">
+            <!-- Usamos una etiqueta <img> con DataURL para que sea 100% visible en pantalla e impresión -->
+            <img 
+              id="posterQrImg" 
+              src={serverQrDataUrl} 
+              alt="Código QR Oficial de Votación" 
+              width="260" 
+              height="260"
+            />
+          </div>
+          <div class="poster-scan-text">
+            <span>👆 ESCANEA CON LA CÁMARA DE TU CELULAR</span>
+          </div>
+        </div>
+
+        <div class="poster-instructions">
+          <div class="instruction-step">
+            <span class="instruction-num">1</span>
+            <span>Apunta con la cámara de tu celular al código QR</span>
+          </div>
+          <div class="instruction-step">
+            <span class="instruction-num">2</span>
+            <span>Ingresa tu correo institucional <b>@est.univalle.edu</b> o <b>@univalle.edu</b></span>
+          </div>
+          <div class="instruction-step">
+            <span class="instruction-num">3</span>
+            <span>Elige a tus grupos favoritos (1 voto por cada categoría)</span>
+          </div>
+        </div>
+
+        <div class="poster-footer">
+          <p class="mono" id="posterUrlDisplay">{initialVoteUrl}</p>
+          <small>El marcador se actualiza en vivo en las pantallas gigantes del campus central.</small>
+        </div>
+      </div>
+    </main>
+  </div>
+</Layout>
+
+<style>
+  .poster-page {
+    min-height: 100vh;
+    background: var(--paper);
+    padding-bottom: 60px;
+  }
+
+  .poster-toolbar {
+    background: var(--white);
+    border-bottom: 3px solid var(--ink);
+    padding: 14px 0;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+
+  .toolbar-inner {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+
+  .toolbar-controls {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+
+  .toolbar-label {
+    font-size: 11px;
+    text-transform: uppercase;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .toolbar-input {
+    border: 2px solid var(--ink);
+    border-radius: 8px;
+    padding: 6px 10px;
+    font-family: 'Space Mono', monospace;
+    font-size: 12px;
+    background: var(--white);
+    color: var(--ink);
+    min-width: 240px;
+  }
+
+  .poster-wrap {
+    display: flex;
+    justify-content: center;
+    padding: 40px 20px;
+  }
+
+  /* TARJETA DEL AFICHE FORMATO IMPRESIÓN */
+  .poster-card {
+    background: var(--white);
+    border: 4px solid var(--ink);
+    border-radius: 20px;
+    width: 100%;
+    max-width: 520px;
+    padding: 40px 36px;
+    box-shadow: 12px 12px 0 0 var(--ink);
+    text-align: center;
+    position: relative;
+    box-sizing: border-box;
+  }
+
+  .poster-top-decor {
+    display: flex;
+    justify-content: space-between;
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    color: var(--ink);
+    opacity: 0.7;
+    border-bottom: 2px solid var(--ink);
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+  }
+
+  .poster-brand h1 {
+    font-size: 46px;
+    margin: 0;
+    line-height: 1;
+    color: var(--ink);
+  }
+
+  .poster-brand h1 span {
+    color: var(--orange-deep);
+  }
+
+  .poster-tagline {
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    color: var(--ink);
+    margin-top: 8px;
+    opacity: 0.8;
+  }
+
+  .poster-badge {
+    display: inline-block;
+    background: var(--orange);
+    color: var(--white);
+    font-family: 'Anton', sans-serif;
+    font-size: 16px;
+    letter-spacing: 0.05em;
+    padding: 8px 20px;
+    border: 2.5px solid var(--ink);
+    border-radius: 999px;
+    margin: 20px 0 24px;
+    box-shadow: 4px 4px 0 0 var(--ink);
+  }
+
+  .poster-qr-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 0 auto 24px;
+  }
+
+  .poster-qr-frame {
+    background: var(--white);
+    border: 3.5px solid var(--ink);
+    border-radius: 16px;
+    padding: 14px;
+    display: inline-block;
+    box-shadow: 6px 6px 0 0 var(--ink);
+    line-height: 0;
+  }
+
+  .poster-qr-frame img {
+    display: block !important;
+    width: 250px !important;
+    height: 250px !important;
+    image-rendering: pixelated;
+  }
+
+  .poster-scan-text {
+    margin-top: 14px;
+    font-family: 'Space Mono', monospace;
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--ink);
+  }
+
+  .poster-instructions {
+    border-top: 2px dashed var(--line);
+    border-bottom: 2px dashed var(--line);
+    padding: 18px 0;
+    margin: 20px 0;
+    text-align: left;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .instruction-step {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 13.5px;
+  }
+
+  .instruction-num {
+    background: var(--ink);
+    color: var(--white);
+    font-family: 'Anton', sans-serif;
+    font-size: 14px;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex: 0 0 24px;
+  }
+
+  .poster-footer {
+    margin-top: 16px;
+  }
+
+  .poster-footer p {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--orange-deep);
+    margin: 0 0 4px;
+    word-break: break-all;
+  }
+
+  .poster-footer small {
+    font-size: 11px;
+    color: var(--ink);
+    opacity: 0.65;
+  }
+
+  /* REGLAS PARA IMPRESIÓN LIMPIA (CTRL + P) */
+  @media print {
+    .no-print {
+      display: none !important;
+    }
+
+    body, .poster-page {
+      background: white !important;
+      padding: 0 !important;
+      margin: 0 !important;
+    }
+
+    .poster-wrap {
+      padding: 0 !important;
+      margin: 0 !important;
+      width: 100% !important;
+    }
+
+    .poster-card {
+      border: 3px solid black !important;
+      box-shadow: none !important;
+      border-radius: 0 !important;
+      max-width: 100% !important;
+      width: 100% !important;
+      padding: 24px !important;
+      page-break-inside: avoid;
+    }
+
+    .poster-qr-frame {
+      box-shadow: none !important;
+    }
+
+    .poster-qr-frame img {
+      width: 280px !important;
+      height: 280px !important;
+    }
+  }
+</style>
+
+<script>
+  import QRCode from 'qrcode';
+  import { supabase, isConfigured } from '../lib/supabase.js';
+
+  const urlParams = new URLSearchParams(window.location.search);
+  const targetEquipoId = urlParams.get('equipo') || urlParams.get('grupo');
+
+  const baseUrlInput = document.getElementById('posterBaseUrlInput') as HTMLInputElement;
+  const posterQrImg = document.getElementById('posterQrImg') as HTMLImageElement;
+  const posterUrlDisplay = document.getElementById('posterUrlDisplay');
+  const printBtn = document.getElementById('printPosterBtn');
+  const downloadPngBtn = document.getElementById('downloadPosterPngBtn');
+  const posterBadge = document.querySelector('.poster-badge') as HTMLElement;
+
+  let currentTeamName = '';
+
+  // Actualizar QR si el usuario cambia el input de Dominio / URL
+  async function updatePosterQR() {
+    const baseUrl = baseUrlInput?.value.trim().replace(/\/$/, '') || window.location.origin;
+    const targetUrl = targetEquipoId 
+      ? `${baseUrl}/votar?equipo=${targetEquipoId}`
+      : `${baseUrl}/votar`;
+
+    try {
+      const dataUrl = await QRCode.toDataURL(targetUrl, {
+        width: 600,
+        margin: 2,
+        color: { dark: '#101010', light: '#FFFFFF' }
+      });
+
+      if (posterQrImg) {
+        posterQrImg.src = dataUrl;
+      }
+      if (posterUrlDisplay) {
+        posterUrlDisplay.textContent = targetUrl;
+      }
+    } catch (err) {
+      console.error('Error generando QR:', err);
+    }
+  }
+
+  // Si viene con equipo, obtener nombre del equipo
+  async function checkTargetTeam() {
+    if (!targetEquipoId) return;
+
+    if (isConfigured && supabase) {
+      try {
+        const { data: grupo } = await supabase
+          .from('grupos')
+          .select('nombre')
+          .eq('id', targetEquipoId)
+          .single();
+
+        if (grupo) {
+          currentTeamName = grupo.nombre;
+          if (posterBadge) {
+            posterBadge.textContent = `VOTACIÓN OFICIAL — EQUIPO: ${grupo.nombre.toUpperCase()}`;
+          }
+        }
+      } catch (e) {
+        console.error(e);
+      }
+    }
+  }
+
+  baseUrlInput?.addEventListener('input', updatePosterQR);
+
+  // Imprimir afiche (abre la ventana de impresión nativa)
+  printBtn?.addEventListener('click', () => {
+    window.print();
+  });
+
+  // Descargar imagen PNG del QR en alta resolución
+  downloadPngBtn?.addEventListener('click', () => {
+    if (!posterQrImg) return;
+    const link = document.createElement('a');
+    link.download = currentTeamName 
+      ? `QR-${currentTeamName.replace(/\s+/g, '_')}.png`
+      : `QR-MarketingWeek-VotacionGeneral.png`;
+    link.href = posterQrImg.src;
+    link.click();
+  });
+
+  async function init() {
+    await checkTargetTeam();
+    await updatePosterQR();
+  }
+
+  init();
+</script>

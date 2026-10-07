@@ -1,0 +1,119 @@
+---
+// Premios.astro — Podio oficial y desglose de premios por categoría
+---
+<section class="sec on-orange premios-section-relative" id="premios">
+  <!-- Patrón retro de estrellitas rubberhose y destellos de campeonato -->
+  <div class="premios-bg-pattern-stars" aria-hidden="true"></div>
+  <div class="wrap" style="position:relative; z-index:2;">
+    <div class="prem">
+      <div class="sec-head">
+        <p class="eyebrow">Premiación</p>
+        <h2 class="display">Lo que se lleva el campeón.</h2>
+        <p class="sec-lead">
+          El jueves 08, en la E-Zone, se entregan los premios por competencia y el título de campeón general. El detalle de cada premio se comunicará por los canales oficiales de la carrera.
+        </p>
+        <div>
+          <a class="btn" href="#programa">Ver horario de premiación</a>
+        </div>
+      </div>
+
+      <!-- Podio Deportivo con Marki Valle Campeón en el 1° Lugar -->
+      <div class="podium" role="img" aria-label="Podio con primer, segundo y tercer lugar">
+        <div class="pod pod--2" style="--pod-delay: 0.15s">
+          <b>2°</b>
+          <span>Subcampeón</span>
+        </div>
+
+        <div class="pod pod--1" style="--pod-delay: 0s">
+          <b>1°</b>
+          <span>Campeón general</span>
+        </div>
+
+        <div class="pod pod--3" style="--pod-delay: 0.3s">
+          <b>3°</b>
+          <span>Tercer puesto</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Lista de Reconocimientos -->
+    <div class="awards">
+      <div class="aw">
+        <span class="mono">Enbanderamiento</span>
+        <h3>Mejor bandera</h3>
+        <p>Identidad visual más coherente durante toda la semana.</p>
+      </div>
+      <div class="aw">
+        <span class="mono">Botargas</span>
+        <h3>Mejor botarga</h3>
+        <p>Creatividad del disfraz, tiempo en el circuito y animación del público.</p>
+      </div>
+      <div class="aw">
+        <span class="mono">Stands</span>
+        <h3>Mejor stand</h3>
+        <p>Diseño, activación con el público y propuesta de marca.</p>
+      </div>
+      <div class="aw">
+        <span class="mono">Votación en vivo</span>
+        <h3>Premio del público</h3>
+        <p>El equipo con más votos de la comunidad universitaria.</p>
+      </div>
+      <div class="aw">
+        <span class="mono">Marcador general</span>
+        <h3>Campeón general</h3>
+        <p>Mayor puntaje acumulado en todas las competencias.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .premios-section-relative {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .premios-bg-pattern-stars {
+    position: absolute;
+    inset: -60px;
+    pointer-events: none;
+    z-index: 1;
+    opacity: 0.055;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120' viewBox='0 0 120 120'%3E%3Cpath d='M30 14 L33 26 L45 29 L33 32 L30 44 L27 32 L15 29 L27 26 Z' fill='%230D0E10'/%3E%3Cpath d='M90 74 L92 82 L100 84 L92 86 L90 94 L88 86 L80 84 L88 82 Z' fill='%230D0E10'/%3E%3Ccircle cx='85' cy='25' r='2' fill='%230D0E10'/%3E%3Ccircle cx='35' cy='95' r='2' fill='%230D0E10'/%3E%3Cpath d='M60 55 L61.5 58.5 L65 60 L61.5 61.5 L60 65 L58.5 61.5 L55 60 L58.5 58.5 Z' fill='%230D0E10'/%3E%3C/svg%3E");
+    background-size: 110px 110px;
+    animation: starsDrift 110s linear infinite;
+    will-change: transform;
+  }
+
+  @keyframes starsDrift {
+    0% { transform: translate3d(0, 0, 0); }
+    100% { transform: translate3d(-110px, -110px, 0); }
+  }
+</style>
+
+<script>
+  function initPodiumAnimation() {
+    const podium = document.querySelector('.podium');
+    if (!podium) return;
+
+    const observer = new IntersectionObserver(
+      (entries, obs) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            podium.classList.add('is-visible');
+            obs.unobserve(entry.target);
+          }
+        });
+      },
+      { threshold: 0.25 }
+    );
+
+    observer.observe(podium);
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initPodiumAnimation);
+  } else {
+    initPodiumAnimation();
+  }
+</script>

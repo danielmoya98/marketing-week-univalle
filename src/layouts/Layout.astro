@@ -1,0 +1,128 @@
+---
+import '../styles/global.css';
+
+interface Props {
+  title?: string;
+  description?: string;
+}
+
+const { 
+  title = "Marketing Week Univalle — 2026", 
+  description = "Innovación, creatividad y competencia. Cinco días de identidad y estrategia en Univalle." 
+} = Astro.props;
+---
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{title}</title>
+  <meta name="description" content={description}>
+  <link rel="icon" type="image/png" href="/assets/img/mascot-peace.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Anton&family=Space+Mono:wght@400;700&family=Work+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+  <slot />
+
+  <script>
+    // ---- Ripple effect on buttons ----
+    function attachRipple(el: HTMLElement) {
+      el.addEventListener('click', function(this: HTMLElement, e: MouseEvent) {
+        const rect = this.getBoundingClientRect();
+        const ripple = document.createElement('span');
+        const size = Math.max(rect.width, rect.height) * 1.2;
+        ripple.className = 'ripple';
+        ripple.style.width = ripple.style.height = size + 'px';
+        ripple.style.left = (e.clientX - rect.left - size/2) + 'px';
+        ripple.style.top = (e.clientY - rect.top - size/2) + 'px';
+        this.appendChild(ripple);
+        setTimeout(() => ripple.remove(), 600);
+      });
+    }
+    document.querySelectorAll<HTMLElement>('.btn, .tab-btn').forEach(attachRipple);
+
+    // ---- Scroll reveal with IntersectionObserver ----
+    const revealEls = document.querySelectorAll('.reveal');
+    if ('IntersectionObserver' in window) {
+      const io = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('in-view');
+            io.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.15, rootMargin: '0px 0px -40px 0px' });
+      revealEls.forEach(el => io.observe(el));
+    } else {
+      revealEls.forEach(el => el.classList.add('in-view'));
+    }
+
+    // ---- 1. Botones Magnéticos (Magnetic Cursor Pull) ----
+    const magneticBtns = document.querySelectorAll<HTMLElement>('.btn-magnetic, .btn-primary');
+    magneticBtns.forEach(btn => {
+      btn.addEventListener('mousemove', (e) => {
+        const rect = btn.getBoundingClientRect();
+        const x = e.clientX - (rect.left + rect.width / 2);
+        const y = e.clientY - (rect.top + rect.height / 2);
+        btn.style.transform = `translate(${x * 0.22}px, ${y * 0.22}px)`;
+      });
+      btn.addEventListener('mouseleave', () => {
+        btn.style.transform = 'translate(0px, 0px)';
+      });
+    });
+
+    // ---- 2. Foil Shimmer Holográfico en Tarjetas (.foil-card) ----
+    const foilCards = document.querySelectorAll<HTMLElement>('.foil-card');
+    foilCards.forEach(card => {
+      card.addEventListener('mousemove', (e) => {
+        const rect = card.getBoundingClientRect();
+        const x = ((e.clientX - rect.left) / rect.width) * 100;
+        const y = ((e.clientY - rect.top) / rect.height) * 100;
+        card.style.setProperty('--foil-x', `${x}%`);
+        card.style.setProperty('--foil-y', `${y}%`);
+
+        // Sutil inclinación 3D
+        const px = (e.clientX - rect.left) / rect.width - 0.5;
+        const py = (e.clientY - rect.top) / rect.height - 0.5;
+        card.style.transform = `perspective(800px) rotateY(${px * 8}deg) rotateX(${-py * 8}deg) translateY(-4px)`;
+      });
+      card.addEventListener('mouseleave', () => {
+        card.style.transform = 'perspective(800px) rotateY(0deg) rotateX(0deg) translateY(0px)';
+      });
+    });
+
+    // ---- 3. Aceleración Dinámica de la Marquesina con Scroll ----
+    let lastScrollY = window.scrollY;
+    let marqueeVelocity = 1;
+    let ticking = false;
+    const marqueeTracks = document.querySelectorAll<HTMLElement>('.marquee-track');
+
+    window.addEventListener('scroll', () => {
+      if (!ticking) {
+        window.requestAnimationFrame(() => {
+          const delta = Math.abs(window.scrollY - lastScrollY);
+          lastScrollY = window.scrollY;
+          // Si el usuario scrollea rápido, aceleramos temporalmente
+          marqueeVelocity = Math.min(4.5, 1 + delta * 0.04);
+          marqueeTracks.forEach(track => {
+            track.style.animationDuration = `${38 / marqueeVelocity}s`;
+          });
+
+          // Desacelerar suavemente tras detener el scroll
+          setTimeout(() => {
+            marqueeTracks.forEach(track => {
+              track.style.animationDuration = '38s';
+            });
+          }, 350);
+
+          ticking = false;
+        });
+        ticking = true;
+      }
+    }, { passive: true });
+  </script>
+</body>
+</html>

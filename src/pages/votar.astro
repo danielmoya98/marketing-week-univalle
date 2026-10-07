@@ -1,0 +1,684 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout title="Votación Oficial — Marketing Week Univalle">
+  <div class="vote-page">
+    <header class="vote-header">
+      <div class="wrap">
+        <a href="/" class="brand-link">
+          <div class="brand">Marketing <span>Week</span></div>
+        </a>
+        <span class="live-pill"><span class="pulse"></span> Votación Activa</span>
+      </div>
+    </header>
+
+    <main class="vote-main wrap">
+      <div class="vote-card">
+        <!-- Banner cuando se vota por QR personalizado de un equipo específico -->
+        <div id="teamCustomBanner" class="team-custom-banner" style="display: none;">
+          <div class="team-banner-tag mono">VOTACIÓN OFICIAL POR EQUIPO</div>
+          <h1 id="customTeamName" class="custom-team-title">Cargando equipo...</h1>
+          <p id="customTeamSub" class="custom-team-sub">
+            Selecciona en cuál de sus competencias deseas otorgar tu voto a este equipo. <strong>(Solo puedes votar 1 vez por cada equipo en todo el evento; en las demás competencias podrás apoyar a otros equipos diferentes)</strong>.
+          </p>
+        </div>
+
+        <!-- Encabezado cuando se entra a votación general sin QR de equipo -->
+        <div class="vote-card-head" id="standardVoteHead">
+          <div class="eyebrow on-orange">Elección estudiantil</div>
+          <h1 id="voteTitle">Vota por tu equipo</h1>
+          <p id="voteSub">
+            Selecciona la categoría, elige a tu equipo favorito e ingresa tu correo institucional. <strong>(1 voto por categoría y máximo 1 voto al mismo equipo en todo el evento)</strong>.
+          </p>
+        </div>
+
+        <!-- Selector de Categorías Oficiales (Botargas, Stands, Embanderamiento) -->
+        <div class="cat-pill-group" id="catPillGroup" role="group" aria-label="Elegir categoría">
+          <button type="button" class="vote-cat-btn active" data-cat="botargas">Carrera de botargas</button>
+          <button type="button" class="vote-cat-btn" data-cat="stands">Decoración de stands</button>
+          <button type="button" class="vote-cat-btn" data-cat="enbanderamiento">Embanderamiento</button>
+        </div>
+
+        <form id="mobileVoteForm" class="vote-form">
+          <!-- Equipos en la categoría seleccionada -->
+          <div class="field">
+            <label class="section-label" id="chooseTeamLabel">1. Elige a tu equipo en esta categoría</label>
+            <div id="teamsRadioContainer" class="teams-radio-list">
+              <!-- Renderizado dinámico de equipos -->
+            </div>
+          </div>
+
+          <!-- Correo Institucional -->
+          <div class="field" style="margin-top: 6px;">
+            <label for="voterEmail" class="section-label">2. Tu correo institucional Univalle</label>
+            <input 
+              type="email" 
+              id="voterEmail" 
+              placeholder="xxx3005567@est.univalle.edu"
+              pattern="^[a-zA-Z0-9._%+-]*[0-9]{7}@(est\.)?univalle\.edu$"
+              title="Debe contener exactamente 7 números antes del @ y terminar en @est.univalle.edu o @univalle.edu"
+              required
+            >
+            <div class="vote-rule-notice mono">
+              🔒 <strong>REGLAS DEL TORNEO:</strong> Máximo 1 voto por categoría y 1 voto por equipo (no puedes votar dos veces al mismo equipo, debes apoyar a otros equipos en las demás categorías).
+            </div>
+          </div>
+
+          <!-- Mensajes de alerta / error -->
+          <div id="voteAlert" class="vote-alert" style="display: none;"></div>
+
+          <div class="vote-actions">
+            <button type="submit" id="submitVoteBtn" class="btn btn-primary btn-block">
+              Confirmar y Emitir mi Voto &rarr;
+            </button>
+            <a href="/#votacion" class="btn btn-ghost btn-block" style="margin-top: 10px;">
+              Ver Marcador en Vivo
+            </a>
+          </div>
+        </form>
+
+        <!-- Pantalla de éxito tras votar -->
+        <div id="voteSuccessScreen" class="vote-success" style="display: none;">
+          <div class="success-icon">✓</div>
+          <h2>¡Voto registrado con éxito!</h2>
+          <p id="successTeamMessage">
+            Tu voto ha sido registrado y sumado en tiempo real en la pantalla del campus.
+          </p>
+          <div class="success-actions" style="margin-top: 20px;">
+            <button type="button" id="voteAnotherCatBtn" class="btn btn-primary btn-block">
+              Votar en otra categoría disponible &rarr;
+            </button>
+            <a href="/#votacion" class="btn btn-ghost btn-block" style="margin-top: 10px;">
+              Ver Marcador en Vivo en Pantalla
+            </a>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+</Layout>
+
+<style>
+  .vote-page {
+    min-height: 100vh;
+    background: var(--paper);
+    padding-bottom: 60px;
+  }
+
+  .vote-header {
+    background: var(--white);
+    border-bottom: 3px solid var(--ink);
+    padding: 16px 0;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+  }
+
+  .vote-header .wrap {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .brand-link {
+    text-decoration: none;
+    color: inherit;
+  }
+
+  .vote-main {
+    max-width: 560px;
+    margin: 30px auto 0;
+  }
+
+  .vote-card {
+    background: var(--white);
+    border: 3px solid var(--ink);
+    border-radius: var(--radius);
+    padding: 28px 24px;
+    box-shadow: 6px 6px 0px var(--ink);
+  }
+
+  .team-custom-banner {
+    background: var(--orange-soft, #FFCB8A);
+    border: 2.5px solid var(--ink);
+    border-radius: 12px;
+    padding: 18px;
+    margin-bottom: 20px;
+    box-shadow: 4px 4px 0px var(--ink);
+  }
+
+  .team-banner-tag {
+    font-size: 10.5px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    color: var(--white);
+    background: var(--ink);
+    display: inline-block;
+    padding: 3px 8px;
+    border-radius: 4px;
+    margin-bottom: 6px;
+  }
+
+  .custom-team-title {
+    font-size: 26px;
+    color: var(--ink);
+    margin: 4px 0 6px;
+    line-height: 1.15;
+  }
+
+  .custom-team-sub {
+    font-size: 13px;
+    color: var(--ink);
+    opacity: 0.9;
+    margin: 0;
+    line-height: 1.4;
+  }
+
+  .vote-card-head {
+    margin-bottom: 18px;
+  }
+
+  .vote-card-head h1 {
+    font-size: 26px;
+    margin: 6px 0 8px;
+  }
+
+  .vote-card-head p {
+    font-size: 14px;
+    color: var(--ink);
+    opacity: 0.8;
+    margin: 0;
+  }
+
+  .cat-pill-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 20px;
+  }
+
+  .vote-cat-btn {
+    flex: 1;
+    min-width: 120px;
+    background: var(--paper);
+    border: 2px solid var(--ink);
+    border-radius: 8px;
+    padding: 10px 8px;
+    font-size: 12px;
+    font-weight: 700;
+    cursor: pointer;
+    text-align: center;
+    transition: all 0.15s;
+    font-family: inherit;
+  }
+
+  .vote-cat-btn:hover {
+    background: var(--orange-soft);
+  }
+
+  .vote-cat-btn.active {
+    background: var(--ink);
+    color: var(--white);
+    box-shadow: 2.5px 2.5px 0px var(--orange);
+  }
+
+  .vote-form {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .section-label {
+    font-size: 14px;
+    font-weight: 700;
+    display: block;
+    margin-bottom: 8px;
+  }
+
+  .teams-radio-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    max-height: 280px;
+    overflow-y: auto;
+    padding-right: 4px;
+  }
+
+  .team-option {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 14px;
+    border: 2px solid var(--ink);
+    border-radius: 10px;
+    cursor: pointer;
+    background: var(--paper);
+    transition: all 0.15s;
+    user-select: none;
+  }
+
+  .team-option:hover {
+    background: var(--orange-soft);
+    border-color: var(--orange-deep);
+  }
+
+  .team-option.selected {
+    background: var(--orange-soft);
+    border-color: var(--ink);
+    box-shadow: 3px 3px 0px var(--ink);
+  }
+
+  .team-option input[type="radio"] {
+    accent-color: var(--orange-deep);
+    width: 18px;
+    height: 18px;
+  }
+
+  .team-option-name {
+    font-weight: 700;
+    font-size: 14px;
+    flex: 1;
+  }
+
+  .team-option-color {
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    border: 1.5px solid var(--ink);
+    display: inline-block;
+  }
+
+  .vote-rule-notice {
+    font-size: 11.5px;
+    background: #FFF5E6;
+    border: 1.5px solid var(--orange);
+    border-radius: 6px;
+    padding: 8px 10px;
+    margin-top: 6px;
+    color: var(--ink);
+    line-height: 1.35;
+  }
+
+  .btn-block {
+    width: 100%;
+    display: block;
+    text-align: center;
+  }
+
+  .vote-alert {
+    padding: 12px 14px;
+    border-radius: 8px;
+    font-size: 13px;
+    font-family: 'Space Mono', monospace;
+    line-height: 1.4;
+  }
+
+  .vote-alert.error {
+    background: #FFE5E5;
+    border: 2px solid #D32F2F;
+    color: #D32F2F;
+  }
+
+  .vote-alert.success {
+    background: #EAF8EE;
+    border: 2px solid #2E7D32;
+    color: #1B5E20;
+  }
+
+  .vote-success {
+    text-align: center;
+    padding: 20px 0 10px;
+  }
+
+  .success-icon {
+    width: 60px;
+    height: 60px;
+    background: var(--orange);
+    color: var(--white);
+    border: 3px solid var(--ink);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 28px;
+    font-weight: 900;
+    margin: 0 auto 16px;
+    box-shadow: 4px 4px 0px var(--ink);
+  }
+
+  .vote-success h2 {
+    font-size: 24px;
+    margin: 0 0 8px;
+  }
+
+  .vote-success p {
+    font-size: 14px;
+    opacity: 0.85;
+    margin: 0 0 16px;
+  }
+</style>
+
+<script>
+  import confetti from 'canvas-confetti';
+  import { supabase, isConfigured, isValidUnivalleEmail, FALLBACK_CATEGORIAS, FALLBACK_EQUIPOS } from '../lib/supabase.js';
+
+  // Parámetro de URL para identificar el equipo/grupo del QR
+  const urlParams = new URLSearchParams(window.location.search);
+  const targetGrupoId = urlParams.get('equipo') || urlParams.get('grupo');
+
+  let selectedCategory = 'botargas';
+  let categoryTeams: Record<string, Array<{ id: string; nombre: string; color: string; grupo_id?: string; votes: number }>> = JSON.parse(JSON.stringify(FALLBACK_EQUIPOS));
+  let customGroupData: { id: string; nombre: string; categorias: string[] } | null = null;
+
+  // DOM Elements
+  const catButtons = document.querySelectorAll<HTMLButtonElement>('.vote-cat-btn');
+  const teamsContainer = document.getElementById('teamsRadioContainer');
+  const voterEmailInput = document.getElementById('voterEmail') as HTMLInputElement;
+  const voteForm = document.getElementById('mobileVoteForm') as HTMLFormElement;
+  const submitVoteBtn = document.getElementById('submitVoteBtn') as HTMLButtonElement;
+  const voteAlert = document.getElementById('voteAlert');
+  const voteSuccessScreen = document.getElementById('voteSuccessScreen');
+  const successTeamMessage = document.getElementById('successTeamMessage');
+  const voteAnotherCatBtn = document.getElementById('voteAnotherCatBtn');
+  const teamCustomBanner = document.getElementById('teamCustomBanner');
+  const customTeamName = document.getElementById('customTeamName');
+  const standardVoteHead = document.getElementById('standardVoteHead');
+  const chooseTeamLabel = document.getElementById('chooseTeamLabel');
+
+  function getCategoryName(catId: string): string {
+    const found = FALLBACK_CATEGORIAS.find(c => c.id === catId);
+    return found ? found.nombre : catId;
+  }
+
+  // 1. Configurar vista por QR si viene un equipo
+  async function setupCustomTeamView() {
+    if (!targetGrupoId) return;
+
+    if (isConfigured && supabase) {
+      try {
+        const { data: grupo, error } = await supabase
+          .from('grupos')
+          .select('id, nombre, categorias')
+          .eq('id', targetGrupoId)
+          .single();
+
+        if (!error && grupo) {
+          customGroupData = grupo;
+          if (teamCustomBanner && customTeamName) {
+            teamCustomBanner.style.display = 'block';
+            customTeamName.textContent = grupo.nombre;
+            if (standardVoteHead) standardVoteHead.style.display = 'none';
+          }
+
+          // Filtrar las pestañas para mostrar SOLO las categorías donde participa este equipo
+          const allowedCats = grupo.categorias || [];
+          catButtons.forEach(btn => {
+            const cat = btn.getAttribute('data-cat') || '';
+            if (allowedCats.includes(cat)) {
+              btn.style.display = 'block';
+            } else {
+              btn.style.display = 'none';
+            }
+          });
+
+          // Seleccionar la primera categoría permitida
+          if (allowedCats.length > 0 && !allowedCats.includes(selectedCategory)) {
+            selectedCategory = allowedCats[0];
+          }
+
+          catButtons.forEach(btn => {
+            if (btn.getAttribute('data-cat') === selectedCategory) {
+              btn.classList.add('active');
+            } else {
+              btn.classList.remove('active');
+            }
+          });
+        }
+      } catch (e) {
+        console.error('Error cargando grupo:', e);
+      }
+    }
+  }
+
+  // 2. Cargar equipos desde Supabase
+  async function loadTeamsFromSupabase() {
+    if (!isConfigured || !supabase) {
+      renderTeams();
+      return;
+    }
+
+    try {
+      const { data: equiposData, error: equiposError } = await supabase
+        .from('equipos')
+        .select('id, categoria_id, nombre, color, grupo_id');
+
+      if (equiposError) throw equiposError;
+
+      const { data: votosData, error: votosError } = await supabase
+        .from('votos')
+        .select('equipo_id, categoria_id');
+
+      if (votosError) throw votosError;
+
+      const counts: Record<string, number> = {};
+      (votosData || []).forEach(v => {
+        counts[v.equipo_id] = (counts[v.equipo_id] || 0) + 1;
+      });
+
+      const newCategoryTeams: Record<string, Array<{ id: string; nombre: string; color: string; grupo_id?: string; votes: number }>> = {
+        botargas: [],
+        stands: [],
+        enbanderamiento: []
+      };
+
+      (equiposData || []).forEach(eq => {
+        if (!newCategoryTeams[eq.categoria_id]) {
+          newCategoryTeams[eq.categoria_id] = [];
+        }
+        newCategoryTeams[eq.categoria_id].push({
+          id: eq.id,
+          nombre: eq.nombre,
+          color: eq.color || '#FE7B00',
+          grupo_id: eq.grupo_id,
+          votes: counts[eq.id] || 0
+        });
+      });
+
+      categoryTeams = newCategoryTeams;
+      renderTeams();
+    } catch (err) {
+      console.error('Error cargando equipos:', err);
+      renderTeams();
+    }
+  }
+
+  // 3. Renderizar equipos en la categoría activa
+  function renderTeams() {
+    if (!teamsContainer) return;
+    const teams = categoryTeams[selectedCategory] || [];
+    teamsContainer.innerHTML = '';
+
+    if (teams.length === 0) {
+      teamsContainer.innerHTML = `
+        <div style="padding: 24px 12px; text-align: center; color: var(--ink); opacity: 0.65; font-family: 'Space Mono', monospace; font-size: 13px; background: var(--paper); border: 2px dashed var(--ink); border-radius: 8px;">
+          Aún no hay equipos inscritos en esta categoría.
+        </div>
+      `;
+      return;
+    }
+
+    teams.forEach((t) => {
+      // Pre-seleccionar si es el equipo del QR
+      const isTargetGroup = targetGrupoId && (t.grupo_id === targetGrupoId || t.id === targetGrupoId);
+
+      const label = document.createElement('label');
+      label.className = `team-option ${isTargetGroup ? 'selected' : ''}`;
+      label.innerHTML = `
+        <input type="radio" name="selectedTeam" value="${t.id}" ${isTargetGroup ? 'checked' : ''} required>
+        <span class="team-option-color" style="background-color: ${t.color}"></span>
+        <span class="team-option-name">${t.nombre}</span>
+        ${isTargetGroup ? '<span class="mono" style="font-size:10px; background:var(--ink); color:white; padding:2px 6px; border-radius:4px;">Tu Equipo</span>' : ''}
+      `;
+
+      label.addEventListener('click', () => {
+        document.querySelectorAll('.team-option').forEach(el => el.classList.remove('selected'));
+        label.classList.add('selected');
+      });
+
+      teamsContainer.appendChild(label);
+    });
+
+    if (chooseTeamLabel) {
+      const catLabel = getCategoryName(selectedCategory);
+      chooseTeamLabel.textContent = `1. Elige a tu equipo en "${catLabel}"`;
+    }
+  }
+
+  // Cambio de Categoría al pulsar botones
+  catButtons.forEach(btn => {
+    btn.addEventListener('click', () => {
+      catButtons.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      selectedCategory = btn.getAttribute('data-cat') || 'botargas';
+      renderTeams();
+      if (voteAlert) voteAlert.style.display = 'none';
+    });
+  });
+
+  // 4. Enviar Voto (1 voto por categoría)
+  if (voteForm) {
+    voteForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      if (voteAlert) voteAlert.style.display = 'none';
+
+      const email = voterEmailInput.value.trim().toLowerCase();
+      const selectedRadio = voteForm.querySelector<HTMLInputElement>('input[name="selectedTeam"]:checked');
+      const teamId = selectedRadio ? selectedRadio.value : '';
+
+      // Validación de correo institucional Univalle (7 números antes del @)
+      if (!isValidUnivalleEmail(email)) {
+        showAlert('⚠️ Debes ingresar un correo institucional válido (@est.univalle.edu o @univalle.edu) con exactamente 7 números antes del @ (ej. xxx3005567@est.univalle.edu).', 'error');
+        voterEmailInput.focus();
+        return;
+      }
+
+      if (!teamId) {
+        showAlert('⚠️ Por favor selecciona un equipo antes de emitir tu voto.', 'error');
+        return;
+      }
+
+      submitVoteBtn.disabled = true;
+      submitVoteBtn.textContent = 'Registrando voto...';
+
+      if (isConfigured && supabase) {
+        try {
+          const currentTeam = (categoryTeams[selectedCategory] || []).find(t => t.id === teamId);
+          const teamGroupId = currentTeam?.grupo_id || targetGrupoId || null;
+
+          const { error } = await supabase
+            .from('votos')
+            .insert({
+              categoria_id: selectedCategory,
+              equipo_id: teamId,
+              grupo_id: teamGroupId,
+              correo_institucional: email
+            });
+
+          if (error) {
+            if (error.message.includes('unique_voto_por_grupo')) {
+              showAlert(`🚫 Ya emitiste un voto por este equipo en otra categoría. Para que la competencia sea justa, solo puedes votar 1 vez al mismo equipo en todo el evento. ¡Apoya a otro equipo en esta competencia!`, 'error');
+            } else if (error.message.includes('unique_voto_por_categoria')) {
+              showAlert(`🚫 Este correo ya emitió su voto en la categoría de "${getCategoryName(selectedCategory)}". Solo se permite 1 voto por categoría por persona, pero aún puedes votar en tus demás categorías.`, 'error');
+            } else if (error.code === '23505' || error.message.includes('unique')) {
+              showAlert(`🚫 Voto duplicado: Ya votaste en esta categoría o ya votaste por este equipo en otra competencia.`, 'error');
+            } else if (error.message.includes('check_correo')) {
+              showAlert('⚠️ Formato de correo no válido. Debe tener 7 números antes del @ y terminar en @est.univalle.edu o @univalle.edu.', 'error');
+            } else {
+              showAlert(`Error al registrar voto: ${error.message}`, 'error');
+            }
+            submitVoteBtn.disabled = false;
+            submitVoteBtn.textContent = 'Confirmar y Emitir mi Voto →';
+            return;
+          }
+
+          // Éxito con Supabase
+          handleVoteSuccess(selectedCategory, teamId);
+        } catch (err: any) {
+          showAlert(`Error de conexión: ${err.message}`, 'error');
+          submitVoteBtn.disabled = false;
+          submitVoteBtn.textContent = 'Confirmar y Emitir mi Voto →';
+        }
+      } else {
+        // Modo Demo Local
+        handleVoteSuccess(selectedCategory, teamId);
+      }
+    });
+  }
+
+  function showAlert(msg: string, type: 'error' | 'success') {
+    if (!voteAlert) return;
+    voteAlert.textContent = msg;
+    voteAlert.className = `vote-alert ${type}`;
+    voteAlert.style.display = 'block';
+  }
+
+  function handleVoteSuccess(category: string, teamId: string) {
+    confetti({
+      particleCount: 70,
+      spread: 85,
+      origin: { y: 0.6 },
+      colors: ['#FE7B00', '#FE6E02', '#101010', '#FFCB8A', '#FEFFFA']
+    });
+
+    const teams = categoryTeams[category] || [];
+    const team = teams.find(t => t.id === teamId);
+    const teamName = team ? team.nombre : 'tu equipo';
+    const catName = getCategoryName(category);
+
+    if (successTeamMessage) {
+      successTeamMessage.innerHTML = `
+        Tu voto por <strong>"${teamName}"</strong> en la competencia de <strong>"${catName}"</strong> fue registrado exitosamente.<br><br>
+        <span class="mono" style="font-size:12.5px; display:inline-block; background:rgba(0,0,0,0.05); padding:8px 12px; border-radius:6px; line-height:1.4;">
+          📌 <strong>Aviso del torneo:</strong> Ya utilizaste tu voto para este equipo. Ahora puedes apoyar a <strong>otros equipos</strong> en tus competencias restantes.
+        </span>
+      `;
+    }
+
+    if (voteForm) voteForm.style.display = 'none';
+    if (voteSuccessScreen) voteSuccessScreen.style.display = 'block';
+  }
+
+  // Botón para votar en otra categoría disponible (apoyando a otro equipo)
+  if (voteAnotherCatBtn) {
+    voteAnotherCatBtn.addEventListener('click', () => {
+      if (voteForm) voteForm.style.display = 'block';
+      if (voteSuccessScreen) voteSuccessScreen.style.display = 'none';
+      submitVoteBtn.disabled = false;
+      submitVoteBtn.textContent = 'Confirmar y Emitir mi Voto →';
+      if (voteAlert) voteAlert.style.display = 'none';
+
+      // Permitir explorar otros equipos en las categorías restantes
+      if (teamCustomBanner) teamCustomBanner.style.display = 'none';
+      if (standardVoteHead) standardVoteHead.style.display = 'block';
+      catButtons.forEach(btn => btn.style.display = 'block');
+
+      // Cambiar a la siguiente categoría no votada
+      const allCats = ['botargas', 'stands', 'enbanderamiento'];
+      const nextCat = allCats.find(c => c !== selectedCategory) || 'botargas';
+      
+      const nextBtn = document.querySelector<HTMLButtonElement>(`.vote-cat-btn[data-cat="${nextCat}"]`);
+      if (nextBtn) {
+        nextBtn.click();
+      }
+    });
+  }
+
+  // Inicialización
+  async function init() {
+    await setupCustomTeamView();
+    await loadTeamsFromSupabase();
+  }
+
+  init();
+</script>

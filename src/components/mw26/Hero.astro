@@ -1,0 +1,211 @@
+---
+// Hero.astro — Portada de campeonato con placa diagonal y contador en vivo
+---
+<section class="hero night" id="inicio">
+  <div class="hero-bg-num" aria-hidden="true">26</div>
+  <div class="wrap">
+    <div class="hero__grid">
+      <div>
+        <div style="display: flex; align-items: center; gap: 14px; flex-wrap: wrap;">
+          <p class="eyebrow" style="margin: 0;">Univalle · Campus Central</p>
+          <span class="badge-rubberhose">★ EDICIÓN OFICIAL 2026 ★</span>
+        </div>
+        <h1 class="hero__h">
+          <span class="word-mask"><span class="hero__title-word">Marketing</span></span>
+          <span class="word-mask"><span class="hero__title-word o">Week</span></span>
+        </h1>
+        <p class="hero__uni">Innovación · Creatividad · Competencia</p>
+        <p class="lead">
+          Cuatro días para que tu grupo enbandere, corra, piense y decore. Cuatro competencias oficiales, un solo marcador general y toda la comunidad universitaria votando.
+        </p>
+        <div class="hero__cta">
+          <a class="btn btn--orange" href="/inscribir">Inscribe a tu grupo</a>
+          <a class="btn btn--ghost" href="/marcador"><i class="dot dot--ok" style="margin-right: 2px;"></i>Ver marcador en vivo</a>
+        </div>
+      </div>
+
+      <div class="plate">
+        <div class="plate__back"></div>
+        <div class="plate__img">
+          <img src="/assets/img/marki-valle-official.png" width="397" height="485" alt="Marki Valle, mascota oficial de Marketing Week 2026" style="background: #fff; object-fit: contain; width: 100%; height: auto;" />
+        </div>
+        <span class="badge-rubberhose plate__tag" style="position: absolute; right: 0; top: -10px; font-size: 11px; padding: 4px 10px;">⚙️ MARKI VALLE</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Marcador de cuenta regresiva y siguiente actividad (Full Width) -->
+  <div class="score-full">
+    <div class="score-full__in" role="group" aria-label="Cuenta regresiva">
+      <div class="score__col-digits">
+        <p class="score__lab">
+          <i class="dot dot--ok"></i>
+          <span id="cdLab">Falta para la inauguración</span>
+        </p>
+        <div class="digits" role="timer">
+          <div class="u"><b id="cdD">00</b><small>Días</small></div>
+          <span class="s">:</span>
+          <div class="u"><b id="cdH">00</b><small>Horas</small></div>
+          <span class="s">:</span>
+          <div class="u"><b id="cdM">00</b><small>Min</small></div>
+          <span class="s">:</span>
+          <div class="u"><b id="cdS">00</b><small>Seg</small></div>
+        </div>
+      </div>
+      <div class="score__next" id="nextBox" aria-live="polite"></div>
+      <div class="score__col-cta">
+        <a class="btn btn--ghost btn--sm" href="#programa">Ver fixture</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  const pad = (n: number) => String(n).padStart(2, '0');
+  const esc = (t: string) => String(t).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c] || c));
+  const TZ = '-04:00';
+
+  const EV_START = new Date('2026-10-05T08:00:00' + TZ);
+  const EV_END = new Date('2026-10-08T12:00:00' + TZ);
+
+  const DAYS = [
+    {
+      abbr: 'LUN', name: 'Lunes', d: '2026-10-05',
+      acts: [
+        { s: '08:00', e: '10:30', t: 'Inauguración', p: 'Patio', g: 'Apertura', x: 'Presentación de grupos, izada de banderas y arranque oficial de la semana.' },
+        { s: '10:30', e: '12:00', t: 'Enbanderamiento', p: 'Patio', g: 'Enbanderamiento', x: 'Cada grupo presenta su bandera y la planta frente a todo el campus.' }
+      ]
+    },
+    {
+      abbr: 'MAR', name: 'Martes', d: '2026-10-06',
+      acts: [
+        { s: '08:30', e: '12:30', t: 'Armado de stands', p: 'Patio', g: 'Stands', x: 'Montaje y decoración de los stands antes de abrir al público.' },
+        { s: '15:00', e: '17:00', t: 'Feria de stands', p: 'Patio', g: 'Stands', x: 'Stands abiertos al público, con activaciones y votación desde el móvil.' }
+      ]
+    },
+    {
+      abbr: 'MIÉ', name: 'Miércoles', d: '2026-10-07',
+      acts: [
+        { s: '08:30', e: '12:00', t: 'Preparación y pruebas de botargas', p: 'Patio', g: 'Botargas', x: 'Inspección técnica de disfraces, prueba de circuito y animación previa.' },
+        { s: '15:00', e: '17:00', t: 'Carrera de botargas', p: 'Patio', g: 'Botargas', x: 'Circuito de obstáculos en el Patio con la botarga de cada grupo.' }
+      ]
+    },
+    {
+      abbr: 'JUE', name: 'Jueves', d: '2026-10-08',
+      acts: [
+        { s: '10:30', e: '12:00', t: 'Premiación', p: 'E-Zone', g: 'Cierre', x: 'Cierre oficial de la semana y entrega de premios en la E-Zone.' }
+      ]
+    }
+  ];
+
+  type ActItem = {
+    s: string; e: string; t: string; p: string; g: string; x: string;
+    start: Date; end: Date; day: typeof DAYS[0];
+  };
+
+  const parsedDays = DAYS.map(day => {
+    return {
+      ...day,
+      acts: day.acts.map(a => ({
+        ...a,
+        start: new Date(`${day.d}T${a.s}:00${TZ}`),
+        end: new Date(`${day.d}T${a.e}:00${TZ}`),
+        day
+      }))
+    };
+  });
+
+  const fmtShort = (d: string) => {
+    const p = d.split('-');
+    return `${p[2]}/${p[1]}/${p[0].slice(2)}`;
+  };
+
+  function relText(ms: number) {
+    const m = Math.max(0, Math.floor(ms / 60000));
+    const d = Math.floor(m / 1440);
+    const h = Math.floor((m % 1440) / 60);
+    const mi = m % 60;
+    return d > 0 ? `${d} d ${h} h` : (h > 0 ? `${h} h ${mi} min` : `${mi} min`);
+  }
+
+  function getNext(): { a: ActItem | null; live: boolean } {
+    const now = new Date();
+    let cur: ActItem | null = null;
+    let nxt: ActItem | null = null;
+
+    for (let i = 0; i < parsedDays.length && !cur; i++) {
+      for (let j = 0; j < parsedDays[i].acts.length; j++) {
+        const a = parsedDays[i].acts[j];
+        if (now >= a.start && now < a.end) {
+          cur = a;
+          break;
+        }
+      }
+    }
+
+    if (!cur) {
+      for (let i = 0; i < parsedDays.length && !nxt; i++) {
+        for (let j = 0; j < parsedDays[i].acts.length; j++) {
+          const a = parsedDays[i].acts[j];
+          if (a.start > now) {
+            nxt = a;
+            break;
+          }
+        }
+      }
+    }
+
+    return { a: cur || nxt, live: !!cur };
+  }
+
+  function tickCd() {
+    const now = new Date();
+    let target = EV_START;
+    let mode = 'pre';
+
+    if (now >= EV_START && now < EV_END) {
+      target = EV_END;
+      mode = 'live';
+    } else if (now >= EV_END) {
+      mode = 'post';
+    }
+
+    const s = mode === 'post' ? 0 : Math.floor(Math.max(0, target.getTime() - now.getTime()) / 1000);
+    const elD = document.getElementById('cdD');
+    const elH = document.getElementById('cdH');
+    const elM = document.getElementById('cdM');
+    const elS = document.getElementById('cdS');
+    const elLab = document.getElementById('cdLab');
+
+    if (elD) elD.textContent = pad(Math.floor(s / 86400));
+    if (elH) elH.textContent = pad(Math.floor((s % 86400) / 3600));
+    if (elM) elM.textContent = pad(Math.floor((s % 3600) / 60));
+    if (elS) elS.textContent = pad(s % 60);
+    if (elLab) {
+      elLab.textContent = mode === 'pre'
+        ? 'Falta para la inauguración'
+        : (mode === 'live' ? 'Falta para la premiación de cierre' : 'Edición 2026 finalizada');
+    }
+  }
+
+  function renderNextBox() {
+    const n = getNext();
+    const el = document.getElementById('nextBox');
+    if (!el) return;
+    const a = n.a;
+    if (!a) {
+      el.innerHTML = '<p class="score__lab">Estado</p><h3>La semana terminó</h3><p>Gracias por ser parte de Marketing Week 2026.</p>';
+      return;
+    }
+    el.innerHTML = `
+      <p class="score__lab" style="margin:0">${n.live ? 'Ahora en curso' : 'Siguiente actividad'}</p>
+      <h3>${esc(a.t)}</h3>
+      <p>${esc(a.day.name)} ${fmtShort(a.day.d)} · ${a.s} a ${a.e} · ${esc(a.p)}${n.live ? '' : ' · en ' + relText(a.start.getTime() - Date.now())}</p>
+    `;
+  }
+
+  tickCd();
+  setInterval(tickCd, 1000);
+  renderNextBox();
+  setInterval(renderNextBox, 60000);
+</script>

@@ -1,0 +1,948 @@
+---
+// marcador.astro — Página dedicada del Marcador Oficial en Tiempo Real para Marketing Week 2026
+import LayoutMW26 from '../layouts/LayoutMW26.astro';
+import TopBar from '../components/mw26/TopBar.astro';
+---
+
+<LayoutMW26 title="Marcador Oficial en Vivo — Marketing Week 2026">
+  <!-- 1. Barra Superior con Fechas y Contexto -->
+  <TopBar />
+
+  <!-- 2. Header de Navegación Oficial MW26 -->
+  <header class="nav night">
+    <div class="wrap nav__in">
+      <a class="logo" href="/">
+        <img src="/img/logo-mw26.png" width="36" height="36" alt="Logo oficial Marketing Week 2026" class="logo__emblem" />
+        <span>Marketing Week</span>
+      </a>
+
+      <nav class="nav__links" aria-label="Navegación del evento">
+        <a href="/#programa">Fixture</a>
+        <a href="/#mapa">Mapa</a>
+        <a href="/#competencias">Competencias</a>
+        <a href="/#premios">Premios</a>
+        <a href="/marcador" class="is-active" style="color:var(--orange);">Marcador</a>
+      </nav>
+
+      <div class="nav__right">
+        <button class="icon-btn" id="themeBtn" type="button" aria-label="Cambiar entre tema claro y oscuro">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true">
+            <circle cx="12" cy="12" r="9"/>
+            <path d="M12 3a9 9 0 0 1 0 18z" fill="currentColor"/>
+          </svg>
+        </button>
+        <a class="btn btn--orange btn--sm" href="/inscribir">Inscribir grupo</a>
+        <a class="btn btn--ghost btn--sm" href="/votar">Votar &rarr;</a>
+      </div>
+    </div>
+  </header>
+
+  <main class="sec" style="background: var(--paper); color: var(--ink); padding-top: clamp(36px, 5vw, 64px); position: relative; overflow: hidden;">
+    <!-- Marca de agua de fondo característica de la nueva versión -->
+    <div class="hero-bg-num" aria-hidden="true" style="position: absolute; right: 2%; top: 0; font: 900 clamp(8rem, 20vw, 16rem)/.8 var(--f-display); color: var(--ink); opacity: 0.035; pointer-events: none; user-select: none;">26</div>
+
+    <div class="wrap" style="position: relative; z-index: 2;">
+      <!-- Hero de Marcador con estilo Editorial MW26 -->
+      <div class="marcador-editorial-head">
+        <div class="sec-head" style="margin-bottom: 24px; max-width: 850px;">
+          <div style="display: flex; align-items: center; gap: 12px; flex-wrap: wrap;">
+            <p class="eyebrow" style="margin: 0;">Univalle · Tablero en vivo</p>
+            <span class="badge-rubberhose">★ CLASIFICACIÓN OFICIAL MW26 ★</span>
+            <span class="lv"><i class="dot dot--ok"></i>Supabase Realtime</span>
+          </div>
+          <h1 class="display" style="font-size: clamp(2.8rem, 6.4vw, 5.2rem); margin: 0; line-height: 0.92;">
+            TABLERO Y CLASIFICACIÓN <span style="color: var(--orange);">EN TIEMPO REAL</span>
+          </h1>
+          <p class="sec-lead" style="margin: 0;">
+            Seguimiento en directo del campeonato estudiantil. Los resultados se actualizan automáticamente con cada voto validado y evaluación oficial.
+          </p>
+        </div>
+
+        <div class="marcador-plate-card">
+          <div class="plate">
+            <div class="plate__back"></div>
+            <div class="plate__img">
+              <img src="/assets/img/marki-valle-official.png" width="220" height="260" alt="Marki Valle Mascota Oficial MW26" style="background: #fff; object-fit: contain; width: 100%; height: auto;" />
+            </div>
+            <span class="badge-rubberhose plate__tag" style="position: absolute; right: 0; top: -10px; font-size: 10px; padding: 3px 10px;">⚙️ MARKI VALLE</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Selector de Categorías (Píldoras Oficiales .chips / .chip de MW26) -->
+      <div class="chips" role="group" aria-label="Filtrar clasificación" style="margin-bottom: 32px;">
+        <button type="button" class="chip active" data-filter="gen">
+          🏆 Clasificación General
+        </button>
+        <button type="button" class="chip" data-filter="botargas">
+          🏃 Carrera de Botargas
+        </button>
+        <button type="button" class="chip" data-filter="stands">
+          🎪 Decoración de Stands
+        </button>
+        <button type="button" class="chip" data-filter="enbanderamiento">
+          🚩 Embanderamiento
+        </button>
+      </div>
+
+      <!-- Podio Oficial Top 3 en vivo -->
+      <section class="podium-section" aria-label="Podio de líderes">
+        <div class="podium-grid" id="podiumContainer">
+          <!-- 2° Lugar (Plata) -->
+          <div class="card podium-card podium-card--2">
+            <div class="podium-card-top">
+              <span class="tag" style="background: rgba(148,163,184,0.15); border-color: rgba(148,163,184,0.3); color: var(--ink);">🥈 2° LUGAR</span>
+              <span class="mono" style="font-size: 0.76rem; font-weight: 700; color: var(--muted);" id="pod2Bib">#027</span>
+            </div>
+            <div class="avatar podium-avatar av-silver" id="pod2Avatar">BH</div>
+            <h3 class="podium-team-title display" id="pod2Name">Brand Hunters</h3>
+            <div class="podium-score-container">
+              <span class="podium-score-label mono">PUNTUACIÓN</span>
+              <div class="podium-score-val-wrap">
+                <span class="podium-score-val display" id="pod2Score">86.2</span>
+                <span class="podium-score-unit mono">PTS</span>
+              </div>
+            </div>
+            <span class="mono podium-award-pill">🥈 Subcampeón · Plata</span>
+          </div>
+
+          <!-- 1° Lugar (Oro) -->
+          <div class="card podium-card podium-card--1 is-champion">
+            <span class="podium-crown">👑</span>
+            <div class="podium-card-top">
+              <span class="tag tag--demo" style="background: var(--orange); color: #0D0E10; border-color: var(--orange);">🥇 1° LUGAR · LÍDER</span>
+              <span class="mono" style="font-size: 0.76rem; font-weight: 700; color: var(--orange);" id="pod1Bib">#014</span>
+            </div>
+            <div class="avatar podium-avatar av-gold" id="pod1Avatar">PI</div>
+            <h3 class="podium-team-title display title-gold" id="pod1Name">Los Pixelados</h3>
+            <div class="podium-score-container score-gold">
+              <span class="podium-score-label mono">PUNTUACIÓN</span>
+              <div class="podium-score-val-wrap">
+                <span class="podium-score-val display gold-val" id="pod1Score">90.8</span>
+                <span class="podium-score-unit mono unit-gold">PTS</span>
+              </div>
+            </div>
+            <span class="mono podium-award-pill pill-gold">★ Campeón General · Oro ★</span>
+          </div>
+
+          <!-- 3° Lugar (Bronce) -->
+          <div class="card podium-card podium-card--3">
+            <div class="podium-card-top">
+              <span class="tag" style="background: rgba(245,158,11,0.15); border-color: rgba(245,158,11,0.3); color: var(--ink);">🥉 3° LUGAR</span>
+              <span class="mono" style="font-size: 0.76rem; font-weight: 700; color: var(--muted);" id="pod3Bib">#041</span>
+            </div>
+            <div class="avatar podium-avatar av-bronze" id="pod3Avatar">IN</div>
+            <h3 class="podium-team-title display" id="pod3Name">Los Insights</h3>
+            <div class="podium-score-container">
+              <span class="podium-score-label mono">PUNTUACIÓN</span>
+              <div class="podium-score-val-wrap">
+                <span class="podium-score-val display" id="pod3Score">83.7</span>
+                <span class="podium-score-unit mono">PTS</span>
+              </div>
+            </div>
+            <span class="mono podium-award-pill">🥉 3° Puesto · Bronce</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- Tabla Animada de Posiciones (.card.panel de MW26) -->
+      <div class="board-layout-container">
+        <div class="card panel board-main-panel">
+          <div class="panel__top">
+            <div>
+              <h2 class="display" id="activeCategoryTitle" style="font-size: clamp(1.8rem, 3.6vw, 2.5rem); margin: 0 0 8px 0; line-height: 1.1;">
+                Clasificación General
+              </h2>
+              <p class="mono" style="font-size: 0.74rem; color: var(--muted); margin: 0;" id="activeCategorySub">
+                Gana el equipo con mayor puntuación acumulada · Actualización en tiempo real
+              </p>
+            </div>
+            <div style="display: flex; gap: 12px; align-items: center; flex-wrap: wrap;">
+              <span class="tag tag--demo">Datos oficiales</span>
+              <span class="lv"><i class="dot dot--ok"></i>En vivo</span>
+            </div>
+          </div>
+
+          <!-- Filas Oficiales MW26 (.rows) -->
+          <div class="rows animated-board-list" id="leaderboardList">
+            <!-- Las filas de equipos se renderizan dinámicamente aquí -->
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+</LayoutMW26>
+
+<style>
+  /* Cabecera Editorial Marcador MW26 */
+  .marcador-editorial-head {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 260px;
+    gap: clamp(24px, 4vw, 56px);
+    align-items: center;
+    margin-bottom: clamp(32px, 4vw, 48px);
+  }
+
+  @media (max-width: 860px) {
+    .marcador-editorial-head {
+      grid-template-columns: minmax(0, 1fr);
+    }
+    .marcador-plate-card {
+      max-width: 240px;
+      margin: 0 auto;
+    }
+  }
+
+  .marcador-plate-card {
+    position: relative;
+    display: flex;
+    justify-content: center;
+  }
+
+  /* Píldoras Selectoras de Categoría (.chips / .chip) */
+  .chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 32px;
+  }
+
+  .chip.active {
+    background: var(--ink);
+    color: var(--paper);
+    border-color: var(--ink);
+  }
+
+  :root[data-theme="dark"] .chip.active,
+  .night .chip.active {
+    background: var(--orange);
+    color: #0D0E10;
+    border-color: var(--orange);
+  }
+
+  /* Podio Oficial Top 3 en Vivo */
+  .podium-section {
+    margin-bottom: clamp(36px, 5vw, 56px);
+  }
+
+  .podium-grid {
+    display: grid;
+    grid-template-columns: 1fr 1.15fr 1fr;
+    gap: 16px;
+    align-items: end;
+  }
+
+  @media (max-width: 860px) {
+    .podium-grid {
+      grid-template-columns: minmax(0, 1fr);
+      align-items: stretch;
+    }
+  }
+
+  .podium-card {
+    padding: clamp(20px, 2.5vw, 28px) clamp(16px, 2vw, 24px);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    position: relative;
+    transition: transform 0.3s ease, border-color 0.3s ease;
+  }
+
+  .podium-card:hover {
+    transform: translateY(-4px);
+    border-color: var(--ink);
+  }
+
+  .podium-card--1 {
+    order: 2;
+    min-height: 380px;
+    border-top: 3px solid var(--orange);
+    background: var(--surface);
+  }
+
+  .podium-card--2 {
+    order: 1;
+    min-height: 330px;
+    background: var(--surface);
+  }
+
+  .podium-card--3 {
+    order: 3;
+    min-height: 310px;
+    background: var(--surface);
+  }
+
+  @media (max-width: 860px) {
+    .podium-card--1 { order: 1; min-height: auto; }
+    .podium-card--2 { order: 2; min-height: auto; }
+    .podium-card--3 { order: 3; min-height: auto; }
+  }
+
+  .podium-crown {
+    font-size: 2rem;
+    position: absolute;
+    top: -20px;
+    filter: drop-shadow(0 2px 6px rgba(255, 122, 0, 0.4));
+  }
+
+  .podium-card-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    margin-bottom: 16px;
+  }
+
+  .podium-avatar {
+    width: 56px;
+    height: 56px;
+    min-width: 56px;
+    min-height: 56px;
+    aspect-ratio: 1 / 1;
+    border-radius: 50%;
+    border: 1px solid var(--rule);
+    display: grid;
+    place-items: center;
+    font: 900 1.35rem/1 var(--f-display);
+    margin-bottom: 12px;
+    background: repeating-linear-gradient(45deg, var(--paper-2) 0 4px, var(--surface) 4px 8px);
+    color: var(--ink);
+    flex-shrink: 0;
+  }
+
+  .av-gold {
+    width: 64px;
+    height: 64px;
+    min-width: 64px;
+    min-height: 64px;
+    aspect-ratio: 1 / 1;
+    font-size: 1.6rem;
+    border-color: var(--orange);
+    color: var(--orange);
+    background: rgba(255, 122, 0, 0.08);
+  }
+
+  .av-silver {
+    border-color: var(--rule);
+  }
+
+  .av-bronze {
+    border-color: var(--rule);
+  }
+
+  .podium-team-title {
+    font: 800 clamp(1.3rem, 2vw, 1.7rem)/1.1 var(--f-display);
+    text-transform: uppercase;
+    color: var(--ink);
+    margin: 0 0 12px;
+    min-height: 2.2em;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .title-gold {
+    color: var(--orange-ink, var(--ink));
+  }
+
+  .podium-score-container {
+    width: 100%;
+    padding: 10px 14px;
+    border: 1px solid var(--rule);
+    border-radius: 4px;
+    background: var(--paper-2);
+    margin-bottom: 14px;
+  }
+
+  .score-gold {
+    border-color: rgba(255, 122, 0, 0.4);
+    background: rgba(255, 122, 0, 0.05);
+  }
+
+  .podium-score-label {
+    display: block;
+    font: 700 0.6rem/1 var(--f-mono);
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 4px;
+  }
+
+  .podium-score-val-wrap {
+    display: flex;
+    align-items: baseline;
+    justify-content: center;
+    gap: 6px;
+  }
+
+  .podium-score-val {
+    font: 900 2.5rem/1 var(--f-display);
+    color: var(--ink);
+  }
+
+  .gold-val {
+    color: var(--orange);
+    font-size: 3rem;
+  }
+
+  .podium-score-unit {
+    font: 700 0.74rem/1 var(--f-mono);
+    color: var(--muted);
+  }
+
+  .podium-award-pill {
+    font: 700 0.68rem/1 var(--f-mono);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+    padding: 6px 12px;
+    border: 1px solid var(--rule);
+    border-radius: 2px;
+    margin-top: auto;
+  }
+
+  .pill-gold {
+    color: var(--orange-ink, var(--orange));
+    border-color: var(--orange);
+    background: rgba(255, 122, 0, 0.08);
+  }
+
+  /* Panel Principal de la Tabla */
+  .board-layout-container {
+    width: 100%;
+  }
+
+  .board-main-panel {
+    width: 100%;
+  }
+
+  /* Filas Animadas con Soporte FLIP de Solapamiento */
+  :global(.animated-board-list) {
+    position: relative;
+    display: grid;
+    margin-top: 14px;
+    min-height: 380px;
+  }
+
+  :global(.leader-card-item) {
+    display: grid !important;
+    grid-template-columns: 44px 44px 54px minmax(0, 1fr) auto !important;
+    gap: 16px;
+    align-items: center;
+    padding: 16px 8px !important;
+    border-top: 1px solid var(--rule) !important;
+    background: transparent;
+    transition: transform 0.65s cubic-bezier(0.22, 1, 0.36, 1),
+                background-color 0.3s ease,
+                box-shadow 0.4s ease;
+    will-change: transform, z-index;
+  }
+
+  :global(.leader-card-item:hover) {
+    background: rgba(255, 122, 0, 0.03);
+  }
+
+  /* Estado cuando escala y solapa a las demás tarjetas */
+  :global(.leader-card-item.is-climbing) {
+    background: var(--surface) !important;
+    border-top: 1px solid var(--orange) !important;
+    border-bottom: 1px solid var(--orange) !important;
+    box-shadow: 0 10px 28px rgba(0, 0, 0, 0.1), 0 0 0 1px var(--orange) !important;
+    z-index: 25 !important;
+    transform: scale(1.015);
+  }
+
+  :global(.leader-card-item.just-voted) {
+    animation: mwPulse 0.6s ease-out;
+  }
+
+  @keyframes mwPulse {
+    0% { transform: scale(1); }
+    40% { transform: scale(1.02); }
+    100% { transform: scale(1); }
+  }
+
+  /* Ranking oficial */
+  :global(.board-rk-badge) {
+    font: 900 2.2rem/1 var(--f-display);
+    color: var(--muted);
+    text-align: center;
+    font-variant-numeric: tabular-nums;
+  }
+
+  :global(.rk-top-1) {
+    color: var(--orange) !important;
+  }
+
+  :global(.rk-top-2) {
+    color: var(--ink) !important;
+  }
+
+  :global(.rk-top-3) {
+    color: var(--ink) !important;
+  }
+
+  /* Avatar con Iniciales */
+  :global(.board-avatar-initials) {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    border: 1px solid var(--rule);
+    background: repeating-linear-gradient(45deg, var(--paper-2) 0 4px, var(--surface) 4px 8px);
+    display: grid;
+    place-items: center;
+    font: 900 1.1rem/1 var(--f-display);
+    color: var(--ink);
+    flex-shrink: 0;
+  }
+
+  /* Dorsal */
+  :global(.board-bib-tag) {
+    width: 52px;
+    height: 36px;
+    border: 1px solid var(--rule);
+    border-radius: 2px;
+    display: grid;
+    place-items: center;
+    font: 700 0.84rem/1 var(--f-mono);
+    color: var(--muted);
+  }
+
+  /* Info del Equipo */
+  :global(.board-team-info) {
+    display: grid;
+    gap: 8px;
+    min-width: 0;
+  }
+
+  :global(.board-team-name-row) {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 12px;
+  }
+
+  :global(.board-team-name) {
+    font-weight: 700;
+    font-size: 1.05rem;
+    color: var(--ink);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  :global(.board-meta-tag) {
+    font: 700 0.65rem/1 var(--f-mono);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  /* Barra de progreso */
+  :global(.board-track-bar) {
+    height: 6px;
+    background: var(--paper-2);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+
+  :global(.board-track-fill) {
+    height: 100%;
+    background: var(--orange);
+    transition: width 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  /* Puntaje y botón de votación */
+  :global(.board-row-actions) {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+  }
+
+  :global(.board-score-val) {
+    font: 900 2.4rem/1 var(--f-display);
+    color: var(--ink);
+    text-align: right;
+    min-width: 60px;
+    line-height: 1;
+    font-variant-numeric: tabular-nums;
+  }
+
+  @media (max-width: 640px) {
+    :global(.leader-card-item) {
+      grid-template-columns: 32px 38px minmax(0, 1fr) auto !important;
+      gap: 10px;
+    }
+    :global(.board-bib-tag) {
+      display: none;
+    }
+    :global(.board-avatar-initials) {
+      width: 38px;
+      height: 38px;
+      font-size: 0.95rem;
+    }
+    :global(.board-score-val) {
+      font-size: 1.8rem;
+      min-width: 44px;
+    }
+  }
+</style>
+
+<script>
+  import QRCode from 'qrcode';
+  import { supabase, isConfigured } from '../lib/supabase.js';
+
+  // Toggle de tema para el navbar
+  const themeBtn = document.getElementById('themeBtn');
+  if (themeBtn) {
+    themeBtn.addEventListener('click', () => {
+      const root = document.documentElement;
+      const current = root.getAttribute('data-theme');
+      const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+      const isDark = current === 'dark' || (!current && prefersDark);
+      const nextTheme = isDark ? 'light' : 'dark';
+      root.setAttribute('data-theme', nextTheme);
+      localStorage.setItem('mw26_theme', nextTheme);
+    });
+  }
+
+  const esc = (t: string) => String(t).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c] || c));
+
+  // Ponderaciones oficiales
+  interface TeamBoardData {
+    id: string;
+    bib: string;
+    name: string;
+    leader?: string;
+    scores: {
+      botargas: number;
+      stands: number;
+      enbanderamiento: number;
+    };
+    votes: {
+      botargas: number;
+      stands: number;
+      enbanderamiento: number;
+    };
+  }
+
+  let teamsData: TeamBoardData[] = [
+    {
+      id: 't-pixelados',
+      bib: '014',
+      name: 'Los Pixelados',
+      leader: 'Daniel Moya',
+      scores: { botargas: 88, stands: 92, enbanderamiento: 95 },
+      votes: { botargas: 54, stands: 68, enbanderamiento: 42 }
+    },
+    {
+      id: 't-hunters',
+      bib: '027',
+      name: 'Brand Hunters',
+      leader: 'Valeria Cruz',
+      scores: { botargas: 94, stands: 80, enbanderamiento: 88 },
+      votes: { botargas: 62, stands: 45, enbanderamiento: 36 }
+    },
+    {
+      id: 't-insights',
+      bib: '041',
+      name: 'Los Insights',
+      leader: 'Carlos Mendoza',
+      scores: { botargas: 78, stands: 86, enbanderamiento: 92 },
+      votes: { botargas: 38, stands: 51, enbanderamiento: 48 }
+    },
+    {
+      id: 't-pulso',
+      bib: '033',
+      name: 'Grupo Pulso',
+      leader: 'Andrea Salinas',
+      scores: { botargas: 74, stands: 84, enbanderamiento: 76 },
+      votes: { botargas: 30, stands: 44, enbanderamiento: 22 }
+    },
+    {
+      id: 't-mix',
+      bib: '052',
+      name: 'Mix Creativo',
+      leader: 'Fernando Rojas',
+      scores: { botargas: 90, stands: 72, enbanderamiento: 80 },
+      votes: { botargas: 58, stands: 32, enbanderamiento: 28 }
+    },
+    {
+      id: 't-estrategia',
+      bib: '068',
+      name: 'Estrategia Sur',
+      leader: 'Camila Quispe',
+      scores: { botargas: 70, stands: 88, enbanderamiento: 74 },
+      votes: { botargas: 26, stands: 55, enbanderamiento: 20 }
+    }
+  ];
+
+  let currentFilter = 'gen';
+
+  function calculateTeamScore(t: TeamBoardData, filter: string): number {
+    if (filter === 'gen') {
+      return Number((t.scores.botargas + t.scores.stands + t.scores.enbanderamiento).toFixed(1));
+    }
+
+    if (filter === 'botargas') return t.scores.botargas;
+    if (filter === 'stands') return t.scores.stands;
+    if (filter === 'enbanderamiento') return t.scores.enbanderamiento;
+
+    return 0;
+  }
+
+  // SISTEMA FLIP DE REORDENAMIENTO ANIMADO Y SOLAPAMIENTO DE TARJETAS
+  function updateBoardWithAnimation(changedTeamId: string | null = null) {
+    const container = document.getElementById('leaderboardList');
+    if (!container) return;
+
+    // 1. FIRST: Medir posición vertical previa de cada fila
+    const firstPositions = new Map<string, number>();
+    container.querySelectorAll<HTMLElement>('.leader-card-item').forEach(card => {
+      const id = card.dataset.teamId;
+      if (id) {
+        firstPositions.set(id, card.getBoundingClientRect().top);
+      }
+    });
+
+    // 2. Ordenar datos actualizados
+    const sortedList = teamsData
+      .map(t => ({
+        ...t,
+        calculatedScore: calculateTeamScore(t, currentFilter)
+      }))
+      .sort((a, b) => b.calculatedScore - a.calculatedScore);
+
+    // Actualizar Podio
+    updatePodium(sortedList);
+
+    // 3. Renderizar DOM con el nuevo orden
+    renderCardsDOM(container, sortedList, changedTeamId);
+
+    // 4. INVERT & PLAY: Calcular deltas de desplazamiento y animar solapamiento
+    container.querySelectorAll<HTMLElement>('.leader-card-item').forEach(card => {
+      const id = card.dataset.teamId;
+      if (!id) return;
+
+      const firstTop = firstPositions.get(id);
+      if (firstTop !== undefined) {
+        const lastTop = card.getBoundingClientRect().top;
+        const deltaY = firstTop - lastTop;
+
+        if (deltaY !== 0) {
+          // Si el equipo subió de posición, elevar z-index y activar resplandor para solapar
+          if (deltaY > 0) {
+            card.style.zIndex = '20';
+            card.classList.add('is-climbing');
+          } else {
+            card.style.zIndex = '2';
+            card.classList.remove('is-climbing');
+          }
+
+          // Invert
+          card.style.transform = `translateY(${deltaY}px)`;
+          card.style.transition = 'none';
+
+          // Forzar reflujo
+          card.offsetHeight;
+
+          // Play con curva cubic suave
+          card.style.transition = 'transform 0.75s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.75s ease, z-index 0.75s ease';
+          card.style.transform = 'translateY(0)';
+
+          setTimeout(() => {
+            card.style.zIndex = '';
+            card.classList.remove('is-climbing');
+          }, 800);
+        }
+      }
+    });
+  }
+
+  // Obtener iniciales legibles del nombre del equipo
+  function getTeamInitials(name: string): string {
+    if (!name) return 'MW';
+    const words = name.trim().split(/\s+/).filter(w => !['los', 'las', 'el', 'la', 'de', 'del', 'en', 'y'].includes(w.toLowerCase()));
+    if (words.length === 0) return name.slice(0, 2).toUpperCase();
+    if (words.length === 1) return words[0].slice(0, 2).toUpperCase();
+    return (words[0][0] + words[1][0]).toUpperCase();
+  }
+
+  function renderCardsDOM(container: HTMLElement, sortedList: Array<TeamBoardData & { calculatedScore: number }>, changedTeamId: string | null) {
+    const maxScore = sortedList.length > 0 ? Math.max(...sortedList.map(x => x.calculatedScore), 100) : 100;
+
+    container.innerHTML = sortedList.map((item, index) => {
+      const rk = index + 1;
+      const rkClass = rk === 1 ? 'rk-top-1' : rk === 2 ? 'rk-top-2' : rk === 3 ? 'rk-top-3' : '';
+      const percent = Math.min(100, Math.round((item.calculatedScore / maxScore) * 100));
+      const isJustVoted = item.id === changedTeamId;
+      const initials = getTeamInitials(item.name);
+      const formattedRk = rk < 10 ? '0' + rk : String(rk);
+
+      const votesCount = currentFilter === 'gen'
+        ? (item.votes.botargas + item.votes.stands + item.votes.enbanderamiento)
+        : (item.votes[currentFilter as keyof typeof item.votes] || 0);
+
+      return `
+        <div class="row leader-card-item ${isJustVoted ? 'just-voted' : ''}" data-team-id="${item.id}">
+          <span class="board-rk-badge ${rkClass}">${formattedRk}</span>
+          <div class="board-avatar-initials" title="${esc(item.name)}">${initials}</div>
+          <span class="board-bib-tag">#${esc(item.bib)}</span>
+          <div class="board-team-info">
+            <div class="board-team-name-row">
+              <strong class="board-team-name">${esc(item.name)}</strong>
+              <span class="board-meta-tag">🔥 ${votesCount} votos</span>
+            </div>
+            <div class="board-track-bar">
+              <div class="board-track-fill" style="width: ${percent}%;"></div>
+            </div>
+          </div>
+          <div class="board-row-actions">
+            <span class="board-score-val">${item.calculatedScore}</span>
+          </div>
+        </div>
+      `;
+    }).join('');
+  }
+
+  function updatePodium(sortedList: Array<TeamBoardData & { calculatedScore: number }>) {
+    if (sortedList[0]) {
+      const p1Bib = document.getElementById('pod1Bib');
+      const p1Name = document.getElementById('pod1Name');
+      const p1Score = document.getElementById('pod1Score');
+      const p1Avatar = document.getElementById('pod1Avatar');
+      if (p1Bib) p1Bib.textContent = `#${sortedList[0].bib}`;
+      if (p1Name) p1Name.textContent = sortedList[0].name;
+      if (p1Score) p1Score.textContent = String(sortedList[0].calculatedScore);
+      if (p1Avatar) p1Avatar.textContent = getTeamInitials(sortedList[0].name);
+    }
+
+    if (sortedList[1]) {
+      const p2Bib = document.getElementById('pod2Bib');
+      const p2Name = document.getElementById('pod2Name');
+      const p2Score = document.getElementById('pod2Score');
+      const p2Avatar = document.getElementById('pod2Avatar');
+      if (p2Bib) p2Bib.textContent = `#${sortedList[1].bib}`;
+      if (p2Name) p2Name.textContent = sortedList[1].name;
+      if (p2Score) p2Score.textContent = String(sortedList[1].calculatedScore);
+      if (p2Avatar) p2Avatar.textContent = getTeamInitials(sortedList[1].name);
+    }
+
+    if (sortedList[2]) {
+      const p3Bib = document.getElementById('pod3Bib');
+      const p3Name = document.getElementById('pod3Name');
+      const p3Score = document.getElementById('pod3Score');
+      const p3Avatar = document.getElementById('pod3Avatar');
+      if (p3Bib) p3Bib.textContent = `#${sortedList[2].bib}`;
+      if (p3Name) p3Name.textContent = sortedList[2].name;
+      if (p3Score) p3Score.textContent = String(sortedList[2].calculatedScore);
+      if (p3Avatar) p3Avatar.textContent = getTeamInitials(sortedList[2].name);
+    }
+  }
+
+  // Carga de datos reales desde Supabase
+  async function fetchSupabaseData(changedTeamId: string | null = null) {
+    try {
+      if (isConfigured && supabase) {
+        const { data: gruposData, error: gErr } = await supabase
+          .from('grupos')
+          .select('id, nombre, lider, categorias, color');
+
+        const { data: votosData, error: vErr } = await supabase
+          .from('votos')
+          .select('id, categoria_id, equipo_id, grupo_id');
+
+        if (!gErr && gruposData && gruposData.length > 0) {
+          const voteCounts: Record<string, Record<string, number>> = {};
+
+          (votosData || []).forEach(v => {
+            const gId = v.grupo_id || v.equipo_id;
+            if (!voteCounts[gId]) voteCounts[gId] = { botargas: 0, stands: 0, enbanderamiento: 0 };
+            if (v.categoria_id && voteCounts[gId][v.categoria_id] !== undefined) {
+              voteCounts[gId][v.categoria_id] += 1;
+            }
+          });
+
+          const dynamicTeams: TeamBoardData[] = gruposData.map((g, idx) => {
+            const gVotes = voteCounts[g.id] || { botargas: 0, stands: 0, enbanderamiento: 0 };
+            const bibNum = String(idx + 1).padStart(2, '0');
+
+            return {
+              id: g.id,
+              bib: bibNum,
+              name: g.nombre,
+              leader: g.lider,
+              scores: {
+                botargas: gVotes.botargas,
+                stands: gVotes.stands,
+                enbanderamiento: gVotes.enbanderamiento
+              },
+              votes: gVotes
+            };
+          });
+
+          teamsData = dynamicTeams.length > 0 ? dynamicTeams : teamsData;
+        }
+      }
+    } catch (err) {
+      console.warn('Operando con datos cacheados:', err);
+    } finally {
+      updateBoardWithAnimation(changedTeamId);
+    }
+  }
+
+  // Interacción de chips selectores
+  const filterChips = document.querySelectorAll<HTMLButtonElement>('.chips .chip');
+  filterChips.forEach(btn => {
+    btn.addEventListener('click', () => {
+      filterChips.forEach(b => {
+        b.classList.remove('active');
+        b.removeAttribute('aria-pressed');
+      });
+      btn.classList.add('active');
+      btn.setAttribute('aria-pressed', 'true');
+      currentFilter = btn.getAttribute('data-filter') || 'gen';
+
+      const titlesMap: Record<string, string> = {
+        gen: 'Clasificación General',
+        botargas: 'Carrera de Botargas',
+        stands: 'Decoración de Stands',
+        enbanderamiento: 'Embanderamiento'
+      };
+
+      const titleEl = document.getElementById('activeCategoryTitle');
+      if (titleEl) titleEl.textContent = titlesMap[currentFilter] || 'Clasificación Oficial';
+
+      updateBoardWithAnimation();
+    });
+  });
+
+  // Inicialización automática
+  updateBoardWithAnimation();
+  fetchSupabaseData();
+
+  // Activación de Supabase Realtime automático para Votos y Grupos
+  if (isConfigured && supabase) {
+    const channel = supabase.channel('mw26-live-marcador')
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'votos' }, (payload) => {
+        console.log('⚡ Voto recibido en tiempo real:', payload);
+        const changedTeamId = (payload.new as any)?.grupo_id || (payload.new as any)?.equipo_id || null;
+        fetchSupabaseData(changedTeamId);
+      })
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'grupos' }, (payload) => {
+        console.log('⚡ Cambio en grupos en tiempo real:', payload);
+        fetchSupabaseData();
+      })
+      .subscribe((status) => {
+        if (status === 'SUBSCRIBED') {
+          console.log('🟢 Supabase Realtime activo en marcador');
+        }
+      });
+  }
+
+  // Polling de respaldo cada 25 segundos
+  setInterval(() => {
+    fetchSupabaseData();
+  }, 25000);
+</script>

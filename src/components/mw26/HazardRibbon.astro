@@ -1,0 +1,313 @@
+---
+// HazardRibbon.astro - Réplica de la tira animada estilo Streetwear / Cyber-Brutalist Tape
+interface Props {
+  angle?: number; // Inclinación en grados, por defecto 0 (horizontal)
+  speedSeconds?: number;
+}
+
+const { angle = 0, speedSeconds = 24 } = Astro.props;
+---
+
+<div class="hazard-ribbon-wrap" style={`--ribbon-angle: ${angle}deg; --scroll-speed: ${speedSeconds}s;`}>
+  <div class="hazard-tape-track">
+    <!-- Grupo 1 -->
+    <div class="hazard-tape-group">
+      {Array.from({ length: 4 }).map(() => (
+        <div class="hazard-unit">
+          <!-- Franja superior de peligro (Hazard Stripes) -->
+          <div class="hazard-border-stripe hazard-top"></div>
+
+          <!-- Fila de micro-texto superior -->
+          <div class="hazard-micro-lane hazard-micro-top mono">
+            <span>INNOVACIÓN &amp; ESTRATEGIA</span>
+            <span class="hazard-star">★</span>
+            <span>05 — 08 OCTUBRE</span>
+            <span class="hazard-star">★</span>
+            <span>CAMPUS CENTRAL UNIVALLE</span>
+            <span class="hazard-star">★</span>
+            <span>3 COMPETENCIAS OFICIALES</span>
+            <span class="hazard-star">★</span>
+          </div>
+
+          <!-- Fila central protagonista -->
+          <div class="hazard-center-lane">
+            <!-- Destello con líneas extendidas -->
+            <div class="spark-line-wrap" aria-hidden="true">
+              <svg viewBox="0 0 120 20" class="spark-line-svg">
+                <line x1="0" y1="10" x2="52" y2="10" stroke="currentColor" stroke-width="2" />
+                <polygon points="60,2 63,10 60,18 57,10" fill="currentColor" />
+                <line x1="68" y1="10" x2="120" y2="10" stroke="currentColor" stroke-width="2" />
+              </svg>
+            </div>
+
+            <!-- Ícono tech / 4-lobed clover -->
+            <div class="tech-clover-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor">
+                <circle cx="12" cy="4.5" r="3.2"/>
+                <circle cx="12" cy="19.5" r="3.2"/>
+                <circle cx="4.5" cy="12" r="3.2"/>
+                <circle cx="19.5" cy="12" r="3.2"/>
+                <circle cx="12" cy="12" r="2.4"/>
+              </svg>
+            </div>
+
+            <!-- Título central contundente -->
+            <span class="hazard-headline display">
+              MARKETING WEEK
+            </span>
+
+            <!-- Ícono tech derecho -->
+            <div class="tech-clover-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor">
+                <circle cx="12" cy="4.5" r="3.2"/>
+                <circle cx="12" cy="19.5" r="3.2"/>
+                <circle cx="4.5" cy="12" r="3.2"/>
+                <circle cx="19.5" cy="12" r="3.2"/>
+                <circle cx="12" cy="12" r="2.4"/>
+              </svg>
+            </div>
+
+            <!-- Destello con líneas extendidas derecho -->
+            <div class="spark-line-wrap" aria-hidden="true">
+              <svg viewBox="0 0 120 20" class="spark-line-svg">
+                <line x1="0" y1="10" x2="52" y2="10" stroke="currentColor" stroke-width="2" />
+                <polygon points="60,2 63,10 60,18 57,10" fill="currentColor" />
+                <line x1="68" y1="10" x2="120" y2="10" stroke="currentColor" stroke-width="2" />
+              </svg>
+            </div>
+          </div>
+
+          <!-- Fila de micro-texto inferior -->
+          <div class="hazard-micro-lane hazard-micro-bottom mono">
+            <span>VOTACIÓN EN TIEMPO REAL</span>
+            <span class="hazard-star">★</span>
+            <span>AUDITORÍA ESTUDIANTIL</span>
+            <span class="hazard-star">★</span>
+            <span>1 VOTO POR PERSONA</span>
+            <span class="hazard-star">★</span>
+            <span>MARCADOR EN VIVO</span>
+            <span class="hazard-star">★</span>
+          </div>
+
+          <!-- Franja inferior de peligro (Hazard Stripes) -->
+          <div class="hazard-border-stripe hazard-bottom"></div>
+        </div>
+      ))}
+    </div>
+
+    <!-- Grupo 2 (Clon idéntico para scroll infinito sin saltos) -->
+    <div class="hazard-tape-group" aria-hidden="true">
+      {Array.from({ length: 4 }).map(() => (
+        <div class="hazard-unit">
+          <div class="hazard-border-stripe hazard-top"></div>
+
+          <div class="hazard-micro-lane hazard-micro-top mono">
+            <span>INNOVACIÓN &amp; ESTRATEGIA</span>
+            <span class="hazard-star">★</span>
+            <span>05 — 09 OCTUBRE</span>
+            <span class="hazard-star">★</span>
+            <span>CAMPUS CENTRAL UNIVALLE</span>
+            <span class="hazard-star">★</span>
+            <span>4 COMPETENCIAS OFICIALES</span>
+            <span class="hazard-star">★</span>
+          </div>
+
+          <div class="hazard-center-lane">
+            <div class="spark-line-wrap" aria-hidden="true">
+              <svg viewBox="0 0 120 20" class="spark-line-svg">
+                <line x1="0" y1="10" x2="52" y2="10" stroke="currentColor" stroke-width="2" />
+                <polygon points="60,2 63,10 60,18 57,10" fill="currentColor" />
+                <line x1="68" y1="10" x2="120" y2="10" stroke="currentColor" stroke-width="2" />
+              </svg>
+            </div>
+
+            <div class="tech-clover-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor">
+                <circle cx="12" cy="4.5" r="3.2"/>
+                <circle cx="12" cy="19.5" r="3.2"/>
+                <circle cx="4.5" cy="12" r="3.2"/>
+                <circle cx="19.5" cy="12" r="3.2"/>
+                <circle cx="12" cy="12" r="2.4"/>
+              </svg>
+            </div>
+
+            <span class="hazard-headline display">
+              MARKETING WEEK
+            </span>
+
+            <div class="tech-clover-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor">
+                <circle cx="12" cy="4.5" r="3.2"/>
+                <circle cx="12" cy="19.5" r="3.2"/>
+                <circle cx="4.5" cy="12" r="3.2"/>
+                <circle cx="19.5" cy="12" r="3.2"/>
+                <circle cx="12" cy="12" r="2.4"/>
+              </svg>
+            </div>
+
+            <div class="spark-line-wrap" aria-hidden="true">
+              <svg viewBox="0 0 120 20" class="spark-line-svg">
+                <line x1="0" y1="10" x2="52" y2="10" stroke="currentColor" stroke-width="2" />
+                <polygon points="60,2 63,10 60,18 57,10" fill="currentColor" />
+                <line x1="68" y1="10" x2="120" y2="10" stroke="currentColor" stroke-width="2" />
+              </svg>
+            </div>
+          </div>
+
+          <div class="hazard-micro-lane hazard-micro-bottom mono">
+            <span>VOTACIÓN EN TIEMPO REAL</span>
+            <span class="hazard-star">★</span>
+            <span>AUDITORÍA ESTUDIANTIL</span>
+            <span class="hazard-star">★</span>
+            <span>1 VOTO POR PERSONA</span>
+            <span class="hazard-star">★</span>
+            <span>MARCADOR EN VIVO</span>
+            <span class="hazard-star">★</span>
+          </div>
+
+          <div class="hazard-border-stripe hazard-bottom"></div>
+        </div>
+      ))}
+    </div>
+  </div>
+</div>
+
+<style>
+  .hazard-ribbon-wrap {
+    width: 100%;
+    position: relative;
+    overflow: hidden;
+    padding: 12px 0;
+    transform: rotate(var(--ribbon-angle, 0deg));
+    user-select: none;
+    z-index: 20;
+    pointer-events: none;
+  }
+
+  .hazard-tape-track {
+    display: flex;
+    width: max-content;
+    animation: hazardScroll var(--scroll-speed, 24s) linear infinite;
+    will-change: transform;
+  }
+
+  .hazard-ribbon-wrap:hover .hazard-tape-track {
+    animation-play-state: paused;
+  }
+
+  @keyframes hazardScroll {
+    0% {
+      transform: translateX(0);
+    }
+    100% {
+      transform: translateX(-50%);
+    }
+  }
+
+  .hazard-tape-group {
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
+  }
+
+  .hazard-unit {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    background: var(--orange, #FE7B00);
+    color: var(--ink, #101010);
+    position: relative;
+    box-shadow: 0 8px 18px rgba(16, 16, 16, 0.22);
+    flex-shrink: 0;
+  }
+
+  /* 1. Dientes de peligro superior e inferior (Hazard Stripes) */
+  .hazard-border-stripe {
+    height: 12px;
+    width: 100%;
+    background: repeating-linear-gradient(
+      -45deg,
+      var(--ink, #101010) 0,
+      var(--ink, #101010) 14px,
+      var(--orange, #FE7B00) 14px,
+      var(--orange, #FE7B00) 28px
+    );
+    border-top: 2px solid var(--ink, #101010);
+    border-bottom: 2px solid var(--ink, #101010);
+  }
+
+  .hazard-bottom {
+    background: repeating-linear-gradient(
+      45deg,
+      var(--ink, #101010) 0,
+      var(--ink, #101010) 14px,
+      var(--orange, #FE7B00) 14px,
+      var(--orange, #FE7B00) 28px
+    );
+  }
+
+  /* 2. Micro-carriles de texto superior e inferior */
+  .hazard-micro-lane {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 3px 18px;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    white-space: nowrap;
+    opacity: 0.95;
+    color: var(--ink, #101010);
+  }
+
+  .hazard-micro-top {
+    border-bottom: 1px dashed rgba(16, 16, 16, 0.35);
+  }
+
+  .hazard-micro-bottom {
+    border-top: 1px dashed rgba(16, 16, 16, 0.35);
+  }
+
+  .hazard-star {
+    font-size: 8px;
+    opacity: 0.8;
+  }
+
+  /* 3. Fila Central */
+  .hazard-center-lane {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    padding: 8px 24px;
+    white-space: nowrap;
+  }
+
+  .hazard-headline {
+    font-family: var(--f-display, 'Anton', sans-serif);
+    font-weight: 900;
+    font-size: clamp(34px, 4.5vw, 48px);
+    line-height: 0.9;
+    letter-spacing: 0.04em;
+    color: var(--ink, #101010);
+    text-shadow: 1.5px 1.5px 0px rgba(254, 255, 250, 0.4);
+  }
+
+  .tech-clover-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--ink, #101010);
+  }
+
+  .spark-line-wrap {
+    display: flex;
+    align-items: center;
+    color: var(--ink, #101010);
+  }
+
+  .spark-line-svg {
+    width: 100px;
+    height: 18px;
+    display: block;
+  }
+</style>

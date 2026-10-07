@@ -1,0 +1,497 @@
+---
+// InscripcionDorsal.astro — Formulario oficial con generación y previsualización de dorsal en tiempo real
+---
+<section class="sec sec--alt" id="inscripcion">
+  <div class="wrap">
+    <div class="sec-head">
+      <p class="eyebrow">Inscripción de grupos</p>
+      <h2 class="display">Consigue tu dorsal.</h2>
+      <p class="sec-lead">
+        Completa el formulario oficial para inscribir a tu equipo. Al finalizar recibes tu dorsal con número y código QR.
+      </p>
+    </div>
+
+    <div class="reg">
+      <!-- Formulario de Registro -->
+      <form class="form" id="regForm" novalidate>
+        <div class="f2">
+          <div class="field">
+            <label for="gName">Nombre del grupo / equipo</label>
+            <input class="input" id="gName" type="text" autocomplete="off" placeholder="Ej. Los Pixelados" />
+            <p class="err" id="eName" role="alert"></p>
+          </div>
+          <div class="field">
+            <label for="gLeader">Líder / representante</label>
+            <input class="input" id="gLeader" type="text" autocomplete="name" placeholder="Nombre y apellido" />
+            <p class="err" id="eLeader" role="alert"></p>
+          </div>
+        </div>
+
+        <div class="f2">
+          <div class="field">
+            <label for="gEmail">Correo institucional del líder</label>
+            <input class="input" id="gEmail" type="email" inputmode="email" autocomplete="email" placeholder="tu.nombre@univalle.edu" />
+            <p class="hint">Debe terminar en @univalle.edu o @est.univalle.edu.</p>
+            <p class="err" id="eEmail" role="alert"></p>
+          </div>
+          <div class="field">
+            <span class="lab" id="lMembers">Número de integrantes</span>
+            <div class="stepper">
+              <button type="button" id="mMinus" aria-label="Quitar un integrante">−</button>
+              <input class="input" id="gMembers" type="number" min="1" max="30" value="5" aria-labelledby="lMembers" />
+              <button type="button" id="mPlus" aria-label="Agregar un integrante">+</button>
+            </div>
+            <p class="err" id="eMembers" role="alert"></p>
+          </div>
+        </div>
+
+        <div class="field">
+          <span class="lab">Competencias en las que participan</span>
+          <div class="comps">
+            <label class="comp">
+              <input type="checkbox" id="c_ban" data-n="Enbanderamiento" />
+              <span>Enbanderamiento<small>Opcional</small></span>
+            </label>
+            <label class="comp is-lock">
+              <input type="checkbox" id="c_bot" data-n="Carrera de botargas" checked disabled />
+              <span>Carrera de botargas<small>Obligatoria</small></span>
+            </label>
+            <label class="comp is-lock">
+              <input type="checkbox" id="c_sta" data-n="Decoración de stands" checked disabled />
+              <span>Decoración de stands<small>Obligatoria</small></span>
+            </label>
+          </div>
+        </div>
+
+        <div class="foot-row">
+          <button class="btn" type="submit">Inscribir equipo y generar QR</button>
+          <span class="hint">Botargas y Stands son obligatorios.</span>
+        </div>
+      </form>
+
+      <!-- Previsualización del Dorsal Oficial en Tiempo Real -->
+      <aside class="bib" id="bib" aria-live="polite">
+        <!-- Tarjeta Mascota con Dorsal Oficial 01 -->
+        <div class="bib-mascot-head">
+          <img src="/assets/img/marki-valle-dorsal.jpg" alt="Marki Valle con el dorsal oficial número 01" class="bib-mascot-art" />
+          <div class="bib-mascot-badge-box">
+            <span class="badge-rubberhose" style="font-size: 10px; padding: 2px 8px;">★ DORSAL DE CARRERA ★</span>
+            <b class="font-cartoon" style="font-size: 1rem; color: var(--ink); display: block; margin-top: 2px;">¡COMPITE CON TU GRUPO!</b>
+            <small style="font-size: 0.78rem; color: var(--muted); display: block;">Tu equipo recibe un dorsal numerado con QR.</small>
+          </div>
+        </div>
+
+        <div class="bib__top">
+          <i class="bib__hole l"></i>
+          <i class="bib__hole r"></i>
+          <span>Marketing Week 26</span>
+          <span id="bStatus">Borrador</span>
+        </div>
+        <div class="bib__num" id="bNum">N° ---</div>
+        <h3 id="bName">Tu grupo</h3>
+        <dl>
+          <div>
+            <dt>Líder</dt>
+            <dd id="bLeader">Por completar</dd>
+          </div>
+          <div>
+            <dt>Correo</dt>
+            <dd id="bEmail">Por completar</dd>
+          </div>
+          <div>
+            <dt>Integrantes</dt>
+            <dd id="bMembers">5</dd>
+          </div>
+          <div>
+            <dt>Compiten en</dt>
+            <dd><div class="pills" id="bComps"></div></dd>
+          </div>
+        </dl>
+        <div class="bib__qr">
+          <div class="box" id="bQr">El QR aparece al inscribir</div>
+          <p id="bNote">Así se verá el dorsal de tu equipo. Se actualiza mientras escribes.</p>
+        </div>
+        <div class="bib__actions" id="bActions" style="display:none; gap:8px; flex-direction:column; width:100%; margin-top:10px;">
+          <button class="btn btn--orange btn--sm" type="button" id="bDownloadPdf">📥 Descargar Ficha PDF</button>
+          <button class="btn btn--ghost btn--sm" type="button" id="bCopyLink">📋 Copiar enlace de votación</button>
+        </div>
+        <button class="btn btn--ghost btn--sm" type="button" id="bReset" hidden style="margin-top:6px;">Inscribir otro grupo</button>
+      </aside>
+    </div>
+  </div>
+</section>
+
+<script>
+  import confetti from 'canvas-confetti';
+  import QRCode from 'qrcode';
+  import { jsPDF } from 'jspdf';
+  import { supabase, isConfigured, isValidUnivalleEmail } from '../../lib/supabase.js';
+
+  const esc = (t: string) => String(t).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c] || c));
+
+  const regForm = document.getElementById('regForm') as HTMLFormElement | null;
+  const F = {
+    name: document.getElementById('gName') as HTMLInputElement,
+    leader: document.getElementById('gLeader') as HTMLInputElement,
+    email: document.getElementById('gEmail') as HTMLInputElement,
+    members: document.getElementById('gMembers') as HTMLInputElement
+  };
+
+  let submitted = false;
+  let currentTeamData: {
+    id: string;
+    nombre: string;
+    lider: string;
+    correo: string;
+    integrantes: number;
+    categorias: string[];
+    qrDataUrl: string;
+    voteUrl: string;
+    num: number;
+  } | null = null;
+
+  function comps(): { id: string; name: string }[] {
+    const list = [
+      { id: 'enbanderamiento', k: 'ban', name: 'Enbanderamiento' },
+      { id: 'botargas', k: 'bot', name: 'Carrera de botargas' },
+      { id: 'stands', k: 'sta', name: 'Decoración de stands' }
+    ];
+
+    return list.filter(item => {
+      const el = document.getElementById('c_' + item.k) as HTMLInputElement | null;
+      return el && el.checked;
+    }).map(item => ({ id: item.id, name: item.name }));
+  }
+
+  function updateBib() {
+    if (submitted) return;
+    const bName = document.getElementById('bName');
+    const bLeader = document.getElementById('bLeader');
+    const bEmail = document.getElementById('bEmail');
+    const bMembers = document.getElementById('bMembers');
+    const bComps = document.getElementById('bComps');
+
+    if (bName) bName.textContent = F.name?.value.trim() || 'Tu grupo';
+    if (bLeader) bLeader.textContent = F.leader?.value.trim() || 'Por completar';
+    if (bEmail) bEmail.textContent = F.email?.value.trim() || 'Por completar';
+    if (bMembers) bMembers.textContent = F.members?.value || '0';
+    if (bComps) {
+      bComps.innerHTML = comps().map(c => `<span class="tag">${esc(c.name)}</span>`).join('');
+    }
+  }
+
+  if (F.name && F.leader && F.email && F.members) {
+    Object.values(F).forEach(input => {
+      input.addEventListener('input', () => {
+        input.removeAttribute('aria-invalid');
+        updateBib();
+      });
+    });
+
+    document.querySelectorAll('.comp input').forEach(c => {
+      c.addEventListener('change', updateBib);
+    });
+
+    const mMinus = document.getElementById('mMinus');
+    const mPlus = document.getElementById('mPlus');
+
+    if (mMinus) {
+      mMinus.addEventListener('click', () => {
+        F.members.value = String(Math.max(1, (+F.members.value || 1) - 1));
+        updateBib();
+      });
+    }
+
+    if (mPlus) {
+      mPlus.addEventListener('click', () => {
+        F.members.value = String(Math.min(30, (+F.members.value || 0) + 1));
+        updateBib();
+      });
+    }
+
+    updateBib();
+  }
+
+  function setErr(id: string, input: HTMLInputElement, msg: string): boolean {
+    const el = document.getElementById(id);
+    if (el) el.textContent = msg;
+    if (msg) input.setAttribute('aria-invalid', 'true');
+    else input.removeAttribute('aria-invalid');
+    return !msg;
+  }
+
+  // Descarga del PDF oficial con formato de afiche / dorsal deportivo
+  async function downloadPdf(team: NonNullable<typeof currentTeamData>) {
+    try {
+      const doc = new jsPDF({
+        orientation: 'portrait',
+        unit: 'mm',
+        format: 'a4'
+      });
+
+      const pw = doc.internal.pageSize.getWidth();
+      const ph = doc.internal.pageSize.getHeight();
+
+      // Fondo marfil
+      doc.setFillColor(244, 243, 239);
+      doc.rect(0, 0, pw, ph, 'F');
+
+      // Franja superior de campeonato naranja
+      doc.setFillColor(255, 122, 0);
+      doc.rect(0, 0, pw, 18, 'F');
+
+      doc.setFont('helvetica', 'bold');
+      doc.setFontSize(11);
+      doc.setTextColor(13, 14, 16);
+      doc.text('MARKETING WEEK 2026 · UNIVALLE CAMPUS CENTRAL', pw / 2, 12, { align: 'center' });
+
+      // Número de dorsal de gran formato
+      doc.setFontSize(48);
+      doc.text(`N° ${team.num}`, pw / 2, 42, { align: 'center' });
+
+      // Nombre del equipo
+      doc.setFontSize(22);
+      doc.setTextColor(255, 122, 0);
+      doc.text(team.nombre.toUpperCase(), pw / 2, 54, { align: 'center' });
+
+      // Datos del equipo
+      doc.setFont('helvetica', 'normal');
+      doc.setFontSize(11);
+      doc.setTextColor(13, 14, 16);
+      doc.text(`Líder: ${team.lider}`, 24, 68);
+      doc.text(`Correo Institucional: ${team.correo}`, 24, 76);
+      doc.text(`Integrantes: ${team.integrantes}`, 24, 84);
+      doc.text(`Competencias: ${team.categorias.join(', ')}`, 24, 92);
+
+      // Código QR
+      const qrSize = 90;
+      const qrX = (pw - qrSize) / 2;
+      const qrY = 104;
+
+      doc.setFillColor(255, 255, 255);
+      doc.rect(qrX - 4, qrY - 4, qrSize + 8, qrSize + 8, 'FD');
+      doc.addImage(team.qrDataUrl, 'PNG', qrX, qrY, qrSize, qrSize);
+
+      doc.setFont('helvetica', 'bold');
+      doc.setFontSize(12);
+      doc.setTextColor(255, 122, 0);
+      doc.text('👆 ESCANEA ESTE CÓDIGO QR PARA VOTAR POR EL EQUIPO', pw / 2, qrY + qrSize + 14, { align: 'center' });
+
+      doc.setFont('helvetica', 'normal');
+      doc.setFontSize(9);
+      doc.setTextColor(80, 80, 80);
+      doc.text(team.voteUrl, pw / 2, qrY + qrSize + 22, { align: 'center' });
+
+      // Reglas oficiales
+      doc.setFillColor(13, 14, 16);
+      doc.rect(20, ph - 36, pw - 40, 22, 'F');
+      doc.setFont('helvetica', 'bold');
+      doc.setFontSize(8.5);
+      doc.setTextColor(255, 122, 0);
+      doc.text('REGLAMENTO OFICIAL DE VOTACIÓN:', 24, ph - 28);
+      doc.setFont('helvetica', 'normal');
+      doc.setTextColor(244, 243, 239);
+      doc.text('• Válido con correo institucional @univalle.edu o @est.univalle.edu con 7 dígitos de estudiante.', 24, ph - 22);
+      doc.text('• 1 voto por categoría por persona auditado en base de datos PostgreSQL.', 24, ph - 17);
+
+      const safeName = team.nombre.replace(/[^a-zA-Z0-9_-]/g, '_');
+      doc.save(`Dorsal-Oficial-${safeName}-MW26.pdf`);
+    } catch (err) {
+      console.error('Error generando PDF del dorsal:', err);
+    }
+  }
+
+  if (regForm) {
+    regForm.addEventListener('submit', async (e: Event) => {
+      e.preventDefault();
+      const m = +F.members.value;
+      const a = setErr('eName', F.name, F.name.value.trim().length < 2 ? 'Escribe el nombre del grupo.' : '');
+      const b = setErr('eLeader', F.leader, F.leader.value.trim().length < 3 ? 'Escribe nombre y apellido del líder.' : '');
+      
+      const emailVal = F.email.value.trim().toLowerCase();
+      const emailOk = isValidUnivalleEmail ? isValidUnivalleEmail(emailVal) : /^[^\s@]+@([a-z0-9-]+\.)?univalle\.edu$/i.test(emailVal);
+      const c = setErr('eEmail', F.email, emailOk ? '' : 'Usa un correo terminado en @univalle.edu o @est.univalle.edu (con 7 dígitos).');
+      const d = setErr('eMembers', F.members, (m >= 1 && m <= 30) ? '' : 'Indica entre 1 y 30 integrantes.');
+
+      if (!(a && b && c && d)) {
+        const firstErr = regForm.querySelector('[aria-invalid="true"]') as HTMLElement | null;
+        if (firstErr) firstErr.focus();
+        return;
+      }
+
+      const submitBtn = regForm.querySelector('button[type="submit"]') as HTMLButtonElement | null;
+      if (submitBtn) {
+        submitBtn.disabled = true;
+        submitBtn.textContent = 'Registrando equipo...';
+      }
+
+      const selectedComps = comps();
+      const compIds = selectedComps.map(x => x.id);
+      const compNames = selectedComps.map(x => x.name);
+      const num = 100 + Math.floor(Math.random() * 800);
+      let grupoId = '';
+
+      try {
+        if (isConfigured && supabase) {
+          // Inserción real en base de datos Supabase
+          const { data: gData, error: gError } = await supabase
+            .from('grupos')
+            .insert({
+              nombre: F.name.value.trim(),
+              lider: F.leader.value.trim(),
+              correo_lider: emailVal,
+              integrantes: m,
+              categorias: compIds,
+              color: '#FF7A00'
+            })
+            .select()
+            .single();
+
+          if (gError) throw gError;
+          grupoId = gData.id;
+
+          const eqRows = compIds.map((cId, idx) => ({
+            grupo_id: grupoId,
+            categoria_id: cId,
+            nombre: F.name.value.trim(),
+            color: '#FF7A00',
+            orden: idx + 1
+          }));
+
+          await supabase.from('equipos').insert(eqRows);
+        } else {
+          grupoId = 'demo-' + Date.now();
+        }
+      } catch (err: any) {
+        console.warn('Operando en modo local/fallback:', err);
+        grupoId = 'demo-' + Date.now();
+      }
+
+      submitted = true;
+      const baseSite = window.location.origin;
+      const voteUrl = `${baseSite}/votar?equipo=${grupoId}`;
+
+      // Generar QR en base64
+      let qrDataUrl = '';
+      try {
+        qrDataUrl = await QRCode.toDataURL(voteUrl, {
+          width: 500,
+          margin: 1,
+          color: { dark: '#0D0E10', light: '#FFFFFF' }
+        });
+      } catch (e) {
+        qrDataUrl = '';
+      }
+
+      currentTeamData = {
+        id: grupoId,
+        nombre: F.name.value.trim(),
+        lider: F.leader.value.trim(),
+        correo: emailVal,
+        integrantes: m,
+        categorias: compNames,
+        qrDataUrl,
+        voteUrl,
+        num
+      };
+
+      // Disparar confeti de celebración
+      try {
+        confetti({
+          particleCount: 80,
+          spread: 70,
+          origin: { y: 0.6 },
+          colors: ['#FF7A00', '#F4F3EF', '#0D0E10']
+        });
+      } catch (e) {}
+
+      // Actualizar dorsal visual
+      const box = document.getElementById('bQr');
+      if (box) {
+        box.innerHTML = qrDataUrl ? `<img src="${qrDataUrl}" alt="QR Votación" style="width:104px;height:104px;display:block;margin:auto;background:#fff;padding:4px;border-radius:4px;" />` : voteUrl;
+      }
+
+      const bStatus = document.getElementById('bStatus');
+      const bNum = document.getElementById('bNum');
+      const bName = document.getElementById('bName');
+      const bLeader = document.getElementById('bLeader');
+      const bEmail = document.getElementById('bEmail');
+      const bMembers = document.getElementById('bMembers');
+      const bComps = document.getElementById('bComps');
+      const bNote = document.getElementById('bNote');
+      const bReset = document.getElementById('bReset') as HTMLButtonElement | null;
+      const bActions = document.getElementById('bActions');
+      const bib = document.getElementById('bib');
+
+      if (bStatus) bStatus.textContent = 'Inscrito';
+      if (bNum) bNum.textContent = 'N° ' + num;
+      if (bName) bName.textContent = F.name.value.trim();
+      if (bLeader) bLeader.textContent = F.leader.value.trim();
+      if (bEmail) bEmail.textContent = emailVal;
+      if (bMembers) bMembers.textContent = String(m);
+      if (bComps) bComps.innerHTML = compNames.map(x => `<span class="tag">${esc(x)}</span>`).join('');
+      if (bNote) bNote.textContent = `¡Equipo registrado con éxito! Descarga tu ficha o copia el enlace de votación.`;
+      if (bActions) bActions.style.display = 'flex';
+      if (bReset) bReset.hidden = false;
+
+      if (submitBtn) {
+        submitBtn.disabled = false;
+        submitBtn.textContent = '✓ Equipo Inscrito';
+      }
+
+      if (bib) bib.scrollIntoView({ behavior: 'smooth', block: 'center' });
+
+      // Descargar automáticamente el PDF oficial
+      if (currentTeamData && qrDataUrl) {
+        downloadPdf(currentTeamData);
+      }
+    });
+
+    // Botones de acción del dorsal
+    const bDownloadPdf = document.getElementById('bDownloadPdf');
+    if (bDownloadPdf) {
+      bDownloadPdf.addEventListener('click', () => {
+        if (currentTeamData) downloadPdf(currentTeamData);
+      });
+    }
+
+    const bCopyLink = document.getElementById('bCopyLink');
+    if (bCopyLink) {
+      bCopyLink.addEventListener('click', async () => {
+        if (!currentTeamData) return;
+        try {
+          await navigator.clipboard.writeText(currentTeamData.voteUrl);
+          const orig = bCopyLink.textContent;
+          bCopyLink.textContent = '✓ ¡Enlace copiado!';
+          setTimeout(() => { bCopyLink.textContent = orig; }, 2500);
+        } catch (e) {
+          prompt('Copia este enlace de votación:', currentTeamData.voteUrl);
+        }
+      });
+    }
+
+    const bReset = document.getElementById('bReset');
+    if (bReset) {
+      bReset.addEventListener('click', () => {
+        submitted = false;
+        currentTeamData = null;
+        regForm.reset();
+        const bStatus = document.getElementById('bStatus');
+        const bNum = document.getElementById('bNum');
+        const bQr = document.getElementById('bQr');
+        const bNote = document.getElementById('bNote');
+        const bActions = document.getElementById('bActions');
+        const submitBtn = regForm.querySelector('button[type="submit"]') as HTMLButtonElement | null;
+
+        if (bStatus) bStatus.textContent = 'Borrador';
+        if (bNum) bNum.textContent = 'N° ---';
+        if (bQr) bQr.textContent = 'El QR aparece al inscribir';
+        if (bNote) bNote.textContent = 'Así se verá el dorsal de tu equipo. Se actualiza mientras escribes.';
+        if (bActions) bActions.style.display = 'none';
+        if (submitBtn) submitBtn.textContent = 'Inscribir equipo y generar QR';
+        bReset.hidden = true;
+        updateBib();
+      });
+    }
+  }
+</script>

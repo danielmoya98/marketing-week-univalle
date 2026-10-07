@@ -1,0 +1,68 @@
+---
+// Layout Oficial para Marketing Week 2026
+import LayoutMW26 from '../layouts/LayoutMW26.astro';
+
+// Componentes Migrados de Marketing Week 2026
+import TopBar from '../components/mw26/TopBar.astro';
+import Navbar from '../components/mw26/Navbar.astro';
+import Hero from '../components/mw26/Hero.astro';
+import MarqueeBand from '../components/mw26/MarqueeBand.astro';
+import Fixture from '../components/mw26/Fixture.astro';
+import CampusMapMW26 from '../components/mw26/CampusMap.astro';
+import Competencias from '../components/mw26/Competencias.astro';
+import Premios from '../components/mw26/Premios.astro';
+import DjSession from '../components/mw26/DjSession.astro';
+import SocialFeed from '../components/mw26/SocialFeed.astro';
+import InscripcionCta from '../components/mw26/InscripcionCta.astro';
+import Faq from '../components/mw26/Faq.astro';
+import FooterMW26 from '../components/mw26/Footer.astro';
+import MobileDock from '../components/mw26/MobileDock.astro';
+import HazardRibbon from '../components/mw26/HazardRibbon.astro';
+---
+
+<LayoutMW26 title="Marketing Week 26 — Univalle Campus Central">
+
+  <!-- 1. Barra Superior con Fechas y Acceso -->
+  <TopBar />
+
+  <!-- 2. Navegación Principal con Logo y Selector de Tema -->
+  <Navbar />
+
+  <main>
+    <!-- 3. Hero de Campeonato con Mascota, Contador y Próxima Actividad -->
+    <Hero />
+
+    <!-- 4. Cinta Hazard Ribbon Horizontal con Animación Streetwear Continua -->
+    <HazardRibbon angle={0} />
+
+    <!-- 5. Fixture Semanal y Cronograma con Filtros por Zona -->
+    <Fixture />
+
+    <!-- 6. Mapa Interactivo del Campus con Pines y Detalles de Zonas -->
+    <CampusMapMW26 />
+
+    <!-- 7. Franjas Interactivas de Competencias (Reglas, Ponderación y Enlaces) -->
+    <Competencias />
+
+    <!-- 10. Podio Oficial y Desglose de Premiación -->
+    <Premios />
+
+    <!-- 11. Escenario Musical en Vivo & DJ Oficial -->
+    <DjSession />
+
+    <!-- 12. Comunidad & Muro Visual de Redes Sociales (Instagram) -->
+    <SocialFeed />
+
+    <!-- 13. Llamada a la Acción de Inscripción de Equipos (Lleva a /inscribir) -->
+    <InscripcionCta />
+
+    <!-- 14. Preguntas Frecuentes Acordeón -->
+    <Faq />
+  </main>
+
+  <!-- 15. Pie de Página con Tipografía Gran Formato -->
+  <FooterMW26 />
+
+  <!-- 16. Botón de Acción Rápida Móvil -->
+  <MobileDock />
+</LayoutMW26>

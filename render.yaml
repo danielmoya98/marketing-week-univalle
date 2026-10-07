@@ -1,0 +1,13 @@
+services:
+  - type: web
+    name: marketing-week-univalle
+    runtime: static
+    buildCommand: npm install && npm run build
+    staticPublishPath: dist
+    envVars:
+      - key: PUBLIC_SITE_URL
+        sync: false
+      - key: PUBLIC_SUPABASE_URL
+        value: https://xhvzvxnkxyuccvwsuxkg.supabase.co
+      - key: PUBLIC_SUPABASE_ANON_KEY
+        value: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inhodnp2eG5reHl1Y2N2d3N1eGtnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTA5NTAxNDgsImV4cCI6MjEwNjUyNjE0OH0.cSPlQY4TR81V9f4q_-29B8nzKSkX4yiYilC5gQ4TjmM

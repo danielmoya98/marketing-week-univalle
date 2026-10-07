@@ -1,0 +1,96 @@
+---
+// GuiaSemana.astro — Checklist interactivo para equipos y recomendaciones para asistentes
+---
+<section class="sec" id="equipos">
+  <div class="wrap">
+    <div class="sec-head">
+      <p class="eyebrow">Guía de la semana</p>
+      <h2 class="display">Prepárate antes del lunes.</h2>
+      <p class="sec-lead">
+        Una lista para los grupos que compiten y una guía rápida para quienes vienen a mirar, probar y votar.
+      </p>
+    </div>
+
+    <div class="team">
+      <!-- Checklist Interactivo del Equipo -->
+      <div class="card check">
+        <h3>Checklist del equipo</h3>
+        <div class="pb">
+          <span id="todoLbl">0 de 7 listos</span>
+          <div class="track"><i id="todoBar" style="width:0%"></i></div>
+        </div>
+        <div class="todo" id="todoList"></div>
+      </div>
+
+      <!-- Guía para Asistentes y Público -->
+      <div class="pubs">
+        <h3 class="pubh">Si vienes a mirar</h3>
+        <div class="pub">
+          <em>A</em>
+          <div>
+            <b>Pasa por el Patio</b>
+            <p>La feria de stands abre el martes 06 de 15:00 a 17:00. Cada stand tiene su propio código para votar.</p>
+          </div>
+        </div>
+        <div class="pub">
+          <em>B</em>
+          <div>
+            <b>No te pierdas la carrera</b>
+            <p>La carrera de botargas es el miércoles 07 a las 15:00. Es la prueba con más público de la semana.</p>
+          </div>
+        </div>
+        <div class="pub">
+          <em>C</em>
+          <div>
+            <b>Vota una vez por categoría</b>
+            <p>Entra con tu correo @univalle.edu. Tu voto se suma al marcador al instante.</p>
+          </div>
+        </div>
+        <div class="pub">
+          <em>D</em>
+          <div>
+            <b>Acceso libre</b>
+            <p>Estudiantes, docentes y personal administrativo pueden recorrer todas las zonas del campus.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  const esc = (t: string) => String(t).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c] || c));
+
+  const TODO = [
+    'Elegir el nombre y el símbolo del grupo',
+    'Definir líder y lista de integrantes',
+    'Diseñar la bandera (mínimo 1,5 × 1 m)',
+    'Crear la botarga y asignar quién corre',
+    'Planear el stand y sus activaciones interactivas',
+    'Conseguir el apoyo del público estudiantil para los votos',
+    'Inscribir al grupo con el correo institucional del líder'
+  ];
+
+  const todoList = document.getElementById('todoList');
+  const todoLbl = document.getElementById('todoLbl');
+  const todoBar = document.getElementById('todoBar');
+
+  if (todoList && todoLbl && todoBar) {
+    todoList.innerHTML = TODO.map((t, i) => `
+      <label>
+        <input type="checkbox" data-i="${i}">
+        <span>${esc(t)}</span>
+      </label>
+    `).join('');
+
+    function updTodo() {
+      const checkedCount = todoList?.querySelectorAll('input:checked').length || 0;
+      if (todoLbl) todoLbl.textContent = `${checkedCount} de ${TODO.length} listos`;
+      if (todoBar) todoBar.style.width = `${Math.round(checkedCount * 100 / TODO.length)}%`;
+    }
+
+    todoList.querySelectorAll('input').forEach(i => {
+      i.addEventListener('change', updTodo);
+    });
+  }
+</script>

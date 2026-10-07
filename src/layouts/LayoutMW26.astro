@@ -1,0 +1,48 @@
+---
+import '../styles/mw26.css';
+
+interface Props {
+  title?: string;
+  description?: string;
+}
+
+const {
+  title = "Marketing Week 26 — Univalle Campus Central",
+  description = "Cuatro días para que tu grupo enbandere, corra, piense y decore. Cuatro competencias oficiales, un solo marcador general y toda la comunidad universitaria votando."
+} = Astro.props;
+---
+
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>{title}</title>
+  <meta name="description" content={description}>
+  <link rel="icon" type="image/png" href="/img/logo-mw26.png">
+
+  <!-- Tipografías Oficiales MW26: Sports Editorial + Retro Cartoon Rubber-Hose -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@600;800;900&family=Hanken+Grotesk:wght@400;500;700&family=JetBrains+Mono:wght@400;700&family=Luckiest+Guy&family=Titan+One&display=swap" rel="stylesheet">
+
+  <!-- Librería QR para generación en cliente -->
+  <script is:inline src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+</head>
+<body>
+  <slot />
+
+  <script>
+    // Inicialización del tema (Dark / Light)
+    const savedTheme = localStorage.getItem('mw26_theme');
+    if (savedTheme) {
+      document.documentElement.setAttribute('data-theme', savedTheme);
+    }
+  </script>
+
+  <!-- Motor de animación premium GSAP + Lenis -->
+  <script>
+    import '../scripts/motion';
+  </script>
+</body>
+</html>

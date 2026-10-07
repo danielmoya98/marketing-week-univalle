@@ -1,0 +1,427 @@
+---
+// InscripcionCta.astro — Sección de llamada a la acción en la landing page para inscribir al equipo
+---
+<section class="sec night cta-section-extended" id="inscripcion">
+  <!-- Marca de agua tipográfica en mosaico diagonal sutil -->
+  <div class="cta-bg-pattern-text" aria-hidden="true"></div>
+  <div class="wrap" style="position:relative; z-index:2;">
+    <div class="cta-grid">
+      <!-- Columna Izquierda: Información, propuesta de valor y botón principal -->
+      <div class="cta-content">
+        <div class="cta-badges">
+          <span class="badge-rubberhose">★ CONVOCATORIA OFICIAL 2026 ★</span>
+          <span class="cta-pill-mono">UNIVALLE CAMPUS CENTRAL</span>
+        </div>
+
+        <h2 class="display cta-title">
+          ¿LISTO PARA <span class="highlight-orange">COMPETIR?</span><br />
+          INSCRIBE A TU EQUIPO.
+        </h2>
+
+        <p class="sec-lead cta-lead">
+          Representa a tu grupo en las cuatro competencias oficiales. Al registrarte aseguras tu <strong>dorsal de carrera numerado</strong>, obtienes tu <strong>código QR exclusivo</strong> para recibir votos de la comunidad y descargas tu <strong>afiche oficial en PDF</strong> listo para imprimir.
+        </p>
+
+        <!-- Beneficios clave del registro -->
+        <div class="cta-perks">
+          <div class="cta-perk">
+            <span class="cta-perk__icon">🎽</span>
+            <div>
+              <strong>Dorsal numerado oficial</strong>
+              <p>Generado al instante con tu número de competencia y los nombres de tu escuadra.</p>
+            </div>
+          </div>
+
+          <div class="cta-perk">
+            <span class="cta-perk__icon">📱</span>
+            <div>
+              <strong>QR de votación popular</strong>
+              <p>Tus compañeros escanean el código para votar por tu equipo con su correo institucional.</p>
+            </div>
+          </div>
+
+          <div class="cta-perk">
+            <span class="cta-perk__icon">📄</span>
+            <div>
+              <strong>Ficha y afiche descargable</strong>
+              <p>Descarga automática en PDF para colgar en tu stand o lucir el día de la carrera.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Botones de Acción -->
+        <div class="cta-actions">
+          <a href="/inscribir" class="btn btn--orange btn--lg cta-btn-main">
+            Inscribir al equipo ahora
+          </a>
+          <a href="#competencias" class="btn btn--ghost btn--lg">
+            Ver competencias y reglas
+          </a>
+        </div>
+
+        <!-- Nota legal / requisitos -->
+        <p class="cta-footnote">
+          🔒 <span>Requisito:</span> Correo institucional Univalle (<code>@univalle.edu</code> o <code>@est.univalle.edu</code>). Registro auditado en tiempo real.
+        </p>
+      </div>
+
+      <!-- Columna Derecha: Tarjeta visual con Marki Valle y Dorsal Oficial -->
+      <div class="cta-visual">
+        <div class="cta-card-preview">
+          <!-- Cabecera estilo Dorsal Deportivo -->
+          <div class="cta-preview-top">
+            <span class="preview-badge">MARKETING WEEK 26</span>
+            <span class="preview-live-tag">DORSAL N° 01</span>
+          </div>
+
+          <!-- Imagen Mascota con Dorsal -->
+          <div class="cta-preview-img-box">
+            <img 
+              src="/assets/img/marki-valle-dorsal.jpg" 
+              alt="Marki Valle portando el dorsal oficial número 01 de Marketing Week" 
+              class="cta-preview-img"
+            />
+            <span class="badge-rubberhose cta-mascot-pill">OFICIAL 01</span>
+          </div>
+
+          <!-- Meta del dorsal -->
+          <div class="cta-preview-info">
+            <div class="preview-team-name">LOS PIXELADOS</div>
+            <div class="preview-meta-row">
+              <span>REPRESENTANTE:</span>
+              <strong>Daniel Moya</strong>
+            </div>
+            <div class="preview-meta-row">
+              <span>ESTADO:</span>
+              <span class="status-confirmed">✓ LISTO PARA CORRER</span>
+            </div>
+            <div class="preview-tags">
+              <span class="tag">Botargas</span>
+              <span class="tag">Stands</span>
+              <span class="tag">Embanderamiento</span>
+            </div>
+          </div>
+
+          <!-- Botón directo en la tarjeta -->
+          <a href="/inscribir" class="cta-card-click-link">
+            <span>Ir a registrar mi equipo</span>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="5" y1="12" x2="19" y2="12"></line>
+              <polyline points="12 5 19 12 12 19"></polyline>
+            </svg>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .cta-section-extended {
+    background: #0D0E10;
+    color: #F4F3EF;
+    border-top: 2px solid var(--orange, #FF7A00);
+    border-bottom: 2px solid rgba(255, 255, 255, 0.12);
+    position: relative;
+    overflow: hidden;
+    padding-block: clamp(64px, 8vw, 112px);
+    width: 100%;
+  }
+
+  .cta-bg-pattern-text {
+    position: absolute;
+    inset: -120px;
+    pointer-events: none;
+    z-index: 1;
+    opacity: 0.045;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='420' height='220' viewBox='0 0 420 220'%3E%3Ctext x='20' y='75' transform='rotate(-18 20 75)' font-family='sans-serif' font-weight='900' font-size='24' fill='%23FF7A00' letter-spacing='3'%3EMARKETING WEEK 2026%3C/text%3E%3Ctext x='230' y='185' transform='rotate(-18 230 185)' font-family='sans-serif' font-weight='900' font-size='22' fill='%23FFFFFF' letter-spacing='3'%3E★ UNIVALLE · MW26 ★%3C/text%3E%3C/svg%3E");
+    background-size: 420px 220px;
+    animation: ctaTextDrift 85s linear infinite;
+    will-change: transform;
+  }
+
+  @keyframes ctaTextDrift {
+    0% { transform: translate3d(0, 0, 0); }
+    100% { transform: translate3d(-420px, -220px, 0); }
+  }
+
+  .cta-grid {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    grid-template-columns: minmax(0, 1.25fr) minmax(320px, 0.75fr);
+    gap: clamp(36px, 5vw, 64px);
+    align-items: center;
+    width: 100%;
+  }
+
+  @media (max-width: 960px) {
+    .cta-grid {
+      grid-template-columns: minmax(0, 1fr);
+      gap: 40px;
+    }
+  }
+
+  .cta-content {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .cta-badges {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+
+  .cta-pill-mono {
+    font-family: var(--f-mono, monospace);
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    color: var(--orange, #FF7A00);
+    background: rgba(255, 122, 0, 0.12);
+    border: 1px solid rgba(255, 122, 0, 0.3);
+    padding: 3px 10px;
+    border-radius: 4px;
+  }
+
+  .cta-title {
+    font-size: clamp(2.4rem, 5vw, 4.4rem);
+    line-height: 0.95;
+    text-transform: uppercase;
+    letter-spacing: -0.02em;
+    margin: 0;
+    color: #F4F3EF;
+  }
+
+  .highlight-orange {
+    color: var(--orange, #FF7A00);
+  }
+
+  .cta-lead {
+    font-size: clamp(1rem, 1.25vw, 1.15rem);
+    line-height: 1.55;
+    color: #C5C7CC;
+    margin: 0;
+    max-width: 680px;
+  }
+
+  .cta-lead strong {
+    color: #F4F3EF;
+  }
+
+  .cta-perks {
+    display: grid;
+    gap: 14px;
+    margin-top: 4px;
+  }
+
+  .cta-perk {
+    display: grid;
+    grid-template-columns: 36px minmax(0, 1fr);
+    gap: 14px;
+    align-items: flex-start;
+  }
+
+  .cta-perk__icon {
+    font-size: 1.5rem;
+    line-height: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .cta-perk strong {
+    display: block;
+    font-family: var(--f-display, sans-serif);
+    font-size: 1.05rem;
+    text-transform: uppercase;
+    color: #F4F3EF;
+    letter-spacing: 0.02em;
+  }
+
+  .cta-perk p {
+    font-size: 0.88rem;
+    line-height: 1.4;
+    color: #9DA0A6;
+    margin: 2px 0 0;
+  }
+
+  .cta-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 14px;
+    align-items: center;
+    margin-top: 8px;
+  }
+
+  .cta-btn-main {
+    box-shadow: 0 4px 18px rgba(255, 122, 0, 0.4);
+    font-size: 1.05rem;
+    padding: 16px 28px;
+  }
+
+  .cta-footnote {
+    font-family: var(--f-mono, monospace);
+    font-size: 0.74rem;
+    color: #8C8F96;
+    margin: 4px 0 0;
+    line-height: 1.4;
+  }
+
+  .cta-footnote code {
+    color: var(--orange, #FF7A00);
+    background: rgba(255, 122, 0, 0.1);
+    padding: 1px 4px;
+    border-radius: 3px;
+  }
+
+  /* Tarjeta visual de previsualización */
+  .cta-visual {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+  }
+
+  .cta-card-preview {
+    background: var(--paper, #F4F3EF);
+    color: #0D0E10;
+    border: 3px solid #0D0E10;
+    border-radius: 12px;
+    box-shadow: 8px 8px 0px var(--orange, #FF7A00);
+    width: 100%;
+    max-width: 420px;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    transition: transform 0.25s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.25s ease;
+  }
+
+  .cta-card-preview:hover {
+    transform: translateY(-4px) rotate(-0.5deg);
+    box-shadow: 10px 12px 0px var(--orange, #FF7A00);
+  }
+
+  .cta-preview-top {
+    background: #0D0E10;
+    color: #F4F3EF;
+    padding: 10px 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-family: var(--f-mono, monospace);
+    font-size: 0.65rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+  }
+
+  .preview-live-tag {
+    color: var(--orange, #FF7A00);
+  }
+
+  .cta-preview-img-box {
+    position: relative;
+    background: #FFFFFF;
+    padding: 14px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-bottom: 2px solid #0D0E10;
+  }
+
+  .cta-preview-img {
+    width: 100%;
+    max-height: 240px;
+    object-fit: cover;
+    border-radius: 6px;
+    border: 2px solid #0D0E10;
+  }
+
+  .cta-mascot-pill {
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+    font-size: 9px;
+    padding: 2px 8px;
+    background: var(--orange, #FF7A00);
+    color: #0D0E10;
+  }
+
+  .cta-preview-info {
+    padding: 16px 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .preview-team-name {
+    font-family: var(--f-display, sans-serif);
+    font-size: 1.7rem;
+    line-height: 1;
+    font-weight: 900;
+    text-transform: uppercase;
+    color: var(--orange, #FF7A00);
+  }
+
+  .preview-meta-row {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.8rem;
+    border-bottom: 1px dashed rgba(13, 14, 16, 0.2);
+    padding-bottom: 4px;
+  }
+
+  .preview-meta-row span {
+    font-family: var(--f-mono, monospace);
+    font-size: 0.68rem;
+    font-weight: 700;
+    color: #666;
+  }
+
+  .status-confirmed {
+    color: #0E7C3A;
+    font-weight: 800;
+    font-family: var(--f-mono, monospace);
+    font-size: 0.74rem;
+  }
+
+  .preview-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-top: 4px;
+  }
+
+  .preview-tags .tag {
+    font-size: 0.68rem;
+    background: #0D0E10;
+    color: #F4F3EF;
+    border-radius: 3px;
+    padding: 2px 8px;
+  }
+
+  .cta-card-click-link {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 20px;
+    background: var(--orange, #FF7A00);
+    color: #0D0E10;
+    font-family: var(--f-mono, monospace);
+    font-size: 0.8rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    text-decoration: none;
+    border-top: 2px solid #0D0E10;
+    transition: background 0.15s ease;
+  }
+
+  .cta-card-click-link:hover {
+    background: #E56E00;
+    color: #000;
+  }
+</style>

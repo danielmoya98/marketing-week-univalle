@@ -1,0 +1,103 @@
+---
+// SocialFeed.astro — Muro visual con auto-lectura automática de posts de Instagram sin APIs
+import { fetchInstagramPost, type InstagramPostData } from '../../lib/instagramScraper';
+
+interface Props {
+  handle?: string;
+  instagramUrl?: string;
+  hashtag?: string;
+  postUrls?: string[];
+}
+
+const {
+  handle = "@marketing_week_univallesucre",
+  instagramUrl = "https://www.instagram.com/marketing_week_univallesucre/",
+  hashtag = "#MarketingWeek",
+  postUrls = [
+    "https://www.instagram.com/p/DeJ3WnKibil/",
+    "https://www.instagram.com/p/DeJ3EqZispQ/",
+    "https://www.instagram.com/p/DeJ24NhCMI6/",
+    "https://www.instagram.com/p/DeDvoDhxC3x/"
+  ]
+} = Astro.props;
+
+// Auto-lectura de la información real (foto, pie de foto y autor) para cada enlace en build-time
+const POSTS: (InstagramPostData & { tag: string })[] = await Promise.all(
+  postUrls.map(async (url, idx) => {
+    const data = await fetchInstagramPost(url);
+    const tags = ["CONVOCATORIA", "BOTARGA", "LANZAMIENTO", "ALIADOS"];
+    return {
+      ...data,
+      tag: tags[idx] || "OFICIAL"
+    };
+  })
+);
+---
+
+<section class="sec sec--social" id="comunidad">
+  <div class="wrap">
+    <div class="social-head">
+      <div>
+        <div style="display: flex; align-items: center; gap: 12px; flex-wrap: wrap; margin-bottom: 8px;">
+          <p class="eyebrow" style="margin: 0;">Comunidad &amp; Redes</p>
+          <span class="badge-rubberhose" style="font-size: 11px; padding: 3px 10px;">★ {hashtag} ★</span>
+        </div>
+        <h2 class="display">Sigue la semana en vivo.</h2>
+        <p class="sec-lead">
+          Conoce las últimas novedades y anuncios directamente desde la cuenta oficial de Instagram <strong style="color:var(--orange-ink)">{handle}</strong>.
+        </p>
+      </div>
+
+      <div class="social-badge">
+        <div class="social-profile">
+          <div class="social-avatar" aria-hidden="true">
+            <img src="/img/logo-mw26.png" width="44" height="44" alt="Marketing Week Univalle" style="width:100%; height:100%; object-fit:cover; border-radius:50%;" />
+          </div>
+          <div>
+            <b>{handle}</b>
+            <span class="mono" style="font-size:11px; color:var(--muted)">⚙️ Soy Marki Valle · @univallesucreoficial</span>
+          </div>
+        </div>
+        <a class="btn btn--orange btn--sm" href={instagramUrl} target="_blank" rel="noopener noreferrer">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+            <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+            <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+            <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+          </svg>
+          Ver en Instagram
+        </a>
+      </div>
+    </div>
+
+    <!-- Muro de Publicaciones Estilo Tarjetas Personalizadas con Descripción y Abrir Post -->
+    <div class="social-grid">
+      {POSTS.map((post) => (
+        <article class="social-card">
+          <a 
+            href={post.url} 
+            target="_blank" 
+            rel="noopener noreferrer" 
+            class="social-card__media-link" 
+            aria-label={`Ver publicación en Instagram: ${post.caption.slice(0, 50)}...`}
+          >
+            <div class="social-card__media">
+              <img src={post.image} alt={post.caption.slice(0, 80)} loading="lazy" />
+              <span class="social-card__tag mono">{post.tag}</span>
+              <div class="social-card__overlay" aria-hidden="true">
+                <span class="social-card__overlay-btn">Ver en Instagram ↗</span>
+              </div>
+            </div>
+          </a>
+          <div class="social-card__body">
+            <p class="social-card__caption">{post.caption}</p>
+            <div class="social-card__foot mono">
+              <a href={post.url} target="_blank" rel="noopener noreferrer" class="social-card__link">
+                Abrir post &rarr;
+              </a>
+            </div>
+          </div>
+        </article>
+      ))}
+    </div>
+  </div>
+</section>

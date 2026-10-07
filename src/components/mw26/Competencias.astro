@@ -1,0 +1,230 @@
+---
+// Competencias.astro — Acordeón interactivo de categorías oficiales
+const CATS = [
+  {
+    id: 'ban', name: 'Enbanderamiento', tab: 'Enbanderamiento', kind: 'Opcional', label: 'Identidad visual',
+    desc: 'Cada grupo diseña y presenta su identidad visual completa: colores corporativos, símbolo y bandera de gran formato, izada frente a todo el campus.',
+    rules: [
+      'Bandera mínima de 1,5 × 1 m con diseño original del grupo.',
+      'Paleta y símbolo deben mantenerse durante toda la semana.',
+      'Se evalúa la coherencia visual y el apoyo de la comunidad estudiantil.'
+    ],
+    crit: [
+      { name: 'Originalidad del diseño', desc: 'Creatividad del concepto, paleta y símbolo' },
+      { name: 'Coherencia en la semana', desc: 'Presencia continua en el campus universitario' },
+      { name: 'Presentación en la izada', desc: 'Puesta en escena e impacto frente a la facultad' }
+    ],
+    when: 'Lunes 05 · 10:30', where: 'Patio'
+  },
+  {
+    id: 'bot', name: 'Carrera de botargas', tab: 'Botargas', kind: 'Obligatoria', label: 'Carrera en el Patio',
+    desc: 'Cada grupo crea una botarga con la personalidad de su marca y la lleva por un circuito de obstáculos en el Patio, con todo el campus mirando.',
+    rules: [
+      'Una botarga original por grupo, con la identidad del equipo.',
+      'Circuito de obstáculos en el Patio por la tarde.',
+      'Gana el equipo con mayor apoyo y puntuación acumulada.'
+    ],
+    crit: [
+      { name: 'Creatividad de la botarga', desc: 'Originalidad, diseño y confección del personaje' },
+      { name: 'Desempeño en pista', desc: 'Tiempo, agilidad y superación del circuito' },
+      { name: 'Animación del público', desc: 'Apoyo masivo de barras y entusiasmo estudiantil' }
+    ],
+    when: 'Miércoles 07 · 15:00', where: 'Patio'
+  },
+  {
+    id: 'sta', name: 'Decoración de stands', tab: 'Stands', kind: 'Obligatoria', label: 'Feria abierta',
+    desc: 'Cada equipo monta un stand temático con activaciones para el público. Es la vitrina de la marca del grupo y la competencia con mayor interacción presencial.',
+    rules: [
+      'Armado el martes por la mañana, feria abierta por la tarde.',
+      'Activaciones interactivas para conectar con el público estudiantil.',
+      'Se evalúan diseño del stand, propuesta de marca y atención.'
+    ],
+    crit: [
+      { name: 'Diseño y ambientación', desc: 'Montaje temático, estética e identidad visual' },
+      { name: 'Activación con público', desc: 'Dinámicas interactivas y experiencia de visitantes' },
+      { name: 'Propuesta de marca', desc: 'Pitch de ventas, concepto y coherencia comunicativa' }
+    ],
+    when: 'Martes 06 · 08:30', where: 'Patio'
+  }
+];
+
+const pad = (n: number) => String(n).padStart(2, '0');
+---
+
+<section class="sec on-orange" id="competencias">
+  <div class="wrap">
+    <div class="sec-head">
+      <p class="eyebrow">Competencias</p>
+      <h2 class="display">Elige tu categoría.</h2>
+      <p class="sec-lead" style="color:#2A1400">
+        Cada competencia premia al equipo con mayor cantidad de puntos. Abre una franja para revisar los requisitos y criterios evaluados.
+      </p>
+    </div>
+
+    <div class="stripes" id="stripes">
+      {CATS.map((c, i) => {
+        const isDefaultOpen = i === 0;
+        return (
+          <article class={`stripe ${isDefaultOpen ? 'is-on' : ''}`} data-index={i}>
+            <button
+              type="button"
+              class="stripe__h"
+              aria-expanded={isDefaultOpen ? 'true' : 'false'}
+              aria-controls={`sp${i}`}
+              aria-label={c.name}
+              data-i={i}
+            >
+              <span class="stripe__n">
+                <span class="stripe__n-num">{pad(i + 1)}</span>
+                <span class="stripe__n-total"> / {pad(CATS.length)}</span>
+              </span>
+              <span class="stripe__t">{c.tab}</span>
+            </button>
+
+            <div class="stripe__drawer" id={`sp${i}`}>
+              <div class="stripe__drawer-inner">
+                <div class="stripe__b">
+                  <div class="stripe__b-main">
+                    <div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
+                      <span class="tag" style="justify-self:start">{c.label} · {c.kind}</span>
+                      {c.id === 'bot' && <span class="badge-rubberhose" style="font-size:11px; padding:3px 10px;">★ MARKI VALLE BOTARGAS ★</span>}
+                      {c.id === 'ban' && <span class="badge-rubberhose" style="font-size:11px; padding:3px 10px; background:#fff; color:#0D0E10;">★ BANDERA INSTITUCIONAL ★</span>}
+                    </div>
+                    <h3>{c.name}</h3>
+                    <div class="stripe__w2 editorial-scoring">
+                      <b>GANA POR PUNTOS</b>
+                      <span>El equipo con más votos acumulados gana la categoría</span>
+                    </div>
+                    <p>{c.desc}</p>
+                    <ul class="rules">
+                      {c.rules.map(r => <li>{r}</li>)}
+                    </ul>
+                  </div>
+
+                  <div class="stripe__b-side">
+                    <div class="crit-clean-list">
+                      <h4>Aspectos de evaluación</h4>
+                      {c.crit.map(r => (
+                        <div class="crit-item-card">
+                          <strong class="crit-item-title">{r.name}</strong>
+                          <span class="crit-item-desc">{r.desc}</span>
+                        </div>
+                      ))}
+                    </div>
+                    <div class="meta">
+                      <div><span>Cuándo </span>{c.when}</div>
+                      <div><span>Dónde </span>{c.where}</div>
+                    </div>
+                    <div style="margin-top:auto;padding-top:8px">
+                      <button type="button" class="btn" data-go={c.id}>Inscribirme en {c.tab}</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </article>
+        );
+      })}
+    </div>
+  </div>
+</section>
+
+<style>
+  .editorial-scoring {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    padding: 10px 14px;
+    background: rgba(254, 123, 0, 0.08);
+    border-left: 3px solid var(--orange, #FE7B00);
+    border-radius: 6px;
+    margin: 4px 0 10px;
+  }
+  .editorial-scoring b {
+    font-size: 1.15rem !important;
+    font-weight: 900;
+    letter-spacing: 0.04em;
+    color: var(--orange-ink, #0D0E10);
+    line-height: 1;
+  }
+  .editorial-scoring span {
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: #4A4D53;
+    line-height: 1.25;
+  }
+  .crit-clean-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .crit-clean-list h4 {
+    font: 700 0.64rem/1 var(--f-mono, monospace);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted, #6B7280);
+    margin-bottom: 2px;
+  }
+  .crit-item-card {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    padding: 8px 12px;
+    background: rgba(255, 255, 255, 0.7);
+    border: 1.5px solid rgba(13, 14, 16, 0.08);
+    border-radius: 8px;
+  }
+  .crit-item-title {
+    font-size: 0.86rem;
+    font-weight: 700;
+    color: var(--ink, #0D0E10);
+  }
+  .crit-item-desc {
+    font-size: 0.75rem;
+    color: #55585E;
+    line-height: 1.35;
+  }
+</style>
+
+<script>
+  const stripes = Array.from(document.querySelectorAll<HTMLElement>('.stripe'));
+
+  function setStripeActive(index: number) {
+    stripes.forEach((stripe, i) => {
+      const isOn = i === index;
+      const btn = stripe.querySelector<HTMLButtonElement>('.stripe__h');
+
+      if (isOn) {
+        stripe.classList.add('is-on');
+        if (btn) btn.setAttribute('aria-expanded', 'true');
+      } else {
+        stripe.classList.remove('is-on');
+        if (btn) btn.setAttribute('aria-expanded', 'false');
+      }
+    });
+  }
+
+  stripes.forEach((stripe, i) => {
+    const btn = stripe.querySelector<HTMLButtonElement>('.stripe__h');
+    if (btn) {
+      btn.addEventListener('click', () => {
+        setStripeActive(i);
+        btn.focus();
+      });
+    }
+  });
+
+  // Botón de inscripción rápida que preselecciona y navega a registro
+  document.querySelectorAll<HTMLButtonElement>('[data-go]').forEach(goBtn => {
+    goBtn.addEventListener('click', () => {
+      const targetId = goBtn.getAttribute('data-go');
+      const cb = document.getElementById(`c_${targetId}`) as HTMLInputElement | null;
+      if (cb && !cb.disabled) {
+        cb.checked = true;
+        cb.dispatchEvent(new Event('change', { bubbles: true }));
+      }
+      const regSection = document.getElementById('inscripcion');
+      if (regSection) regSection.scrollIntoView({ behavior: 'smooth' });
+    });
+  });
+</script>
