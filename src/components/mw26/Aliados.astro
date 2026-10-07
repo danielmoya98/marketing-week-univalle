@@ -13,6 +13,21 @@ const aliados: Aliado[] = [
     category: "Alimentos & Panadería Oficial",
   },
   {
+    name: "Carsa",
+    logo: "/assets/img/aliados/aliado-carsa.png",
+    category: "Equipamiento & Servicios",
+  },
+  {
+    name: "Soti Beats",
+    logo: "/assets/img/aliados/aliado-soti-beats.png",
+    category: "DJ Oficial & Producción",
+  },
+  {
+    name: "Vicio",
+    logo: "/assets/img/aliados/aliado-vicio.png",
+    category: "Hamburguesas & Alitas",
+  },
+  {
     name: "MALABA",
     logo: "/assets/img/aliados/aliado-malaba.png",
     category: "Moda & Streetwear",
@@ -23,9 +38,19 @@ const aliados: Aliado[] = [
     category: "Gastronomía & Snacks",
   },
   {
+    name: "El Sultan",
+    logo: "/assets/img/aliados/aliado-el-sultan.png",
+    category: "Gastronomía & Cafetería",
+  },
+  {
     name: "Scafry",
     logo: "/assets/img/aliados/aliado-scafry.png",
     category: "Gastronomía Española & Mediterránea",
+  },
+  {
+    name: "MOPS Barber Studio",
+    logo: "/assets/img/aliados/aliado-mops-barber.png",
+    category: "Barber Studio by Soti Beats",
   },
   {
     name: "TEC alim S.A.",
@@ -34,8 +59,8 @@ const aliados: Aliado[] = [
   },
 ];
 
-// Repetimos 3 veces en cada grupo para asegurar ancho holgado en cualquier pantalla (incluyendo monitores 4K)
-const trackItems = [...aliados, ...aliados, ...aliados];
+// Repetimos 2 veces en cada grupo para asegurar continuidad fluida en cualquier pantalla
+const trackItems = [...aliados, ...aliados];
 ---
 
 <section class="sec sec--aliados night" id="aliados">
