@@ -25,27 +25,18 @@
         <!-- Beneficios clave del registro -->
         <div class="cta-perks">
           <div class="cta-perk">
-            <span class="cta-perk__icon">🎽</span>
-            <div>
-              <strong>Dorsal numerado oficial</strong>
-              <p>Generado al instante con tu número de competencia y los nombres de tu escuadra.</p>
-            </div>
+            <strong>Dorsal numerado oficial</strong>
+            <p>Generado al instante con tu número de competencia y los nombres de tu escuadra.</p>
           </div>
 
           <div class="cta-perk">
-            <span class="cta-perk__icon">📱</span>
-            <div>
-              <strong>QR de votación popular</strong>
-              <p>Tus compañeros escanean el código para votar por tu equipo con su correo institucional.</p>
-            </div>
+            <strong>QR de votación popular</strong>
+            <p>Tus compañeros escanean el código para votar por tu equipo con su correo institucional.</p>
           </div>
 
           <div class="cta-perk">
-            <span class="cta-perk__icon">📄</span>
-            <div>
-              <strong>Ficha y afiche descargable</strong>
-              <p>Descarga automática en PDF para colgar en tu stand o lucir el día de la carrera.</p>
-            </div>
+            <strong>Ficha y afiche descargable</strong>
+            <p>Descarga automática en PDF para colgar en tu stand o lucir el día de la carrera.</p>
           </div>
         </div>
 
@@ -214,23 +205,14 @@
 
   .cta-perks {
     display: grid;
-    gap: 14px;
-    margin-top: 4px;
+    gap: 16px;
+    margin-top: 6px;
   }
 
   .cta-perk {
-    display: grid;
-    grid-template-columns: 36px minmax(0, 1fr);
-    gap: 14px;
-    align-items: flex-start;
-  }
-
-  .cta-perk__icon {
-    font-size: 1.5rem;
-    line-height: 1;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    display: block;
+    padding-left: 14px;
+    border-left: 2px solid var(--orange);
   }
 
   .cta-perk strong {

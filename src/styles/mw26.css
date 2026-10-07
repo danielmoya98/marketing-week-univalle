@@ -1397,17 +1397,29 @@ h2.display { font-size: clamp(2.6rem, 6.4vw, 5.2rem); }
 .foot h2 { font: 900 clamp(1.8rem, 3vw, 2.6rem)/1 var(--f-display); text-transform: uppercase; margin-bottom: 12px; }
 .foot__cta { display: flex; flex-wrap: wrap; gap: 12px; }
 .foot__mark {
-  margin-top: clamp(32px, 5vw, 64px);
-  font: 900 clamp(4rem, 17.2vw, 15rem)/.78 var(--f-display);
+  margin-top: clamp(24px, 4.5vw, 56px);
+  font: 900 clamp(2rem, 10.5vw, 13rem)/.85 var(--f-display);
   text-transform: uppercase;
   white-space: nowrap;
   color: transparent;
-  -webkit-text-stroke: 2px rgba(244,243,239,.22);
-  letter-spacing: -.005em;
+  -webkit-text-stroke: 1.5px rgba(244,243,239,.18);
+  letter-spacing: .01em;
   user-select: none;
-  margin-bottom: -.05em;
+  text-align: center;
+  max-width: 100%;
+  overflow: hidden;
+  margin-bottom: -.03em;
 }
 .foot__mark b { color: var(--orange); -webkit-text-stroke: 0; font-weight: 900; }
+@media (max-width: 600px) {
+  .foot__mark {
+    font-size: clamp(1.8rem, 9.8vw, 3.4rem);
+    letter-spacing: 0;
+    -webkit-text-stroke: 1.2px rgba(244,243,239,.16);
+    margin-top: 18px;
+    margin-bottom: 2px;
+  }
+}
 .foot small {
   display: block;
   padding-block: 20px;
@@ -1420,20 +1432,10 @@ h2.display { font-size: clamp(2.6rem, 6.4vw, 5.2rem); }
   background: var(--night);
 }
 
-/* Dock flotante móvil */
+/* Dock flotante móvil (deshabilitado por requerimiento) */
 .dock {
-  position: fixed;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  z-index: 45;
-  display: none;
-  padding: 10px 16px calc(10px + env(safe-area-inset-bottom, 0px));
-  background: var(--night);
-  border-top: 1px solid rgba(244,243,239,.2);
+  display: none !important;
 }
-.dock .btn { width: 100%; }
-@media (max-width: 720px) { .dock.is-on { display: block; } }
 
 /* =========================================================================
    MÓDULO: DJ LIVE SESSION & SUNSET BEATS
@@ -1464,7 +1466,7 @@ h2.display { font-size: clamp(2.6rem, 6.4vw, 5.2rem); }
   align-items: center;
 }
 .dj-title {
-  font-size: clamp(2.4rem, 5.5vw, 4.4rem);
+  font-size: clamp(2rem, 5.5vw, 4.4rem);
   margin-top: 14px;
 }
 .dj-title .o {
@@ -1487,6 +1489,11 @@ h2.display { font-size: clamp(2.6rem, 6.4vw, 5.2rem); }
   padding: 20px 24px;
   border-radius: 6px;
   margin-bottom: 26px;
+  overflow: hidden;
+}
+.dj-meta {
+  flex: 1;
+  min-width: 0;
 }
 .dj-avatar {
   position: relative;
@@ -1726,6 +1733,74 @@ h2.display { font-size: clamp(2.6rem, 6.4vw, 5.2rem); }
 @media (max-width: 960px) {
   .dj-grid { grid-template-columns: minmax(0, 1fr); }
   .dj-schedule { grid-template-columns: minmax(0, 1fr); }
+}
+@media (max-width: 640px) {
+  .dj-card {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 16px;
+    gap: 14px;
+  }
+  .dj-meta {
+    width: 100%;
+    min-width: 0;
+  }
+  .dj-badge-row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 6px;
+    width: 100%;
+  }
+  .tag--orange {
+    white-space: normal;
+    word-break: break-word;
+    max-width: 100%;
+    line-height: 1.3;
+  }
+  .dj-genre {
+    white-space: normal;
+    word-break: break-word;
+    line-height: 1.35;
+  }
+  .dj-social-links {
+    width: 100%;
+    gap: 8px;
+  }
+  .dj-soc-btn {
+    flex: 1 1 calc(50% - 6px);
+    justify-content: center;
+    padding: 8px 10px;
+    font-size: .64rem;
+  }
+  .dj-deck {
+    padding: 18px 14px;
+  }
+  .dj-deck__header {
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .dj-deck__cta {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+  }
+  .dj-deck__cta .btn {
+    width: 100%;
+    text-align: center;
+    justify-content: center;
+  }
+  .dj-mascot-spotlight {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 12px;
+  }
+  .dj-mascot-pic {
+    width: 100%;
+    max-width: 140px;
+    height: auto;
+    aspect-ratio: 4 / 3;
+    object-position: center top;
+  }
 }
 
 /* =========================================================================
