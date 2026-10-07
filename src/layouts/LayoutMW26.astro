@@ -13,7 +13,7 @@ const {
 ---
 
 <!doctype html>
-<html lang="es">
+<html lang="es" data-theme="light">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
@@ -33,11 +33,11 @@ const {
   <slot />
 
   <script>
-    // Inicialización del tema (Dark / Light)
-    const savedTheme = localStorage.getItem('mw26_theme');
-    if (savedTheme) {
-      document.documentElement.setAttribute('data-theme', savedTheme);
-    }
+    // Estandarización a modo claro exclusivo
+    try {
+      localStorage.removeItem('mw26_theme');
+    } catch (_) {}
+    document.documentElement.setAttribute('data-theme', 'light');
   </script>
 
   <!-- Motor de animación premium GSAP + Lenis -->

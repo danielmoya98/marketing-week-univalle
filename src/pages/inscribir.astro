@@ -22,12 +22,6 @@ import TopBar from '../components/mw26/TopBar.astro';
           <span class="back-text-full">Volver a la página principal</span>
           <span class="back-text-short">Inicio</span>
         </a>
-        <button class="icon-btn reg-theme-btn" id="themeBtn" type="button" aria-label="Cambiar tema">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true">
-            <circle cx="12" cy="12" r="9"/>
-            <path d="M12 3a9 9 0 0 1 0 18z" fill="currentColor"/>
-          </svg>
-        </button>
       </div>
     </div>
   </header>
@@ -410,10 +404,6 @@ import TopBar from '../components/mw26/TopBar.astro';
     padding-top: clamp(32px, 4.5vw, 64px);
     padding-bottom: clamp(64px, 8vw, 120px);
     background: var(--paper, #F4F3EF);
-  }
-
-  :root[data-theme="dark"] .reg-page-main {
-    background: var(--paper, #121316);
   }
 
   /* Cabecera de la página */
@@ -1036,19 +1026,6 @@ import TopBar from '../components/mw26/TopBar.astro';
   import { jsPDF } from 'jspdf';
   import { supabase, isConfigured, isValidUnivalleEmail, FALLBACK_CATEGORIAS } from '../lib/supabase.js';
 
-  // Toggle de tema para el navbar
-  const themeBtn = document.getElementById('themeBtn');
-  if (themeBtn) {
-    themeBtn.addEventListener('click', () => {
-      const root = document.documentElement;
-      const current = root.getAttribute('data-theme');
-      const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-      const isDark = current === 'dark' || (!current && prefersDark);
-      const nextTheme = isDark ? 'light' : 'dark';
-      root.setAttribute('data-theme', nextTheme);
-      localStorage.setItem('mw26_theme', nextTheme);
-    });
-  }
 
   const esc = (t: string) => String(t).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c] || c));
 

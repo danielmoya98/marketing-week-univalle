@@ -69,42 +69,6 @@ img {
   --f-cartoon-alt: 'Titan One', cursive, sans-serif;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"]) {
-    --paper: #101113; 
-    --paper-2: #17181B; 
-    --surface: #1A1B1F;
-    --ink: #F1F1EE; 
-    --muted: #9A9CA1; 
-    --rule: rgba(241,241,238,.16);
-    --orange-ink: #FF9440; 
-    --night: #08090A; 
-    --night-2: #131417;
-    --btn-bg: #F1F1EE; 
-    --btn-fg: #0D0E10; 
-    --ok: #4ADE80; 
-    --err: #FF7B7B; 
-    color-scheme: dark;
-  }
-}
-
-:root[data-theme="dark"] {
-  --paper: #101113; 
-  --paper-2: #17181B; 
-  --surface: #1A1B1F;
-  --ink: #F1F1EE; 
-  --muted: #9A9CA1; 
-  --rule: rgba(241,241,238,.16);
-  --orange-ink: #FF9440; 
-  --night: #08090A; 
-  --night-2: #131417;
-  --btn-bg: #F1F1EE; 
-  --btn-fg: #0D0E10; 
-  --ok: #4ADE80; 
-  --err: #FF7B7B; 
-  color-scheme: dark;
-}
-
 /* Zonas con paleta propia */
 .night {
   --ink: #F4F3EF;
