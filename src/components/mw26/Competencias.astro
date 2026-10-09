@@ -88,7 +88,7 @@ const pad = (n: number) => String(n).padStart(2, '0');
                     <div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
                       <span class="tag" style="justify-self:start">{c.label} · {c.kind}</span>
                       {c.id === 'bot' && <span class="badge-rubberhose" style="font-size:11px; padding:3px 10px;">★ MARKI VALLE BOTARGAS ★</span>}
-                      {c.id === 'ban' && <span class="badge-rubberhose" style="font-size:11px; padding:3px 10px; background:#fff; color:#0D0E10;">★ BANDERA INSTITUCIONAL ★</span>}
+                      {c.id === 'ban' && <span class="badge-rubberhose" style="font-size:11px; padding:3px 10px; background:#fff; color:var(--ink);">★ BANDERA INSTITUCIONAL ★</span>}
                     </div>
                     <h3>{c.name}</h3>
                     <div class="stripe__w2 editorial-scoring">
@@ -144,7 +144,7 @@ const pad = (n: number) => String(n).padStart(2, '0');
     font-size: 1.15rem !important;
     font-weight: 900;
     letter-spacing: 0.04em;
-    color: var(--orange-ink, #0D0E10);
+    color: var(--orange-ink, var(--ink));
     line-height: 1;
   }
   .editorial-scoring span {
@@ -177,7 +177,7 @@ const pad = (n: number) => String(n).padStart(2, '0');
   .crit-item-title {
     font-size: 0.86rem;
     font-weight: 700;
-    color: var(--ink, #0D0E10);
+    color: var(--ink, var(--ink));
   }
   .crit-item-desc {
     font-size: 0.75rem;

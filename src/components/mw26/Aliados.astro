@@ -133,11 +133,11 @@ const aliados: Aliado[] = [
 const trackItems = [...aliados, ...aliados];
 ---
 
-<section class="sec sec--aliados night" id="aliados">
+<section class="sec sec--aliados" id="aliados">
   <div class="wrap">
     <div class="aliados-head">
       <div style="display: flex; align-items: center; gap: 12px; flex-wrap: wrap; margin-bottom: 8px;">
-        <span class="eyebrow" style="color: var(--orange); margin: 0;">Sponsors &amp; Marcas Oficiales</span>
+        <span class="eyebrow" style="margin: 0;">Sponsors &amp; Marcas Oficiales</span>
         <span class="badge-rubberhose" style="font-size: 11px; padding: 3px 10px;">★ ALIANZAS CONFIRMADAS ★</span>
       </div>
 
@@ -211,9 +211,10 @@ const trackItems = [...aliados, ...aliados];
     position: relative;
     overflow: clip;
     padding-block: clamp(48px, 6vw, 84px);
-    background: #0B0C0E;
-    border-top: 1px solid rgba(244, 243, 239, 0.08);
-    border-bottom: 1px solid rgba(244, 243, 239, 0.08);
+    background: var(--paper);
+    border-top: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
+    color: var(--ink);
   }
 
   .aliados-head {
@@ -224,6 +225,7 @@ const trackItems = [...aliados, ...aliados];
     font-size: clamp(2.2rem, 5vw, 4rem);
     margin-top: 10px;
     text-transform: uppercase;
+    color: var(--ink);
   }
 
   .aliados-title .o {
@@ -232,7 +234,7 @@ const trackItems = [...aliados, ...aliados];
 
   .aliados-lead {
     margin: 14px 0 28px;
-    color: #C9CACD;
+    color: var(--muted);
     font-size: 1.02rem;
     line-height: 1.6;
   }
@@ -279,13 +281,13 @@ const trackItems = [...aliados, ...aliados];
     display: flex;
     align-items: center;
     justify-content: center;
-    background: #FFFFFF;
+    background: var(--white);
     border-radius: 12px;
     padding: 14px 28px;
     height: 82px;
     min-width: 175px;
-    box-shadow: 0 4px 18px rgba(0, 0, 0, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.9);
-    border: 1px solid rgba(255, 255, 255, 0.18);
+    box-shadow: 0 4px 14px rgba(16, 16, 16, 0.05);
+    border: 1.5px solid var(--line);
     transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
     user-select: none;
     flex-shrink: 0;
@@ -293,7 +295,7 @@ const trackItems = [...aliados, ...aliados];
 
   .aliado-card:hover {
     transform: translateY(-3px) scale(1.025);
-    box-shadow: 0 10px 26px rgba(255, 122, 0, 0.22);
+    box-shadow: 0 10px 26px rgba(254, 123, 0, 0.18);
     border-color: var(--orange);
   }
 
@@ -317,18 +319,19 @@ const trackItems = [...aliados, ...aliados];
     align-items: center;
     justify-content: space-between;
     gap: 20px;
-    background: rgba(255, 255, 255, 0.03);
-    border: 1px solid rgba(244, 243, 239, 0.1);
+    background: var(--white);
+    border: 1.5px solid var(--line);
     border-left: 4px solid var(--orange);
     padding: 18px 24px;
     border-radius: 6px;
     margin-top: 14px;
     flex-wrap: wrap;
+    color: var(--ink);
   }
 
   .aliados-cta-text p {
     font-size: 0.9rem;
-    color: #A4A6AB;
+    color: var(--muted);
     margin: 4px 0 0;
     line-height: 1.45;
   }

@@ -9,7 +9,7 @@ import TopBar from '../components/mw26/TopBar.astro';
   <TopBar />
 
   <!-- 2. Header de Navegación dedicado para la página de registro -->
-  <header class="reg-page-nav night">
+  <header class="reg-page-nav">
     <div class="wrap reg-nav__in">
       <a class="logo reg-logo" href="/" title="Marketing Week 2026">
         <img src="/img/logo-mw26.png" width="34" height="34" alt="Logo oficial Marketing Week 2026" class="logo__emblem" />
@@ -160,7 +160,7 @@ import TopBar from '../components/mw26/TopBar.astro';
               <img src="/assets/img/marki-valle-dorsal.jpg" alt="Marki Valle portando el dorsal 01" class="bib-mascot-art" />
               <div class="bib-mascot-badge-box">
                 <span class="badge-rubberhose" style="font-size: 10px; padding: 2px 8px;">★ DORSAL DE CARRERA ★</span>
-                <b class="font-cartoon" style="font-size: 1.05rem; color: #0D0E10; display: block; margin-top: 2px;">¡COMPITE CON TU GRUPO!</b>
+                <b class="font-cartoon" style="font-size: 1.05rem; color: var(--ink); display: block; margin-top: 2px;">¡COMPITE CON TU GRUPO!</b>
                 <small style="font-size: 0.76rem; color: #331A00; display: block;">Visualiza en tiempo real cómo lucirá tu dorsal oficial.</small>
               </div>
             </div>
@@ -294,12 +294,12 @@ import TopBar from '../components/mw26/TopBar.astro';
 <style>
   /* Header de Navegación específico de la página de registro */
   .reg-page-nav {
-    border-bottom: 2px solid var(--rule, rgba(13,14,16,0.15));
+    border-bottom: 1px solid var(--line, rgba(16,16,16,0.14));
     position: sticky;
     top: 0;
     z-index: 100;
-    background: var(--night, #0D0E10);
-    color: #F4F3EF;
+    background: var(--white, #FEFFFA);
+    color: var(--ink, #101010);
   }
 
   .reg-nav__in {
@@ -318,6 +318,7 @@ import TopBar from '../components/mw26/TopBar.astro';
     flex-shrink: 1;
     min-width: 0;
     text-decoration: none;
+    color: var(--ink, #101010);
   }
 
   .reg-logo-text {
@@ -439,17 +440,17 @@ import TopBar from '../components/mw26/TopBar.astro';
     text-transform: uppercase;
     letter-spacing: -0.02em;
     margin: 0 0 16px;
-    color: var(--ink, #0D0E10);
+    color: var(--ink, var(--ink));
   }
 
   .highlight-orange {
-    color: var(--orange, #FF7A00);
+    color: var(--orange, var(--orange));
   }
 
   .reg-page-lead {
     font-size: clamp(1rem, 1.2vw, 1.15rem);
     line-height: 1.6;
-    color: var(--ink, #0D0E10);
+    color: var(--ink, var(--ink));
     opacity: 0.85;
     max-width: 820px;
     margin: 0 0 24px;
@@ -471,20 +472,20 @@ import TopBar from '../components/mw26/TopBar.astro';
 
   .reg-step-card {
     background: var(--surface, #FFFFFF);
-    border: 2px solid var(--ink, #0D0E10);
+    border: 2px solid var(--ink, var(--ink));
     border-radius: 8px;
     padding: 14px 18px;
     display: flex;
     align-items: center;
     gap: 14px;
-    box-shadow: 4px 4px 0px var(--ink, #0D0E10);
+    box-shadow: 4px 4px 0px var(--ink, var(--ink));
   }
 
   .step-num {
     font-family: var(--f-mono, monospace);
     font-size: 1.4rem;
     font-weight: 900;
-    color: var(--orange, #FF7A00);
+    color: var(--orange, var(--orange));
     line-height: 1;
   }
 
@@ -492,7 +493,7 @@ import TopBar from '../components/mw26/TopBar.astro';
     display: block;
     font-size: 0.92rem;
     text-transform: uppercase;
-    color: var(--ink, #0D0E10);
+    color: var(--ink, var(--ink));
   }
 
   .reg-step-card small {
@@ -518,9 +519,9 @@ import TopBar from '../components/mw26/TopBar.astro';
 
   .reg-form-card {
     background: var(--surface, #FFFFFF);
-    border: 3px solid var(--ink, #0D0E10);
+    border: 3px solid var(--ink, var(--ink));
     border-radius: 12px;
-    box-shadow: 8px 8px 0px var(--ink, #0D0E10);
+    box-shadow: 8px 8px 0px var(--ink, var(--ink));
     padding: clamp(24px, 3.5vw, 40px);
   }
 
@@ -537,7 +538,7 @@ import TopBar from '../components/mw26/TopBar.astro';
     font-weight: 900;
     text-transform: uppercase;
     margin: 0;
-    color: var(--ink, #0D0E10);
+    color: var(--ink, var(--ink));
   }
 
   .form-card-sub {
@@ -584,9 +585,9 @@ import TopBar from '../components/mw26/TopBar.astro';
     text-wrap: pretty;
     max-width: 100%;
     width: auto;
-    background: #0D0E10 !important;
+    background: var(--ink) !important;
     color: #F4F3EF !important;
-    border: 1.5px solid #0D0E10;
+    border: 1.5px solid var(--ink);
     border-radius: 4px;
     padding: 3px 8px;
     font-family: var(--f-mono, monospace);
@@ -615,9 +616,9 @@ import TopBar from '../components/mw26/TopBar.astro';
     width: 100%;
     min-height: 48px;
     padding: 12px 18px;
-    background: #0D0E10;
+    background: var(--ink);
     color: #F4F3EF;
-    border: 2px solid #0D0E10;
+    border: 2px solid var(--ink);
     border-radius: 8px;
     font-family: var(--f-mono, monospace);
     font-size: 0.74rem;
@@ -636,10 +637,10 @@ import TopBar from '../components/mw26/TopBar.astro';
 
   .bib-download-btn:hover {
     background: #FFFFFF;
-    color: #0D0E10;
-    border-color: #0D0E10;
+    color: var(--ink);
+    border-color: var(--ink);
     transform: translate(-1px, -1px);
-    box-shadow: 4px 4px 0px #0D0E10;
+    box-shadow: 4px 4px 0px var(--ink);
   }
 
   .bib-download-btn .btn-arrow {
@@ -691,10 +692,10 @@ import TopBar from '../components/mw26/TopBar.astro';
 
   .modal-card {
     background: var(--paper, #F4F3EF);
-    color: #0D0E10;
-    border: 3.5px solid #0D0E10;
+    color: var(--ink);
+    border: 3.5px solid var(--ink);
     border-radius: 16px;
-    box-shadow: 8px 8px 0px var(--orange, #FF7A00);
+    box-shadow: 8px 8px 0px var(--orange, var(--orange));
     max-width: 560px;
     width: 100%;
     max-height: 92vh;
@@ -705,13 +706,13 @@ import TopBar from '../components/mw26/TopBar.astro';
   }
 
   .modal-top-bar {
-    background: #0D0E10;
+    background: var(--ink);
     color: #F4F3EF;
     padding: 10px 16px;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    border-bottom: 2.5px solid #0D0E10;
+    border-bottom: 2.5px solid var(--ink);
   }
 
   .modal-top-left {
@@ -723,7 +724,7 @@ import TopBar from '../components/mw26/TopBar.astro';
   .modal-chip-mw {
     font-size: 0.65rem;
     font-weight: 800;
-    color: var(--orange, #FF7A00);
+    color: var(--orange, var(--orange));
     letter-spacing: 0.1em;
   }
 
@@ -764,9 +765,9 @@ import TopBar from '../components/mw26/TopBar.astro';
     height: 64px;
     flex-shrink: 0;
     background: #FFFFFF;
-    border: 2.5px solid #0D0E10;
+    border: 2.5px solid var(--ink);
     border-radius: 10px;
-    box-shadow: 3px 3px 0px var(--orange, #FF7A00);
+    box-shadow: 3px 3px 0px var(--orange, var(--orange));
     display: flex;
     align-items: center;
     justify-content: center;
@@ -783,14 +784,14 @@ import TopBar from '../components/mw26/TopBar.astro';
     position: absolute;
     bottom: -5px;
     right: -5px;
-    background: #0D0E10;
-    color: var(--orange, #FF7A00);
+    background: var(--ink);
+    color: var(--orange, var(--orange));
     font-family: var(--f-mono, monospace);
     font-size: 8px;
     font-weight: 900;
     padding: 1px 4px;
     border-radius: 3px;
-    border: 1px solid var(--orange, #FF7A00);
+    border: 1px solid var(--orange, var(--orange));
   }
 
   .modal-hero-heading-box {
@@ -803,7 +804,7 @@ import TopBar from '../components/mw26/TopBar.astro';
     font-size: clamp(1.4rem, 4vw, 1.8rem);
     line-height: 1.05;
     margin: 0;
-    color: #0D0E10;
+    color: var(--ink);
     text-transform: uppercase;
     letter-spacing: 0.02em;
   }
@@ -832,7 +833,7 @@ import TopBar from '../components/mw26/TopBar.astro';
 
   .modal-team-box {
     background: #FFFFFF;
-    border: 2px solid #0D0E10;
+    border: 2px solid var(--ink);
     border-radius: 10px;
     padding: 12px 14px;
     display: flex;
@@ -856,13 +857,13 @@ import TopBar from '../components/mw26/TopBar.astro';
   }
 
   .modal-dorsal-tag {
-    background: var(--orange, #FF7A00);
-    color: #0D0E10;
+    background: var(--orange, var(--orange));
+    color: var(--ink);
     font-size: 0.76rem;
     font-weight: 900;
     padding: 2px 7px;
     border-radius: 4px;
-    border: 1px solid #0D0E10;
+    border: 1px solid var(--ink);
   }
 
   .modal-team-title {
@@ -870,7 +871,7 @@ import TopBar from '../components/mw26/TopBar.astro';
     font-size: 1.35rem;
     line-height: 1;
     font-weight: 900;
-    color: var(--orange, #FF7A00);
+    color: var(--orange, var(--orange));
     text-transform: uppercase;
     word-break: break-word;
   }
@@ -900,14 +901,14 @@ import TopBar from '../components/mw26/TopBar.astro';
   }
 
   .meta-val-v {
-    color: #0D0E10;
+    color: var(--ink);
     font-weight: 700;
   }
 
   /* QR Box */
   .modal-qr-box {
     background: #FFFFFF;
-    border: 2px solid #0D0E10;
+    border: 2px solid var(--ink);
     border-radius: 10px;
     padding: 10px;
     display: flex;
@@ -921,7 +922,7 @@ import TopBar from '../components/mw26/TopBar.astro';
   .modal-qr-border {
     padding: 4px;
     background: #FFF;
-    border: 1.5px solid #0D0E10;
+    border: 1.5px solid var(--ink);
     border-radius: 6px;
     display: flex;
     align-items: center;
@@ -984,19 +985,19 @@ import TopBar from '../components/mw26/TopBar.astro';
     justify-content: center;
     font-size: 0.8rem;
     padding: 14px 18px;
-    background: var(--orange, #FF7A00);
-    color: #0D0E10 !important;
-    border: 2px solid #0D0E10;
-    box-shadow: 3px 3px 0px #0D0E10;
+    background: var(--orange, var(--orange));
+    color: var(--ink) !important;
+    border: 2px solid var(--ink);
+    box-shadow: 3px 3px 0px var(--ink);
     cursor: pointer;
     transition: transform 0.15s ease, background 0.15s ease, color 0.15s ease, box-shadow 0.15s ease;
   }
   .modal-btn-primary:hover {
     background: #FFA040 !important;
     color: #000000 !important;
-    border-color: #0D0E10 !important;
+    border-color: var(--ink) !important;
     transform: translate(-1px, -1px);
-    box-shadow: 4px 4px 0px #0D0E10;
+    box-shadow: 4px 4px 0px var(--ink);
   }
 
   .modal-btn-secondary {
@@ -1005,18 +1006,18 @@ import TopBar from '../components/mw26/TopBar.astro';
     font-size: 0.78rem;
     padding: 13px 18px;
     background: #FFFFFF !important;
-    color: #0D0E10 !important;
-    border: 2px solid #0D0E10 !important;
-    box-shadow: 3px 3px 0px #0D0E10;
+    color: var(--ink) !important;
+    border: 2px solid var(--ink) !important;
+    box-shadow: 3px 3px 0px var(--ink);
     cursor: pointer;
     transition: transform 0.15s ease, background 0.15s ease, color 0.15s ease, box-shadow 0.15s ease;
   }
   .modal-btn-secondary:hover {
-    background: #0D0E10 !important;
+    background: var(--ink) !important;
     color: #F4F3EF !important;
-    border-color: #0D0E10 !important;
+    border-color: var(--ink) !important;
     transform: translate(-1px, -1px);
-    box-shadow: 4px 4px 0px var(--orange, #FF7A00);
+    box-shadow: 4px 4px 0px var(--orange, var(--orange));
   }
 </style>
 
@@ -1428,7 +1429,7 @@ import TopBar from '../components/mw26/TopBar.astro';
               correo_lider: emailVal,
               integrantes: m,
               categorias: compIds,
-              color: '#FF7A00'
+              color: 'var(--orange)'
             })
             .select()
             .single();
@@ -1450,7 +1451,7 @@ import TopBar from '../components/mw26/TopBar.astro';
               grupo_id: grupoId,
               categoria_id: cId,
               nombre: nombre,
-              color: '#FF7A00',
+              color: 'var(--orange)',
               orden: idx + 1
             }));
 
@@ -1478,7 +1479,7 @@ import TopBar from '../components/mw26/TopBar.astro';
           qrDataUrl = await QRCode.toDataURL(voteUrl, {
             width: 600,
             margin: 1.5,
-            color: { dark: '#0D0E10', light: '#FFFFFF' }
+            color: { dark: 'var(--ink)', light: '#FFFFFF' }
           });
         } catch (err) {
           console.error('Error generando QR:', err);
@@ -1502,7 +1503,7 @@ import TopBar from '../components/mw26/TopBar.astro';
             particleCount: 85,
             spread: 75,
             origin: { y: 0.55 },
-            colors: ['#FF7A00', '#F4F3EF', '#0D0E10', '#0E7C3A']
+            colors: ['var(--orange)', '#F4F3EF', 'var(--ink)', '#0E7C3A']
           });
         } catch (e) {}
 

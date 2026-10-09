@@ -9,7 +9,7 @@ import TopBar from '../components/mw26/TopBar.astro';
   <TopBar />
 
   <!-- 2. Header de Navegación Oficial MW26 -->
-  <header class="nav night">
+  <header class="nav">
     <div class="wrap nav__in">
       <a class="logo" href="/">
         <img src="/img/logo-mw26.png" width="36" height="36" alt="Logo oficial Marketing Week 2026" class="logo__emblem" />
@@ -104,7 +104,7 @@ import TopBar from '../components/mw26/TopBar.astro';
           <div class="card podium-card podium-card--1 is-champion">
             <span class="podium-crown">👑</span>
             <div class="podium-card-top">
-              <span class="tag tag--demo" style="background: var(--orange); color: #0D0E10; border-color: var(--orange);">🥇 1° LUGAR · LÍDER</span>
+              <span class="tag tag--demo" style="background: var(--orange); color: var(--ink); border-color: var(--orange);">🥇 1° LUGAR · LÍDER</span>
               <span class="mono" style="font-size: 0.76rem; font-weight: 700; color: var(--orange);" id="pod1Bib">#014</span>
             </div>
             <div class="avatar podium-avatar av-gold" id="pod1Avatar">PI</div>
@@ -203,14 +203,8 @@ import TopBar from '../components/mw26/TopBar.astro';
 
   .chip.active {
     background: var(--ink);
-    color: var(--paper);
+    color: var(--white);
     border-color: var(--ink);
-  }
-
-  .night .chip.active {
-    background: var(--orange);
-    color: #0D0E10;
-    border-color: var(--orange);
   }
 
   /* Podio Oficial Top 3 en Vivo */

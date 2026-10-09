@@ -6,7 +6,7 @@
  * - 3D Mouse Tilt en la placa de Marki Valle
  * - Kinetic Typography & Word Masks en titulares
  * - Marquee reactivo a la velocidad del scroll
- * - Stagger reveal en tarjetas de Instagram, DJ y fixture
+ * - Stagger reveal en tarjetas de Instagram y fixture
  */
 import Lenis from 'lenis';
 import gsap from 'gsap';
@@ -239,7 +239,7 @@ function initVelocityMarquee() {
 function initSectionReveals() {
   if (prefersReducedMotion) return;
 
-  const sectionHeadings = document.querySelectorAll('.sec .display, .sec-head .display, .dj-title');
+  const sectionHeadings = document.querySelectorAll('.sec .display, .sec-head .display');
 
   sectionHeadings.forEach((heading) => {
     gsap.fromTo(
@@ -275,28 +275,6 @@ function initSectionReveals() {
         scrollTrigger: {
           trigger: '.social-grid',
           start: 'top 85%',
-          toggleActions: 'play none none none'
-        }
-      }
-    );
-  }
-
-  // Animación para la tarjeta del DJ y la tarima
-  const djCard = document.querySelector('.dj-card');
-  const djDeck = document.querySelector('.dj-deck');
-  if (djCard && djDeck) {
-    gsap.fromTo(
-      [djCard, djDeck],
-      { y: 35, opacity: 0 },
-      {
-        y: 0,
-        opacity: 1,
-        duration: 0.85,
-        ease: 'power3.out',
-        stagger: 0.15,
-        scrollTrigger: {
-          trigger: '.dj-grid',
-          start: 'top 82%',
           toggleActions: 'play none none none'
         }
       }

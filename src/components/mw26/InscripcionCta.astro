@@ -1,7 +1,7 @@
 ---
 // InscripcionCta.astro — Sección de llamada a la acción en la landing page para inscribir al equipo
 ---
-<section class="sec night cta-section-extended" id="inscripcion">
+<section class="sec cta-section-extended" id="inscripcion">
   <!-- Marca de agua tipográfica en mosaico diagonal sutil -->
   <div class="cta-bg-pattern-text" aria-hidden="true"></div>
   <div class="wrap" style="position:relative; z-index:2;">
@@ -109,10 +109,10 @@
 
 <style>
   .cta-section-extended {
-    background: #0D0E10;
-    color: #F4F3EF;
-    border-top: 2px solid var(--orange, #FF7A00);
-    border-bottom: 2px solid rgba(255, 255, 255, 0.12);
+    background: var(--paper);
+    color: var(--ink);
+    border-top: 2px solid var(--ink);
+    border-bottom: 1px solid var(--line);
     position: relative;
     overflow: hidden;
     padding-block: clamp(64px, 8vw, 112px);
@@ -125,7 +125,7 @@
     pointer-events: none;
     z-index: 1;
     opacity: 0.045;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='420' height='220' viewBox='0 0 420 220'%3E%3Ctext x='20' y='75' transform='rotate(-18 20 75)' font-family='sans-serif' font-weight='900' font-size='24' fill='%23FF7A00' letter-spacing='3'%3EMARKETING WEEK 2026%3C/text%3E%3Ctext x='230' y='185' transform='rotate(-18 230 185)' font-family='sans-serif' font-weight='900' font-size='22' fill='%23FFFFFF' letter-spacing='3'%3E★ UNIVALLE · MW26 ★%3C/text%3E%3C/svg%3E");
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='420' height='220' viewBox='0 0 420 220'%3E%3Ctext x='20' y='75' transform='rotate(-18 20 75)' font-family='sans-serif' font-weight='900' font-size='24' fill='%23FE7B00' letter-spacing='3'%3EMARKETING WEEK 2026%3C/text%3E%3Ctext x='230' y='185' transform='rotate(-18 230 185)' font-family='sans-serif' font-weight='900' font-size='22' fill='%23101010' letter-spacing='3'%3E★ UNIVALLE · MW26 ★%3C/text%3E%3C/svg%3E");
     background-size: 420px 220px;
     animation: ctaTextDrift 85s linear infinite;
     will-change: transform;
@@ -171,9 +171,9 @@
     font-size: 0.72rem;
     font-weight: 700;
     letter-spacing: 0.12em;
-    color: var(--orange, #FF7A00);
-    background: rgba(255, 122, 0, 0.12);
-    border: 1px solid rgba(255, 122, 0, 0.3);
+    color: var(--orange-deep);
+    background: var(--orange-soft);
+    border: 1px solid var(--orange);
     padding: 3px 10px;
     border-radius: 4px;
   }
@@ -184,23 +184,23 @@
     text-transform: uppercase;
     letter-spacing: -0.02em;
     margin: 0;
-    color: #F4F3EF;
+    color: var(--ink);
   }
 
   .highlight-orange {
-    color: var(--orange, #FF7A00);
+    color: var(--orange);
   }
 
   .cta-lead {
     font-size: clamp(1rem, 1.25vw, 1.15rem);
     line-height: 1.55;
-    color: #C5C7CC;
+    color: var(--muted);
     margin: 0;
     max-width: 680px;
   }
 
   .cta-lead strong {
-    color: #F4F3EF;
+    color: var(--ink);
   }
 
   .cta-perks {
@@ -212,7 +212,7 @@
   .cta-perk {
     display: block;
     padding-left: 14px;
-    border-left: 2px solid var(--orange);
+    border-left: 3px solid var(--orange);
   }
 
   .cta-perk strong {
@@ -220,14 +220,14 @@
     font-family: var(--f-display, sans-serif);
     font-size: 1.05rem;
     text-transform: uppercase;
-    color: #F4F3EF;
+    color: var(--ink);
     letter-spacing: 0.02em;
   }
 
   .cta-perk p {
     font-size: 0.88rem;
     line-height: 1.4;
-    color: #9DA0A6;
+    color: var(--muted);
     margin: 2px 0 0;
   }
 
@@ -254,7 +254,7 @@
   }
 
   .cta-footnote code {
-    color: var(--orange, #FF7A00);
+    color: var(--orange, var(--orange));
     background: rgba(255, 122, 0, 0.1);
     padding: 1px 4px;
     border-radius: 3px;
@@ -269,11 +269,11 @@
   }
 
   .cta-card-preview {
-    background: var(--paper, #F4F3EF);
-    color: #0D0E10;
-    border: 3px solid #0D0E10;
+    background: var(--white);
+    color: var(--ink);
+    border: 3px solid var(--ink);
     border-radius: 12px;
-    box-shadow: 8px 8px 0px var(--orange, #FF7A00);
+    box-shadow: 8px 8px 0px var(--orange);
     width: 100%;
     max-width: 420px;
     display: flex;
@@ -284,12 +284,12 @@
 
   .cta-card-preview:hover {
     transform: translateY(-4px) rotate(-0.5deg);
-    box-shadow: 10px 12px 0px var(--orange, #FF7A00);
+    box-shadow: 10px 12px 0px var(--orange);
   }
 
   .cta-preview-top {
-    background: #0D0E10;
-    color: #F4F3EF;
+    background: var(--ink);
+    color: var(--white);
     padding: 10px 16px;
     display: flex;
     justify-content: space-between;
@@ -301,17 +301,17 @@
   }
 
   .preview-live-tag {
-    color: var(--orange, #FF7A00);
+    color: var(--orange);
   }
 
   .cta-preview-img-box {
     position: relative;
-    background: #FFFFFF;
+    background: var(--paper);
     padding: 14px;
     display: flex;
     justify-content: center;
     align-items: center;
-    border-bottom: 2px solid #0D0E10;
+    border-bottom: 2px solid var(--ink);
   }
 
   .cta-preview-img {
@@ -319,7 +319,7 @@
     max-height: 240px;
     object-fit: cover;
     border-radius: 6px;
-    border: 2px solid #0D0E10;
+    border: 2px solid var(--ink);
   }
 
   .cta-mascot-pill {
@@ -328,8 +328,8 @@
     right: 20px;
     font-size: 9px;
     padding: 2px 8px;
-    background: var(--orange, #FF7A00);
-    color: #0D0E10;
+    background: var(--orange);
+    color: var(--ink);
   }
 
   .cta-preview-info {
@@ -345,14 +345,14 @@
     line-height: 1;
     font-weight: 900;
     text-transform: uppercase;
-    color: var(--orange, #FF7A00);
+    color: var(--ink);
   }
 
   .preview-meta-row {
     display: flex;
     justify-content: space-between;
     font-size: 0.8rem;
-    border-bottom: 1px dashed rgba(13, 14, 16, 0.2);
+    border-bottom: 1px dashed var(--line);
     padding-bottom: 4px;
   }
 
@@ -360,7 +360,7 @@
     font-family: var(--f-mono, monospace);
     font-size: 0.68rem;
     font-weight: 700;
-    color: #666;
+    color: var(--muted);
   }
 
   .status-confirmed {
@@ -379,8 +379,8 @@
 
   .preview-tags .tag {
     font-size: 0.68rem;
-    background: #0D0E10;
-    color: #F4F3EF;
+    background: var(--ink);
+    color: var(--white);
     border-radius: 3px;
     padding: 2px 8px;
   }
@@ -390,15 +390,15 @@
     align-items: center;
     justify-content: space-between;
     padding: 14px 20px;
-    background: var(--orange, #FF7A00);
-    color: #0D0E10;
+    background: var(--orange, var(--orange));
+    color: var(--ink);
     font-family: var(--f-mono, monospace);
     font-size: 0.8rem;
     font-weight: 800;
     text-transform: uppercase;
     letter-spacing: 0.04em;
     text-decoration: none;
-    border-top: 2px solid #0D0E10;
+    border-top: 2px solid var(--ink);
     transition: background 0.15s ease;
   }
 
