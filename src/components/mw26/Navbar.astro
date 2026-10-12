@@ -1,5 +1,5 @@
 ---
-// Navbar.astro — Barra de navegación principal y selector de tema
+// Navbar.astro — Barra de navegación principal responsive con acceso a Marcador en tiempo real
 ---
 <header class="nav">
   <div class="wrap nav__in">
@@ -12,6 +12,10 @@
       <a href="#programa">Fixture</a>
       <a href="#mapa">Mapa</a>
       <a href="#competencias">Competencias</a>
+      <a href="#marcador" class="nav-link-marcador">
+        <span class="nav-live-dot"></span>
+        <span>Marcador</span>
+      </a>
       <a href="#premios">Premios</a>
       <a href="#aliados">Aliados</a>
       <a href="#comunidad">Comunidad</a>
@@ -23,14 +27,205 @@
         <span class="btn-inscribir-full">Inscribir grupo</span>
         <span class="btn-inscribir-short">Inscribir</span>
       </a>
+
+      <!-- Botón Hamburguesa Móvil (<= 1020px) -->
+      <button 
+        type="button" 
+        class="nav__mobile-toggle" 
+        id="navMobileToggle" 
+        aria-label="Abrir menú de navegación"
+        aria-expanded="false"
+      >
+        <span class="hamburger-line"></span>
+        <span class="hamburger-line"></span>
+        <span class="hamburger-line"></span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Menú Desplegable Móvil -->
+  <div class="nav__mobile-drawer" id="navMobileDrawer" aria-hidden="true">
+    <div class="wrap mobile-drawer-inner">
+      <nav class="mobile-drawer-links" aria-label="Navegación móvil">
+        <a href="#programa" class="mobile-nav-link">Fixture semanal</a>
+        <a href="#mapa" class="mobile-nav-link">Mapa del campus</a>
+        <a href="#competencias" class="mobile-nav-link">Competencias</a>
+        <a href="#marcador" class="mobile-nav-link mobile-nav-link--live">
+          <span class="nav-live-dot"></span>
+          <strong>Marcador en tiempo real</strong>
+        </a>
+        <a href="#premios" class="mobile-nav-link">Premios del torneo</a>
+        <a href="#aliados" class="mobile-nav-link">Marcas aliadas</a>
+        <a href="#comunidad" class="mobile-nav-link">Comunidad & Redes</a>
+        <a href="#faq" class="mobile-nav-link">Preguntas frecuentes</a>
+      </nav>
+
+      <div class="mobile-drawer-actions">
+        <a href="/inscribir" class="btn btn--orange btn--sm mobile-drawer-btn">
+          Inscribir grupo
+        </a>
+        <a href="/votar" class="btn btn--ghost btn--sm mobile-drawer-btn">
+          Votar en vivo &rarr;
+        </a>
+      </div>
     </div>
   </div>
 </header>
 
 <style>
+  /* Enlace a Marcador con Punto Vivo */
+  .nav-link-marcador {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    position: relative;
+  }
+
+  .nav-live-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--orange, #FE7B00);
+    display: inline-block;
+    flex-shrink: 0;
+    box-shadow: 0 0 0 0 rgba(254, 123, 0, 0.7);
+    animation: navPulseDot 1.6s infinite;
+  }
+
+  @keyframes navPulseDot {
+    0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(254, 123, 0, 0.7); }
+    70% { transform: scale(1.15); box-shadow: 0 0 0 4px rgba(254, 123, 0, 0); }
+    100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(254, 123, 0, 0); }
+  }
+
   .btn-inscribir-short {
     display: none;
   }
+
+  /* Botón Hamburguesa */
+  .nav__mobile-toggle {
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
+    width: 38px;
+    height: 38px;
+    padding: 6px;
+    background: var(--paper, #EFEEE8);
+    border: 1px solid var(--line, rgba(16, 16, 16, 0.14));
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background 0.15s ease, border-color 0.15s ease;
+  }
+
+  .nav__mobile-toggle:hover {
+    border-color: var(--orange);
+    background: var(--white);
+  }
+
+  .hamburger-line {
+    width: 20px;
+    height: 2px;
+    background: var(--ink, #101010);
+    border-radius: 2px;
+    transition: transform 0.25s ease, opacity 0.25s ease;
+  }
+
+  /* Estado abierto de hamburguesa */
+  .nav__mobile-toggle.is-active .hamburger-line:nth-child(1) {
+    transform: translateY(7px) rotate(45deg);
+  }
+  .nav__mobile-toggle.is-active .hamburger-line:nth-child(2) {
+    opacity: 0;
+  }
+  .nav__mobile-toggle.is-active .hamburger-line:nth-child(3) {
+    transform: translateY(-7px) rotate(-45deg);
+  }
+
+  /* Menú desplegable móvil */
+  .nav__mobile-drawer {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    background: var(--white, #FEFFFA);
+    border-bottom: 2px solid var(--line, rgba(16, 16, 16, 0.14));
+    box-shadow: 0 16px 32px rgba(16, 16, 16, 0.08);
+    padding-block: 20px 24px;
+    z-index: 99;
+  }
+
+  .nav__mobile-drawer.is-open {
+    display: block;
+    animation: drawerSlideDown 0.22s ease-out;
+  }
+
+  @keyframes drawerSlideDown {
+    from { opacity: 0; transform: translateY(-8px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .mobile-drawer-inner {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+  }
+
+  .mobile-drawer-links {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .mobile-nav-link {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 14px;
+    font-family: var(--f-mono, monospace);
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    text-decoration: none;
+    color: var(--ink, #101010);
+    border-radius: 4px;
+    transition: background 0.15s ease, color 0.15s ease;
+  }
+
+  .mobile-nav-link:hover {
+    background: var(--paper, #EFEEE8);
+    color: var(--orange, #FE7B00);
+  }
+
+  .mobile-nav-link--live {
+    background: rgba(254, 123, 0, 0.08);
+    color: var(--orange-deep, #FE6E02);
+    border: 1px dashed rgba(254, 123, 0, 0.3);
+  }
+
+  .mobile-drawer-actions {
+    display: flex;
+    gap: 10px;
+    padding-top: 12px;
+    border-top: 1px solid var(--line, rgba(16, 16, 16, 0.14));
+  }
+
+  .mobile-drawer-btn {
+    flex: 1;
+    text-align: center;
+    justify-content: center;
+  }
+
+  /* Breakpoints */
+  @media (max-width: 1020px) {
+    .nav__mobile-toggle {
+      display: flex;
+    }
+  }
+
   @media (max-width: 640px) {
     .nav-btn-inscribir {
       padding: 6px 12px !important;
@@ -42,6 +237,9 @@
     }
     .btn-inscribir-short {
       display: inline;
+    }
+    .mobile-drawer-actions {
+      flex-direction: column;
     }
   }
 </style>
@@ -56,4 +254,45 @@
   }
   window.addEventListener('scroll', handleNavScroll, { passive: true });
   handleNavScroll();
+
+  // Control del menú hamburguesa móvil
+  const toggleBtn = document.getElementById('navMobileToggle');
+  const drawerEl = document.getElementById('navMobileDrawer');
+
+  function closeMobileDrawer() {
+    if (drawerEl && toggleBtn) {
+      drawerEl.classList.remove('is-open');
+      drawerEl.setAttribute('aria-hidden', 'true');
+      toggleBtn.classList.remove('is-active');
+      toggleBtn.setAttribute('aria-expanded', 'false');
+    }
+  }
+
+  if (toggleBtn && drawerEl) {
+    toggleBtn.addEventListener('click', () => {
+      const isOpen = drawerEl.classList.contains('is-open');
+      if (isOpen) {
+        closeMobileDrawer();
+      } else {
+        drawerEl.classList.add('is-open');
+        drawerEl.setAttribute('aria-hidden', 'false');
+        toggleBtn.classList.add('is-active');
+        toggleBtn.setAttribute('aria-expanded', 'true');
+      }
+    });
+
+    // Cerrar el drawer al hacer click en cualquiera de los enlaces
+    drawerEl.querySelectorAll('a').forEach(link => {
+      link.addEventListener('click', () => {
+        closeMobileDrawer();
+      });
+    });
+
+    // Cerrar si se hace resize a pantalla grande
+    window.addEventListener('resize', () => {
+      if (window.innerWidth > 1020) {
+        closeMobileDrawer();
+      }
+    });
+  }
 </script>

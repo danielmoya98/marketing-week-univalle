@@ -1,0 +1,881 @@
+---
+// MarcadorLanding.astro — Sección de Marcador en Tiempo Real en la Landing con simulación FLIP infinita
+---
+
+<section class="sec marcador-landing-section" id="marcador" aria-labelledby="marcador-title">
+  <!-- Retícula sutil de micropuntos deportivos de fondo -->
+  <div class="marcador-bg-pattern" aria-hidden="true"></div>
+
+  <div class="wrap" style="position: relative; z-index: 2;">
+    <!-- Encabezado de la Sección -->
+    <div class="marcador-header-row">
+      <div class="sec-head" style="margin-bottom: 0;">
+        <div class="marcador-badges-row">
+          <p class="eyebrow" style="margin: 0;">Tablero oficial en vivo</p>
+          <span class="badge-rubberhose">★ CLASIFICACIÓN REALTIME ★</span>
+          <span class="live-pulse-badge">
+            <span class="live-dot"></span>
+            <span class="mono">SIMULACIÓN EN DIRECTO</span>
+          </span>
+        </div>
+
+        <h2 class="display" id="marcador-title" style="margin-top: 8px;">
+          EL CAMPEONATO SE DEFINE <span style="color: var(--orange);">EN TIEMPO REAL.</span>
+        </h2>
+
+        <p class="sec-lead">
+          Sigue el pulso de la votación estudiantil minuto a minuto. Con cada voto validado en el campus, las posiciones se reordenan en directo y los equipos se disputan el liderato.
+        </p>
+      </div>
+
+      <!-- Placa de información rápida -->
+      <div class="marcador-quick-info">
+        <div class="quick-stat-box">
+          <span class="stat-num mono" id="totalVotesSimulated">291</span>
+          <span class="stat-lbl mono">Votos registrados</span>
+        </div>
+        <div class="quick-stat-box">
+          <span class="stat-num mono">4</span>
+          <span class="stat-lbl mono">Grupos en pista</span>
+        </div>
+        <div class="quick-stat-box">
+          <span class="stat-num mono" style="color: var(--orange);">1</span>
+          <span class="stat-lbl mono">Voto por estudiante</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Ticker de eventos en directo -->
+    <div class="marcador-ticker-bar" role="status" aria-live="polite">
+      <span class="ticker-icon">⚡</span>
+      <span class="ticker-label mono">ÚLTIMA ACTIVIDAD:</span>
+      <span class="ticker-text" id="liveTickerText">Cargando flujo de votación estudiantil...</span>
+    </div>
+
+    <!-- Contenedor del Tablero de Clasificación -->
+    <div class="marcador-board-wrapper">
+      <!-- Encabezado de columnas -->
+      <div class="board-col-headers mono">
+        <span class="col-pos">POS</span>
+        <span class="col-team">EQUIPO / LÍDER</span>
+        <span class="col-bib">DORSAL</span>
+        <span class="col-progress">VOTOS POPULARES</span>
+        <span class="col-score">PUNTAJE</span>
+      </div>
+
+      <!-- Lista reordenable con animación FLIP -->
+      <div class="board-items-container" id="landingBoardList">
+        <!-- Renderizado dinámicamente por JavaScript -->
+      </div>
+    </div>
+
+    <!-- Llamada a la Acción (CTA) para ir a la votación real -->
+    <div class="marcador-cta-box">
+      <div class="marcador-cta-content">
+        <div class="marcador-cta-badge mono">
+          <span class="star-icon">★</span>
+          <span>TU VOZ DECIDE EL CAMPEONATO</span>
+        </div>
+        <h3 class="marcador-cta-title display">
+          ¿QUIERES QUE TU GRUPO SUBA AL PRIMER LUGAR?
+        </h3>
+        <p class="marcador-cta-desc">
+          La votación oficial de Marketing Week 2026 está abierta a toda la comunidad estudiantil de Univalle. Entra a la plataforma oficial, elige a tu equipo favorito y suma tu voto en tiempo real.
+        </p>
+      </div>
+
+      <div class="marcador-cta-actions">
+        <a href="/votar" class="btn btn--orange btn--lg marcador-btn-vote">
+          <span>Ir a votar en vivo</span>
+          <span class="btn-arrow">&rarr;</span>
+        </a>
+        <a href="/marcador" class="btn btn--ghost btn--lg">
+          <span>Ver marcador completo oficial</span>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style is:global>
+  /* =========================================================================
+     SECCIÓN MARCADOR EN LA LANDING (MW26)
+     ========================================================================= */
+  .marcador-landing-section {
+    position: relative;
+    background: var(--paper, #EFEEE8);
+    border-block: 1px solid var(--line, rgba(16, 16, 16, 0.14));
+    overflow: hidden;
+    padding-block: clamp(60px, 7vw, 100px);
+    color: var(--ink, #101010);
+  }
+
+  .marcador-bg-pattern {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: 1;
+    opacity: 0.04;
+    background-image: radial-gradient(var(--ink, #101010) 1.5px, transparent 1.5px);
+    background-size: 24px 24px;
+  }
+
+  .marcador-header-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    gap: 32px;
+    margin-bottom: 24px;
+    flex-wrap: wrap;
+  }
+
+  .marcador-badges-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-bottom: 8px;
+  }
+
+  .live-pulse-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    padding: 3px 10px;
+    border-radius: 999px;
+    background: var(--white, #FEFFFA);
+    border: 1px solid var(--line, rgba(16, 16, 16, 0.14));
+    color: var(--ink, #101010);
+    box-shadow: 0 1px 4px rgba(16, 16, 16, 0.04);
+  }
+
+  .live-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--orange, #FE7B00);
+    box-shadow: 0 0 0 0 rgba(254, 123, 0, 0.7);
+    animation: livePulseGlow 1.8s infinite;
+  }
+
+  @keyframes livePulseGlow {
+    0% {
+      transform: scale(0.95);
+      box-shadow: 0 0 0 0 rgba(254, 123, 0, 0.7);
+    }
+    70% {
+      transform: scale(1.15);
+      box-shadow: 0 0 0 6px rgba(254, 123, 0, 0);
+    }
+    100% {
+      transform: scale(0.95);
+      box-shadow: 0 0 0 0 rgba(254, 123, 0, 0);
+    }
+  }
+
+  .marcador-quick-info {
+    display: flex;
+    gap: 16px;
+    align-items: center;
+  }
+
+  .quick-stat-box {
+    background: var(--white, #FEFFFA);
+    border: 1px solid var(--line, rgba(16, 16, 16, 0.14));
+    border-radius: 6px;
+    padding: 10px 16px;
+    text-align: center;
+    min-width: 105px;
+    box-shadow: 0 2px 6px rgba(16, 16, 16, 0.03);
+  }
+
+  .quick-stat-box .stat-num {
+    display: block;
+    font-size: 1.45rem;
+    font-weight: 800;
+    line-height: 1;
+    color: var(--ink, #101010);
+  }
+
+  .quick-stat-box .stat-lbl {
+    display: block;
+    font-size: 0.62rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--muted, #5B5D62);
+    margin-top: 4px;
+  }
+
+  /* Ticker de actividad */
+  .marcador-ticker-bar {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: var(--white, #FEFFFA);
+    border: 1px solid var(--line, rgba(16, 16, 16, 0.14));
+    border-left: 4px solid var(--orange, #FE7B00);
+    border-radius: 4px;
+    padding: 10px 16px;
+    margin-bottom: 20px;
+    font-size: 0.82rem;
+    box-shadow: 0 1px 4px rgba(16, 16, 16, 0.03);
+  }
+
+  .ticker-icon {
+    color: var(--orange, #FE7B00);
+    font-size: 1rem;
+    line-height: 1;
+  }
+
+  .ticker-label {
+    font-size: 0.68rem;
+    font-weight: 800;
+    letter-spacing: 0.12em;
+    color: var(--orange-deep, #FE6E02);
+    text-transform: uppercase;
+  }
+
+  .ticker-text {
+    color: var(--ink, #101010);
+    font-weight: 500;
+    transition: opacity 0.25s ease;
+  }
+
+  /* Encabezado de columnas */
+  .board-col-headers {
+    display: grid;
+    grid-template-columns: 56px 52px 64px minmax(0, 1fr) 110px 100px;
+    gap: 16px;
+    align-items: center;
+    padding: 10px 18px;
+    font-size: 0.66rem;
+    font-weight: 800;
+    letter-spacing: 0.12em;
+    color: var(--muted, #5B5D62);
+    text-transform: uppercase;
+  }
+
+  .board-col-headers .col-score {
+    text-align: right;
+  }
+
+  /* Contenedor del Tablero */
+  .marcador-board-wrapper {
+    background: var(--white, #FEFFFA);
+    border: 1.5px solid var(--line, rgba(16, 16, 16, 0.14));
+    border-radius: 8px;
+    box-shadow: 0 4px 16px rgba(16, 16, 16, 0.05);
+    overflow: hidden;
+    margin-bottom: 36px;
+  }
+
+  .board-items-container {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    padding: 6px;
+    gap: 6px;
+  }
+
+  /* Tarjeta de Cada Equipo en la Landing */
+  .landing-board-card {
+    position: relative;
+    display: grid;
+    grid-template-columns: 56px 52px 64px minmax(0, 1fr) 110px 100px;
+    gap: 16px;
+    align-items: center;
+    background: var(--white, #FEFFFA);
+    border: 1px solid var(--line-soft, rgba(16, 16, 16, 0.08));
+    border-radius: 6px;
+    padding: 14px 18px;
+    transition: transform 0.65s cubic-bezier(0.22, 1, 0.36, 1),
+                box-shadow 0.4s ease,
+                border-color 0.4s ease,
+                background-color 0.3s ease;
+    will-change: transform, z-index, box-shadow;
+  }
+
+  .landing-board-card:hover {
+    background: rgba(254, 123, 0, 0.02);
+  }
+
+  /* EFECTO DE SOLAPAMIENTO CUANDO UN EQUIPO SUBE DE PUESTO */
+  .landing-board-card.is-climbing {
+    z-index: 30 !important;
+    background: var(--white, #FEFFFA) !important;
+    border-color: var(--orange, #FE7B00) !important;
+    box-shadow: 0 12px 32px rgba(254, 123, 0, 0.22), 0 0 0 1.5px var(--orange, #FE7B00) !important;
+    transform: scale(1.018);
+  }
+
+  .landing-board-card.just-voted {
+    animation: votePulseRow 0.65s ease-out;
+  }
+
+  @keyframes votePulseRow {
+    0% { background: rgba(254, 123, 0, 0.16); }
+    100% { background: var(--white, #FEFFFA); }
+  }
+
+  /* Badge de Posición */
+  .board-rank-badge {
+    font-family: var(--f-display, sans-serif);
+    font-size: 2.2rem;
+    font-weight: 900;
+    line-height: 1;
+    color: var(--muted, #5B5D62);
+    text-align: center;
+    font-variant-numeric: tabular-nums;
+    transition: color 0.3s ease;
+  }
+
+  .rank--1 {
+    color: var(--orange, #FE7B00) !important;
+  }
+  .rank--2 {
+    color: var(--ink, #101010) !important;
+  }
+  .rank--3 {
+    color: var(--ink, #101010) !important;
+  }
+
+  /* Avatar / Escudo */
+  .board-team-avatar {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    border: 1.5px solid var(--line, rgba(16, 16, 16, 0.14));
+    display: grid;
+    place-items: center;
+    font-family: var(--f-display, sans-serif);
+    font-size: 1.15rem;
+    font-weight: 900;
+    color: var(--ink, #101010);
+    flex-shrink: 0;
+  }
+
+  /* Dorsal */
+  .board-dorsal-tag {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    height: 32px;
+    padding-inline: 8px;
+    border: 1px solid var(--line, rgba(16, 16, 16, 0.14));
+    border-radius: 3px;
+    background: var(--paper, #EFEEE8);
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: var(--ink, #101010);
+  }
+
+  /* Información del equipo */
+  .board-team-details {
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .board-team-title-row {
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+
+  .board-team-name {
+    font-family: var(--f-body, sans-serif);
+    font-size: 1.05rem;
+    font-weight: 800;
+    color: var(--ink, #101010);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .board-team-leader {
+    font-size: 0.72rem;
+    font-weight: 600;
+    color: var(--muted, #5B5D62);
+  }
+
+  /* Barra de votos populares */
+  .board-vote-bar-wrap {
+    width: 100%;
+    height: 6px;
+    background: var(--paper, #EFEEE8);
+    border-radius: 999px;
+    overflow: hidden;
+  }
+
+  .board-vote-bar-fill {
+    height: 100%;
+    background: var(--orange, #FE7B00);
+    border-radius: 999px;
+    transition: width 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  /* Columna de votos con flash badge */
+  .board-votes-col {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    white-space: nowrap;
+  }
+
+  .board-vote-count {
+    font-size: 0.86rem;
+    font-weight: 700;
+    color: var(--ink, #101010);
+  }
+
+  .vote-flash-pill {
+    display: inline-flex;
+    align-items: center;
+    font-size: 0.62rem;
+    font-weight: 800;
+    color: var(--orange-deep, #FE6E02);
+    background: var(--orange-soft, #FFCB8A);
+    padding: 2px 5px;
+    border-radius: 3px;
+    animation: flashFade 1s forwards;
+  }
+
+  @keyframes flashFade {
+    0% { opacity: 0; transform: translateY(4px) scale(0.85); }
+    20% { opacity: 1; transform: translateY(0) scale(1); }
+    80% { opacity: 1; }
+    100% { opacity: 0; transform: translateY(-4px); }
+  }
+
+  /* Puntaje numérico */
+  .board-score-col {
+    text-align: right;
+  }
+
+  .board-score-number {
+    font-family: var(--f-display, sans-serif);
+    font-size: 2.2rem;
+    font-weight: 900;
+    line-height: 1;
+    color: var(--ink, #101010);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .board-score-unit {
+    display: block;
+    font-size: 0.64rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    color: var(--muted, #5B5D62);
+  }
+
+  /* =========================================================================
+     CAJA DE LLAMADA A LA ACCIÓN (CTA)
+     ========================================================================= */
+  .marcador-cta-box {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 36px;
+    background: var(--white, #FEFFFA);
+    border: 2px solid var(--ink, #101010);
+    border-radius: 12px;
+    padding: clamp(24px, 4vw, 40px);
+    box-shadow: 6px 6px 0 var(--orange, #FE7B00);
+    flex-wrap: wrap;
+  }
+
+  .marcador-cta-content {
+    flex: 1;
+    min-width: 280px;
+    max-width: 680px;
+  }
+
+  .marcador-cta-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.72rem;
+    font-weight: 800;
+    letter-spacing: 0.12em;
+    color: var(--orange-deep, #FE6E02);
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+
+  .marcador-cta-badge .star-icon {
+    font-size: 0.9rem;
+    color: var(--orange, #FE7B00);
+  }
+
+  .marcador-cta-title {
+    font-size: clamp(1.8rem, 3.2vw, 2.6rem);
+    font-weight: 900;
+    line-height: 0.95;
+    letter-spacing: 0.02em;
+    color: var(--ink, #101010);
+    margin-bottom: 12px;
+  }
+
+  .marcador-cta-desc {
+    font-size: 0.95rem;
+    line-height: 1.5;
+    color: var(--muted, #5B5D62);
+    margin: 0;
+  }
+
+  .marcador-cta-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    flex-shrink: 0;
+  }
+
+  .marcador-btn-vote {
+    box-shadow: 0 4px 16px rgba(254, 123, 0, 0.35);
+  }
+
+  .btn-arrow {
+    transition: transform 0.2s ease;
+  }
+
+  .marcador-btn-vote:hover .btn-arrow {
+    transform: translateX(4px);
+  }
+
+  /* =========================================================================
+     RESPONSIVIDAD MÓVIL
+     ========================================================================= */
+  @media (max-width: 820px) {
+    .board-col-headers {
+      display: none;
+    }
+
+    .landing-board-card {
+      grid-template-columns: 40px 42px minmax(0, 1fr) auto;
+      gap: 12px;
+      padding: 12px 14px;
+    }
+
+    .board-dorsal-tag {
+      display: none;
+    }
+
+    .board-votes-col {
+      display: none;
+    }
+
+    .board-rank-badge {
+      font-size: 1.8rem;
+    }
+
+    .board-team-avatar {
+      width: 40px;
+      height: 40px;
+      font-size: 1rem;
+    }
+
+    .board-score-number {
+      font-size: 1.8rem;
+    }
+
+    .marcador-cta-box {
+      flex-direction: column;
+      align-items: stretch;
+      gap: 24px;
+    }
+
+    .marcador-cta-actions {
+      width: 100%;
+    }
+
+    .marcador-cta-actions .btn {
+      width: 100%;
+      text-align: center;
+      justify-content: center;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .landing-board-card {
+      transition: none !important;
+    }
+    .live-dot {
+      animation: none !important;
+    }
+  }
+</style>
+
+<script>
+  // =========================================================================
+  // SIMULACIÓN CONTINUA DE VOTACIÓN EN TIEMPO REAL CON FLIP OVERLAPPING
+  // =========================================================================
+
+  interface MockTeam {
+    id: string;
+    bib: string;
+    name: string;
+    initials: string;
+    leader: string;
+    avatarBg: string;
+    votes: number;
+    score: number;
+  }
+
+  // 4 Equipos inventados y balanceados
+  let teams: MockTeam[] = [
+    {
+      id: 'mock-pixelados',
+      bib: '014',
+      name: 'Los Pixelados',
+      initials: 'PX',
+      leader: 'Daniel Moya',
+      avatarBg: 'rgba(254, 123, 0, 0.16)',
+      votes: 78,
+      score: 92.4
+    },
+    {
+      id: 'mock-hunters',
+      bib: '027',
+      name: 'Brand Hunters',
+      initials: 'BH',
+      leader: 'Valeria Cruz',
+      avatarBg: 'rgba(16, 16, 16, 0.08)',
+      votes: 75,
+      score: 90.1
+    },
+    {
+      id: 'mock-insights',
+      bib: '041',
+      name: 'Los Insights',
+      initials: 'IN',
+      leader: 'Carlos Mendoza',
+      avatarBg: 'rgba(254, 110, 2, 0.14)',
+      votes: 72,
+      score: 87.8
+    },
+    {
+      id: 'mock-pulso',
+      bib: '033',
+      name: 'Grupo Pulso',
+      initials: 'GP',
+      leader: 'Andrea Salinas',
+      avatarBg: 'rgba(91, 93, 98, 0.12)',
+      votes: 69,
+      score: 85.5
+    }
+  ];
+
+  let totalVotes = 294;
+  const container = document.getElementById('landingBoardList');
+  const tickerText = document.getElementById('liveTickerText');
+  const totalVotesEl = document.getElementById('totalVotesSimulated');
+
+  const CATEGORIES = [
+    'Carrera de Botargas',
+    'Decoración de Stands',
+    'Embanderamiento Oficial',
+    'Votación Popular'
+  ];
+
+  // Render inicial
+  function renderInitialDOM() {
+    if (!container) return;
+    renderCards(container, teams, null, null);
+  }
+
+  function getSortedTeams(): MockTeam[] {
+    return [...teams].sort((a, b) => b.score - a.score);
+  }
+
+  function renderCards(
+    targetEl: HTMLElement,
+    sortedList: MockTeam[],
+    justVotedId: string | null,
+    climbingId: string | null
+  ) {
+    const maxScore = Math.max(...sortedList.map(t => t.score), 100);
+
+    targetEl.innerHTML = sortedList.map((team, index) => {
+      const rank = index + 1;
+      const formattedRank = rank < 10 ? '0' + rank : String(rank);
+      const percent = Math.min(100, Math.round((team.score / maxScore) * 100));
+      const isJustVoted = team.id === justVotedId;
+      const isClimbing = team.id === climbingId;
+
+      return `
+        <div 
+          class="landing-board-card ${isJustVoted ? 'just-voted' : ''} ${isClimbing ? 'is-climbing' : ''}" 
+          data-team-id="${team.id}"
+          role="row"
+        >
+          <span class="board-rank-badge rank--${rank}">${formattedRank}</span>
+          
+          <div class="board-team-avatar" style="background: ${team.avatarBg};" aria-hidden="true">
+            ${team.initials}
+          </div>
+
+          <span class="board-dorsal-tag mono">#${team.bib}</span>
+
+          <div class="board-team-details">
+            <div class="board-team-title-row">
+              <strong class="board-team-name">${team.name}</strong>
+              <span class="board-team-leader mono">Líder: ${team.leader}</span>
+            </div>
+            <div class="board-vote-bar-wrap">
+              <div class="board-vote-bar-fill" style="width: ${percent}%;"></div>
+            </div>
+          </div>
+
+          <div class="board-votes-col mono">
+            <span class="board-vote-count">🔥 ${team.votes}</span>
+            ${isJustVoted ? '<span class="vote-flash-pill">+1 VOTO</span>' : ''}
+          </div>
+
+          <div class="board-score-col">
+            <span class="board-score-number">${team.score.toFixed(1)}</span>
+            <span class="board-score-unit mono">PUNTOS</span>
+          </div>
+        </div>
+      `;
+    }).join('');
+  }
+
+  // ALGORITMO FLIP CON SOLAPAMIENTO EN EL EJE Z
+  function applyFlipReorder(votedTeamId: string) {
+    if (!container) return;
+
+    // 1. FIRST: Medir posiciones verticales actuales de las tarjetas
+    const firstTops = new Map<string, number>();
+    container.querySelectorAll<HTMLElement>('.landing-board-card').forEach(card => {
+      const id = card.dataset.teamId;
+      if (id) {
+        firstTops.set(id, card.getBoundingClientRect().top);
+      }
+    });
+
+    // 2. Ordenar datos con los nuevos puntajes
+    const sortedList = getSortedTeams();
+
+    // 3. Renderizar en el nuevo orden en el DOM
+    renderCards(container, sortedList, votedTeamId, null);
+
+    // 4. INVERT & PLAY: Calcular desplazamientos (deltaY) y animar con solapamiento
+    container.querySelectorAll<HTMLElement>('.landing-board-card').forEach(card => {
+      const id = card.dataset.teamId;
+      if (!id) return;
+
+      const firstTop = firstTops.get(id);
+      if (firstTop !== undefined) {
+        const lastTop = card.getBoundingClientRect().top;
+        const deltaY = firstTop - lastTop;
+
+        if (deltaY !== 0) {
+          // Si el equipo sube de posición (deltaY > 0), elevar z-index y activar solapamiento
+          if (deltaY > 0) {
+            card.style.zIndex = '35';
+            card.classList.add('is-climbing');
+          } else {
+            card.style.zIndex = '5';
+            card.classList.remove('is-climbing');
+          }
+
+          // Invert: colocar inmediatamente en su posición anterior
+          card.style.transform = `translateY(${deltaY}px)`;
+          card.style.transition = 'none';
+
+          // Forzar reflujo de layout
+          void card.offsetHeight;
+
+          // Play: deslizar suavemente a la nueva posición con curva cubic
+          card.style.transition = 'transform 0.75s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.6s ease';
+          card.style.transform = 'translateY(0)';
+
+          // Limpiar clases al terminar la transición
+          setTimeout(() => {
+            card.style.zIndex = '';
+            card.style.transform = '';
+            card.classList.remove('is-climbing');
+          }, 800);
+        }
+      }
+    });
+  }
+
+  // Bucle de simulación infinita de votación
+  function simulateVoteTick() {
+    if (!container) return;
+
+    // Ponderación: Mayor probabilidad de votar por los equipos en 2°, 3° o 4° puesto
+    // para generar adelantamientos y solapamientos constantes
+    const currentOrder = getSortedTeams();
+    const rand = Math.random();
+    let selectedIndex = 0;
+
+    if (rand < 0.40) {
+      selectedIndex = 1; // 2do lugar tiene 40% de probabilidad
+    } else if (rand < 0.70) {
+      selectedIndex = 2; // 3er lugar tiene 30%
+    } else if (rand < 0.90) {
+      selectedIndex = 3; // 4to lugar tiene 20%
+    } else {
+      selectedIndex = 0; // 1er lugar tiene 10%
+    }
+
+    const targetTeam = currentOrder[selectedIndex];
+    if (!targetTeam) return;
+
+    // Incrementar votos y puntaje
+    targetTeam.votes += 1;
+    // Incremento dinámico entre 0.9 y 1.6 puntos para inducir cruces
+    const pointIncrement = Number((0.9 + Math.random() * 0.7).toFixed(1));
+    targetTeam.score = Number((targetTeam.score + pointIncrement).toFixed(1));
+
+    totalVotes += 1;
+    if (totalVotesEl) {
+      totalVotesEl.textContent = String(totalVotes);
+    }
+
+    // Actualizar Ticker en vivo
+    const randomCat = CATEGORIES[Math.floor(Math.random() * CATEGORIES.length)];
+    if (tickerText) {
+      tickerText.style.opacity = '0';
+      setTimeout(() => {
+        tickerText.innerHTML = `Voto validado para <strong>${targetTeam.name}</strong> en <em>${randomCat}</em> (+${pointIncrement} pts)`;
+        tickerText.style.opacity = '1';
+      }, 200);
+    }
+
+    // Aplicar FLIP con animación de solapamiento
+    applyFlipReorder(targetTeam.id);
+  }
+
+  // Inicializar al cargar el DOM
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', () => {
+      renderInitialDOM();
+      startSimulationLoop();
+    });
+  } else {
+    renderInitialDOM();
+    startSimulationLoop();
+  }
+
+  function startSimulationLoop() {
+    // Intervalo aleatorio entre 2.4s y 3.4s para simulación realista e infinita
+    function scheduleNext() {
+      const delay = Math.floor(2400 + Math.random() * 1000);
+      setTimeout(() => {
+        simulateVoteTick();
+        scheduleNext();
+      }, delay);
+    }
+    scheduleNext();
+  }
+</script>
