@@ -1,371 +1,235 @@
 ---
-// HazardRibbon.astro — Cinta horizontal animada minimalista de identidad Marketing Week 2026
-// Basada en la firma visual: [Mascota Marki] MARKETING WEEK | UNIVALLE
-export type RibbonVariant = 'brand' | 'minimal' | 'paper' | 'orange' | 'pills';
-
+// HazardRibbon.astro — Cinta horizontal animada minimalista oficial Marketing Week 2026
+// Basada estrictamente en la referencia visual: [Mascota Marki] MARKETING WEEK | UNIVALLE
 interface Props {
-  variant?: RibbonVariant;
+  variant?: 'brand' | 'minimal' | 'paper' | 'orange';
   angle?: number;
   speedSeconds?: number;
-  interactive?: boolean;
 }
 
 const {
   variant = 'brand',
   angle = 0,
-  speedSeconds = 24,
-  interactive = true
+  speedSeconds = 24
 } = Astro.props;
 
-// Lista repetida para alimentar la tira continua sin pausas ni cortes
-const BRAND_ITEMS = Array.from({ length: 8 }).map((_, idx) => ({
-  id: idx,
-  marketing: "MARKETING",
-  week: "WEEK",
-  divider: "|",
-  university: "UNIVALLE"
-}));
+// Lista repetida para alimentar la tira continua sin cortes
+const REPEATS = Array.from({ length: 8 });
 ---
 
 <div 
-  class={`ribbon-container ribbon-container--${variant} ${interactive ? 'ribbon-container--interactive' : ''}`} 
+  class={`mw-ribbon-bar mw-ribbon-bar--${variant}`} 
   style={`--ribbon-angle: ${angle}deg; --scroll-speed: ${speedSeconds}s;`}
   role="region"
   aria-label="Cinta oficial de Marketing Week Univalle"
 >
-  <div class="ribbon-track">
+  <div class="mw-ribbon-track">
     <!-- Grupo 1 -->
-    <div class="ribbon-group">
-      {variant !== 'pills' ? (
-        BRAND_ITEMS.map((item) => (
-          <div class="ribbon-item">
-            <div class="ribbon-mascot-box">
-              <img 
-                src="/assets/img/mascot-marquee.png" 
-                alt="Marki Mascota" 
-                class="ribbon-mascot-img"
-                width="34"
-                height="34"
-                loading="lazy"
-                decoding="async"
-              />
-            </div>
-            
-            <div class="ribbon-title-box">
-              <span class="ribbon-word-marketing">{item.marketing}</span>
-              <span class="ribbon-word-week">{item.week}</span>
-            </div>
-
-            <span class="ribbon-divider" aria-hidden="true">{item.divider}</span>
-            <span class="ribbon-university mono">{item.university}</span>
-          </div>
-        ))
-      ) : (
-        BRAND_ITEMS.map((item) => (
-          <div class="ribbon-pill-item">
-            <span class="ribbon-pill">
-              <img 
-                src="/assets/img/mascot-marquee.png" 
-                alt="" 
-                class="ribbon-pill-mascot"
-                width="22"
-                height="22"
-                loading="lazy"
-              />
-              <strong class="ribbon-pill__title">
-                {item.marketing} <span class="ribbon-pill__highlight">{item.week}</span>
-              </strong>
-              <span class="ribbon-pill__tag mono">{item.university}</span>
-            </span>
-          </div>
-        ))
-      )}
+    <div class="mw-ribbon-group">
+      {REPEATS.map(() => (
+        <div class="mw-ribbon-item">
+          <img 
+            src="/assets/img/mascot-marquee.png" 
+            alt="Mascota Marki" 
+            class="mw-ribbon-mascot"
+            width="32"
+            height="32"
+            loading="lazy"
+            decoding="async"
+          />
+          <span class="mw-ribbon-text-marketing">MARKETING</span>
+          <span class="mw-ribbon-text-week">WEEK</span>
+          <span class="mw-ribbon-pipe" aria-hidden="true">|</span>
+          <span class="mw-ribbon-text-univalle">UNIVALLE</span>
+        </div>
+      ))}
     </div>
 
     <!-- Grupo 2 (Clon idéntico para continuidad infinita sin saltos) -->
-    <div class="ribbon-group" aria-hidden="true">
-      {variant !== 'pills' ? (
-        BRAND_ITEMS.map((item) => (
-          <div class="ribbon-item">
-            <div class="ribbon-mascot-box">
-              <img 
-                src="/assets/img/mascot-marquee.png" 
-                alt="" 
-                class="ribbon-mascot-img"
-                width="34"
-                height="34"
-                loading="lazy"
-                decoding="async"
-              />
-            </div>
-            
-            <div class="ribbon-title-box">
-              <span class="ribbon-word-marketing">{item.marketing}</span>
-              <span class="ribbon-word-week">{item.week}</span>
-            </div>
-
-            <span class="ribbon-divider" aria-hidden="true">{item.divider}</span>
-            <span class="ribbon-university mono">{item.university}</span>
-          </div>
-        ))
-      ) : (
-        BRAND_ITEMS.map((item) => (
-          <div class="ribbon-pill-item">
-            <span class="ribbon-pill">
-              <img 
-                src="/assets/img/mascot-marquee.png" 
-                alt="" 
-                class="ribbon-pill-mascot"
-                width="22"
-                height="22"
-                loading="lazy"
-              />
-              <strong class="ribbon-pill__title">
-                {item.marketing} <span class="ribbon-pill__highlight">{item.week}</span>
-              </strong>
-              <span class="ribbon-pill__tag mono">{item.university}</span>
-            </span>
-          </div>
-        ))
-      )}
+    <div class="mw-ribbon-group" aria-hidden="true">
+      {REPEATS.map(() => (
+        <div class="mw-ribbon-item">
+          <img 
+            src="/assets/img/mascot-marquee.png" 
+            alt="" 
+            class="mw-ribbon-mascot"
+            width="32"
+            height="32"
+            loading="lazy"
+            decoding="async"
+          />
+          <span class="mw-ribbon-text-marketing">MARKETING</span>
+          <span class="mw-ribbon-text-week">WEEK</span>
+          <span class="mw-ribbon-pipe" aria-hidden="true">|</span>
+          <span class="mw-ribbon-text-univalle">UNIVALLE</span>
+        </div>
+      ))}
     </div>
   </div>
 </div>
 
 <style is:global>
-  .ribbon-container {
-    width: 100%;
-    position: relative;
-    overflow: hidden;
-    transform: rotate(var(--ribbon-angle, 0deg));
-    user-select: none;
-    z-index: 20;
-    pointer-events: auto;
-    cursor: default;
-    /* Transición suave de aceleración/desaceleración */
-    transition: background 0.3s ease, border-color 0.3s ease;
+  /* Contenedor principal de la cinta: SIEMPRE blanco marfil con bordes finos, salvo si se pide explícitamente orange */
+  .mw-ribbon-bar {
+    width: 100% !important;
+    position: relative !important;
+    overflow: hidden !important;
+    background: #FEFFFA !important;
+    border-top: 1px solid rgba(16, 16, 16, 0.14) !important;
+    border-bottom: 1px solid rgba(16, 16, 16, 0.14) !important;
+    padding-top: 12px !important;
+    padding-bottom: 12px !important;
+    transform: rotate(var(--ribbon-angle, 0deg)) !important;
+    user-select: none !important;
+    z-index: 20 !important;
+    box-shadow: 0 1px 4px rgba(16, 16, 16, 0.02) !important;
+    cursor: default !important;
   }
 
-  .ribbon-track {
-    display: flex;
-    width: max-content;
-    animation: ribbonScrollInfinite var(--scroll-speed, 24s) linear infinite;
-    will-change: transform;
+  /* Variante sobre fondo papel si se requiere */
+  .mw-ribbon-bar--paper {
+    background: #EFEEE8 !important;
   }
 
-  .ribbon-container--interactive:hover .ribbon-track {
-    animation-play-state: paused;
+  /* Variante naranja SOLO si se especifica explícitamente variant="orange" */
+  .mw-ribbon-bar--orange {
+    background: #FE7B00 !important;
+    border-top: 1px solid rgba(16, 16, 16, 0.18) !important;
+    border-bottom: 1px solid rgba(16, 16, 16, 0.18) !important;
+  }
+  .mw-ribbon-bar--orange .mw-ribbon-text-marketing {
+    color: #101010 !important;
+  }
+  .mw-ribbon-bar--orange .mw-ribbon-text-week {
+    color: #FEFFFA !important;
+  }
+  .mw-ribbon-bar--orange .mw-ribbon-pipe {
+    color: rgba(16, 16, 16, 0.3) !important;
+  }
+  .mw-ribbon-bar--orange .mw-ribbon-text-univalle {
+    color: rgba(16, 16, 16, 0.65) !important;
   }
 
-  .ribbon-group {
-    display: flex;
-    align-items: center;
-    flex-shrink: 0;
+  /* Riel animado continuo */
+  .mw-ribbon-track {
+    display: flex !important;
+    flex-direction: row !important;
+    flex-wrap: nowrap !important;
+    align-items: center !important;
+    width: max-content !important;
+    animation: mwRibbonScroll var(--scroll-speed, 24s) linear infinite !important;
+    will-change: transform !important;
   }
 
-  @keyframes ribbonScrollInfinite {
-    from {
+  .mw-ribbon-bar:hover .mw-ribbon-track {
+    animation-play-state: paused !important;
+  }
+
+  @keyframes mwRibbonScroll {
+    0% {
       transform: translateX(0);
     }
-    to {
+    100% {
       transform: translateX(-50%);
     }
   }
 
-  /* =========================================================================
-     VARIANTE PRINCIPAL: BRAND / MINIMAL (Exacto al diseño base de la imagen)
-     Fondo: Blanco marfil (#FEFFFA), Bordes: Línea suave (rgba(16,16,16,0.12))
-     ========================================================================= */
-  .ribbon-container--brand,
-  .ribbon-container--minimal {
-    background: var(--white, #FEFFFA);
-    border-block: 1px solid var(--line, rgba(16, 16, 16, 0.14));
-    padding-block: 12px;
-    box-shadow: 0 2px 10px rgba(16, 16, 16, 0.02);
+  /* Grupo de elementos: NUNCA romper línea, estrictamente horizontal */
+  .mw-ribbon-group {
+    display: inline-flex !important;
+    flex-direction: row !important;
+    flex-wrap: nowrap !important;
+    align-items: center !important;
+    flex-shrink: 0 !important;
+    white-space: nowrap !important;
   }
 
-  /* =========================================================================
-     VARIANTE SECUNDARIA: PAPER
-     Fondo cálido papel (#EFEEE8)
-     ========================================================================= */
-  .ribbon-container--paper {
-    background: var(--paper, #EFEEE8);
-    border-block: 1px solid var(--line, rgba(16, 16, 16, 0.14));
-    padding-block: 12px;
+  /* Cada unidad: [Mascota] MARKETING WEEK | UNIVALLE */
+  .mw-ribbon-item {
+    display: inline-flex !important;
+    flex-direction: row !important;
+    flex-wrap: nowrap !important;
+    align-items: center !important;
+    padding-left: 0 !important;
+    padding-right: clamp(36px, 3.5vw, 56px) !important;
+    white-space: nowrap !important;
+    flex-shrink: 0 !important;
   }
 
-  /* =========================================================================
-     VARIANTE TERCIARIA: ORANGE (Para secciones de alta energía)
-     ========================================================================= */
-  .ribbon-container--orange {
-    background: var(--orange, #FE7B00);
-    border-block: 1px solid rgba(16, 16, 16, 0.2);
-    padding-block: 12px;
+  /* Mascota Marki */
+  .mw-ribbon-mascot {
+    width: 32px !important;
+    height: 32px !important;
+    object-fit: contain !important;
+    display: inline-block !important;
+    margin-right: 12px !important;
+    flex-shrink: 0 !important;
+    vertical-align: middle !important;
+    filter: drop-shadow(0 1px 2px rgba(16, 16, 16, 0.08)) !important;
+    transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1) !important;
   }
 
-  .ribbon-container--orange .ribbon-word-marketing {
-    color: var(--ink, #101010);
+  .mw-ribbon-bar:hover .mw-ribbon-mascot {
+    transform: scale(1.18) rotate(4deg) !important;
   }
 
-  .ribbon-container--orange .ribbon-word-week {
-    color: var(--white, #FEFFFA);
+  /* MARKETING (Negro carbón sólido) */
+  .mw-ribbon-text-marketing {
+    font-family: var(--f-display, 'Anton', sans-serif) !important;
+    font-size: clamp(1.2rem, 1.45vw, 1.4rem) !important;
+    font-weight: 900 !important;
+    letter-spacing: 0.04em !important;
+    text-transform: uppercase !important;
+    color: #101010 !important;
+    line-height: 1 !important;
+    display: inline-block !important;
+    margin-right: 6px !important;
+    vertical-align: middle !important;
   }
 
-  .ribbon-container--orange .ribbon-divider {
-    color: rgba(16, 16, 16, 0.35);
+  /* WEEK (Naranja insignia vibrante #FE7B00) */
+  .mw-ribbon-text-week {
+    font-family: var(--f-display, 'Anton', sans-serif) !important;
+    font-size: clamp(1.2rem, 1.45vw, 1.4rem) !important;
+    font-weight: 900 !important;
+    letter-spacing: 0.04em !important;
+    text-transform: uppercase !important;
+    color: #FE7B00 !important;
+    line-height: 1 !important;
+    display: inline-block !important;
+    vertical-align: middle !important;
   }
 
-  .ribbon-container--orange .ribbon-university {
-    color: rgba(16, 16, 16, 0.7);
+  /* Separador | (Gris suave) */
+  .mw-ribbon-pipe {
+    display: inline-block !important;
+    color: rgba(16, 16, 16, 0.25) !important;
+    font-size: 1.15rem !important;
+    font-weight: 300 !important;
+    margin-left: 14px !important;
+    margin-right: 14px !important;
+    line-height: 1 !important;
+    vertical-align: middle !important;
+    user-select: none !important;
   }
 
-  /* =========================================================================
-     ESTRUCTURA Y DETALLES DEL ITEM DE MARCA (RITMO VISUAL)
-     ========================================================================= */
-  .ribbon-item {
-    display: inline-flex;
-    align-items: center;
-    padding-inline: clamp(20px, 2.5vw, 36px);
-    white-space: nowrap;
-    gap: 0;
+  /* UNIVALLE (Monospace suave en gris claro) */
+  .mw-ribbon-text-univalle {
+    display: inline-block !important;
+    font-family: var(--f-mono, 'Space Mono', monospace) !important;
+    font-size: clamp(0.72rem, 0.85vw, 0.82rem) !important;
+    font-weight: 600 !important;
+    letter-spacing: 0.22em !important;
+    text-transform: uppercase !important;
+    color: rgba(16, 16, 16, 0.40) !important;
+    line-height: 1 !important;
+    vertical-align: middle !important;
   }
 
-  /* Mascota Marki en miniatura */
-  .ribbon-mascot-box {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-right: 12px;
-    flex-shrink: 0;
-  }
-
-  .ribbon-mascot-img {
-    width: clamp(28px, 2.2vw, 34px);
-    height: auto;
-    object-fit: contain;
-    display: block;
-    filter: drop-shadow(0 1px 2px rgba(16, 16, 16, 0.06));
-    transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-  }
-
-  /* Animación viva y juguetona de la mascota al pasar el cursor o en ciclo */
-  .ribbon-container:hover .ribbon-mascot-img {
-    transform: scale(1.15) rotate(4deg);
-  }
-
-  /* Titular: MARKETING WEEK */
-  .ribbon-title-box {
-    display: inline-flex;
-    align-items: baseline;
-    gap: 0.22em;
-    line-height: 1;
-  }
-
-  .ribbon-word-marketing {
-    font-family: var(--f-display, 'Anton', sans-serif);
-    font-size: clamp(1.2rem, 1.5vw, 1.45rem);
-    font-weight: 900;
-    letter-spacing: 0.03em;
-    text-transform: uppercase;
-    color: var(--ink, #101010);
-    line-height: 1;
-  }
-
-  .ribbon-word-week {
-    font-family: var(--f-display, 'Anton', sans-serif);
-    font-size: clamp(1.2rem, 1.5vw, 1.45rem);
-    font-weight: 900;
-    letter-spacing: 0.03em;
-    text-transform: uppercase;
-    color: var(--orange, #FE7B00);
-    line-height: 1;
-  }
-
-  /* Divisor vertical | */
-  .ribbon-divider {
-    color: rgba(16, 16, 16, 0.24);
-    font-size: clamp(1rem, 1.3vw, 1.25rem);
-    font-weight: 300;
-    margin-inline: clamp(10px, 1.2vw, 16px);
-    line-height: 1;
-    user-select: none;
-  }
-
-  /* Texto UNIVALLE */
-  .ribbon-university {
-    font-family: var(--f-mono, 'Space Mono', monospace);
-    font-size: clamp(0.72rem, 0.9vw, 0.84rem);
-    font-weight: 600;
-    letter-spacing: 0.22em;
-    text-transform: uppercase;
-    color: rgba(16, 16, 16, 0.42);
-    line-height: 1;
-  }
-
-  /* =========================================================================
-     VARIANTE PILLS (Cápsulas deportivas para contextos alternativos)
-     ========================================================================= */
-  .ribbon-container--pills {
-    background: var(--paper, #EFEEE8);
-    border-block: 1px solid var(--line, rgba(16, 16, 16, 0.14));
-    padding-block: 10px;
-  }
-
-  .ribbon-pill-item {
-    display: inline-flex;
-    align-items: center;
-    padding-inline: 8px;
-    white-space: nowrap;
-  }
-
-  .ribbon-pill {
-    display: inline-flex;
-    align-items: center;
-    gap: 10px;
-    background: var(--white, #FEFFFA);
-    border: 1.5px solid var(--line, rgba(16, 16, 16, 0.14));
-    border-radius: 999px;
-    padding: 6px 16px;
-    box-shadow: 0 2px 6px rgba(16, 16, 16, 0.03);
-    transition: transform 0.2s ease, border-color 0.2s ease;
-  }
-
-  .ribbon-pill-mascot {
-    width: 22px;
-    height: 22px;
-    object-fit: contain;
-  }
-
-  .ribbon-pill__title {
-    font-family: var(--f-display, 'Anton', sans-serif);
-    font-size: 1.05rem;
-    font-weight: 800;
-    letter-spacing: 0.04em;
-    text-transform: uppercase;
-    color: var(--ink, #101010);
-    line-height: 1;
-  }
-
-  .ribbon-pill__highlight {
-    color: var(--orange, #FE7B00);
-  }
-
-  .ribbon-pill__tag {
-    font-size: 0.64rem;
-    font-weight: 700;
-    letter-spacing: 0.12em;
-    padding: 2px 6px;
-    border-radius: 4px;
-    background: var(--paper, #EFEEE8);
-    color: rgba(16, 16, 16, 0.6);
-    text-transform: uppercase;
-  }
-
-  /* Respeto estricto a accesibilidad y reducción de movimiento */
   @media (prefers-reduced-motion: reduce) {
-    .ribbon-track {
+    .mw-ribbon-track {
       animation: none !important;
-      overflow-x: auto;
+      overflow-x: auto !important;
     }
   }
 </style>
