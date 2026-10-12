@@ -26,7 +26,6 @@ import TopBar from '../components/mw26/TopBar.astro';
 
       <div class="nav__right">
         <a class="btn btn--orange btn--sm" href="/inscribir">Inscribir grupo</a>
-        <a class="btn btn--ghost btn--sm" href="/votar">Votar &rarr;</a>
       </div>
     </div>
   </header>
@@ -86,15 +85,15 @@ import TopBar from '../components/mw26/TopBar.astro';
           <div class="card podium-card podium-card--2">
             <div class="podium-card-top">
               <span class="tag" style="background: rgba(148,163,184,0.15); border-color: rgba(148,163,184,0.3); color: var(--ink);">🥈 2° LUGAR</span>
-              <span class="mono" style="font-size: 0.76rem; font-weight: 700; color: var(--muted);" id="pod2Bib">#027</span>
+              <span class="mono" style="font-size: 0.76rem; font-weight: 700; color: var(--muted);" id="pod2Bib">#--</span>
             </div>
-            <div class="avatar podium-avatar av-silver" id="pod2Avatar">BH</div>
-            <h3 class="podium-team-title display" id="pod2Name">Brand Hunters</h3>
+            <div class="avatar podium-avatar av-silver" id="pod2Avatar">—</div>
+            <h3 class="podium-team-title display" id="pod2Name">En disputa</h3>
             <div class="podium-score-container">
-              <span class="podium-score-label mono">PUNTUACIÓN</span>
+              <span class="podium-score-label mono">VOTOS ACUMULADOS</span>
               <div class="podium-score-val-wrap">
-                <span class="podium-score-val display" id="pod2Score">86.2</span>
-                <span class="podium-score-unit mono">PTS</span>
+                <span class="podium-score-val display" id="pod2Score">0</span>
+                <span class="podium-score-unit mono">VOTOS</span>
               </div>
             </div>
             <span class="mono podium-award-pill">🥈 Subcampeón · Plata</span>
@@ -105,33 +104,33 @@ import TopBar from '../components/mw26/TopBar.astro';
             <span class="podium-crown">👑</span>
             <div class="podium-card-top">
               <span class="tag tag--demo" style="background: var(--orange); color: var(--ink); border-color: var(--orange);">🥇 1° LUGAR · LÍDER</span>
-              <span class="mono" style="font-size: 0.76rem; font-weight: 700; color: var(--orange);" id="pod1Bib">#014</span>
+              <span class="mono" style="font-size: 0.76rem; font-weight: 700; color: var(--orange);" id="pod1Bib">#--</span>
             </div>
-            <div class="avatar podium-avatar av-gold" id="pod1Avatar">PI</div>
-            <h3 class="podium-team-title display title-gold" id="pod1Name">Los Pixelados</h3>
+            <div class="avatar podium-avatar av-gold" id="pod1Avatar">—</div>
+            <h3 class="podium-team-title display title-gold" id="pod1Name">En disputa</h3>
             <div class="podium-score-container score-gold">
-              <span class="podium-score-label mono">PUNTUACIÓN</span>
+              <span class="podium-score-label mono">VOTOS ACUMULADOS</span>
               <div class="podium-score-val-wrap">
-                <span class="podium-score-val display gold-val" id="pod1Score">90.8</span>
-                <span class="podium-score-unit mono unit-gold">PTS</span>
+                <span class="podium-score-val display gold-val" id="pod1Score">0</span>
+                <span class="podium-score-unit mono unit-gold">VOTOS</span>
               </div>
             </div>
-            <span class="mono podium-award-pill pill-gold">★ Campeón General · Oro ★</span>
+            <span class="mono podium-award-pill pill-gold">★ Líder de la tabla ★</span>
           </div>
 
           <!-- 3° Lugar (Bronce) -->
           <div class="card podium-card podium-card--3">
             <div class="podium-card-top">
               <span class="tag" style="background: rgba(245,158,11,0.15); border-color: rgba(245,158,11,0.3); color: var(--ink);">🥉 3° LUGAR</span>
-              <span class="mono" style="font-size: 0.76rem; font-weight: 700; color: var(--muted);" id="pod3Bib">#041</span>
+              <span class="mono" style="font-size: 0.76rem; font-weight: 700; color: var(--muted);" id="pod3Bib">#--</span>
             </div>
-            <div class="avatar podium-avatar av-bronze" id="pod3Avatar">IN</div>
-            <h3 class="podium-team-title display" id="pod3Name">Los Insights</h3>
+            <div class="avatar podium-avatar av-bronze" id="pod3Avatar">—</div>
+            <h3 class="podium-team-title display" id="pod3Name">En disputa</h3>
             <div class="podium-score-container">
-              <span class="podium-score-label mono">PUNTUACIÓN</span>
+              <span class="podium-score-label mono">VOTOS ACUMULADOS</span>
               <div class="podium-score-val-wrap">
-                <span class="podium-score-val display" id="pod3Score">83.7</span>
-                <span class="podium-score-unit mono">PTS</span>
+                <span class="podium-score-val display" id="pod3Score">0</span>
+                <span class="podium-score-unit mono">VOTOS</span>
               </div>
             </div>
             <span class="mono podium-award-pill">🥉 3° Puesto · Bronce</span>
@@ -404,12 +403,24 @@ import TopBar from '../components/mw26/TopBar.astro';
     width: 100%;
   }
 
-  /* Filas Animadas con Soporte FLIP de Solapamiento */
   :global(.animated-board-list) {
     position: relative;
     display: grid;
     margin-top: 14px;
-    min-height: 380px;
+    min-height: 260px;
+  }
+
+  :global(.board-empty-state) {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 48px 20px;
+    background: var(--paper, #EFEEE8);
+    border: 1.5px dashed var(--line, rgba(16, 16, 16, 0.2));
+    border-radius: 8px;
+    margin: 14px 0 24px;
   }
 
   :global(.leader-card-item) {
@@ -588,11 +599,7 @@ import TopBar from '../components/mw26/TopBar.astro';
     bib: string;
     name: string;
     leader?: string;
-    scores: {
-      botargas: number;
-      stands: number;
-      enbanderamiento: number;
-    };
+    categories: string[];
     votes: {
       botargas: number;
       stands: number;
@@ -600,69 +607,15 @@ import TopBar from '../components/mw26/TopBar.astro';
     };
   }
 
-  let teamsData: TeamBoardData[] = [
-    {
-      id: 't-pixelados',
-      bib: '014',
-      name: 'Los Pixelados',
-      leader: 'Daniel Moya',
-      scores: { botargas: 88, stands: 92, enbanderamiento: 95 },
-      votes: { botargas: 54, stands: 68, enbanderamiento: 42 }
-    },
-    {
-      id: 't-hunters',
-      bib: '027',
-      name: 'Brand Hunters',
-      leader: 'Valeria Cruz',
-      scores: { botargas: 94, stands: 80, enbanderamiento: 88 },
-      votes: { botargas: 62, stands: 45, enbanderamiento: 36 }
-    },
-    {
-      id: 't-insights',
-      bib: '041',
-      name: 'Los Insights',
-      leader: 'Carlos Mendoza',
-      scores: { botargas: 78, stands: 86, enbanderamiento: 92 },
-      votes: { botargas: 38, stands: 51, enbanderamiento: 48 }
-    },
-    {
-      id: 't-pulso',
-      bib: '033',
-      name: 'Grupo Pulso',
-      leader: 'Andrea Salinas',
-      scores: { botargas: 74, stands: 84, enbanderamiento: 76 },
-      votes: { botargas: 30, stands: 44, enbanderamiento: 22 }
-    },
-    {
-      id: 't-mix',
-      bib: '052',
-      name: 'Mix Creativo',
-      leader: 'Fernando Rojas',
-      scores: { botargas: 90, stands: 72, enbanderamiento: 80 },
-      votes: { botargas: 58, stands: 32, enbanderamiento: 28 }
-    },
-    {
-      id: 't-estrategia',
-      bib: '068',
-      name: 'Estrategia Sur',
-      leader: 'Camila Quispe',
-      scores: { botargas: 70, stands: 88, enbanderamiento: 74 },
-      votes: { botargas: 26, stands: 55, enbanderamiento: 20 }
-    }
-  ];
-
+  // Sin datos mockeados: arranca en blanco esperando los datos reales de Supabase
+  let teamsData: TeamBoardData[] = [];
   let currentFilter = 'gen';
 
   function calculateTeamScore(t: TeamBoardData, filter: string): number {
     if (filter === 'gen') {
-      return Number((t.scores.botargas + t.scores.stands + t.scores.enbanderamiento).toFixed(1));
+      return (t.votes.botargas || 0) + (t.votes.stands || 0) + (t.votes.enbanderamiento || 0);
     }
-
-    if (filter === 'botargas') return t.scores.botargas;
-    if (filter === 'stands') return t.scores.stands;
-    if (filter === 'enbanderamiento') return t.scores.enbanderamiento;
-
-    return 0;
+    return t.votes[filter as keyof typeof t.votes] || 0;
   }
 
   // SISTEMA FLIP DE REORDENAMIENTO ANIMADO Y SOLAPAMIENTO DE TARJETAS
@@ -679,8 +632,12 @@ import TopBar from '../components/mw26/TopBar.astro';
       }
     });
 
-    // 2. Ordenar datos actualizados
-    const sortedList = teamsData
+    // 2. Filtrar y ordenar datos según la categoría activa
+    const filteredTeams = currentFilter === 'gen'
+      ? teamsData
+      : teamsData.filter(t => t.categories && t.categories.includes(currentFilter));
+
+    const sortedList = filteredTeams
       .map(t => ({
         ...t,
         calculatedScore: calculateTeamScore(t, currentFilter)
@@ -704,7 +661,6 @@ import TopBar from '../components/mw26/TopBar.astro';
         const deltaY = firstTop - lastTop;
 
         if (deltaY !== 0) {
-          // Si el equipo subió de posición, elevar z-index y activar resplandor para solapar
           if (deltaY > 0) {
             card.style.zIndex = '20';
             card.classList.add('is-climbing');
@@ -713,14 +669,11 @@ import TopBar from '../components/mw26/TopBar.astro';
             card.classList.remove('is-climbing');
           }
 
-          // Invert
           card.style.transform = `translateY(${deltaY}px)`;
           card.style.transition = 'none';
 
-          // Forzar reflujo
           card.offsetHeight;
 
-          // Play con curva cubic suave
           card.style.transition = 'transform 0.75s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.75s ease, z-index 0.75s ease';
           card.style.transform = 'translateY(0)';
 
@@ -743,19 +696,29 @@ import TopBar from '../components/mw26/TopBar.astro';
   }
 
   function renderCardsDOM(container: HTMLElement, sortedList: Array<TeamBoardData & { calculatedScore: number }>, changedTeamId: string | null) {
-    const maxScore = sortedList.length > 0 ? Math.max(...sortedList.map(x => x.calculatedScore), 100) : 100;
+    if (sortedList.length === 0) {
+      container.innerHTML = `
+        <div class="board-empty-state">
+          <span style="font-size: 2.4rem; display: block; margin-bottom: 8px;">🏁</span>
+          <h3 class="display" style="font-size: 1.7rem; text-transform: uppercase; margin-bottom: 6px;">Aún no hay grupos registrados</h3>
+          <p style="font-size: 0.9rem; color: var(--muted); max-width: 440px; margin: 0 auto 16px;">
+            Las posiciones y votos oficiales se reflejarán en vivo en esta pantalla en cuanto comiencen las inscripciones y votaciones en el campus.
+          </p>
+          <a href="/inscribir" class="btn btn--orange btn--sm">Inscribir grupo oficial &rarr;</a>
+        </div>
+      `;
+      return;
+    }
+
+    const maxScore = Math.max(...sortedList.map(x => x.calculatedScore), 1);
 
     container.innerHTML = sortedList.map((item, index) => {
       const rk = index + 1;
       const rkClass = rk === 1 ? 'rk-top-1' : rk === 2 ? 'rk-top-2' : rk === 3 ? 'rk-top-3' : '';
-      const percent = Math.min(100, Math.round((item.calculatedScore / maxScore) * 100));
+      const percent = maxScore > 0 ? Math.min(100, Math.round((item.calculatedScore / maxScore) * 100)) : 0;
       const isJustVoted = item.id === changedTeamId;
       const initials = getTeamInitials(item.name);
       const formattedRk = rk < 10 ? '0' + rk : String(rk);
-
-      const votesCount = currentFilter === 'gen'
-        ? (item.votes.botargas + item.votes.stands + item.votes.enbanderamiento)
-        : (item.votes[currentFilter as keyof typeof item.votes] || 0);
 
       return `
         <div class="row leader-card-item ${isJustVoted ? 'just-voted' : ''}" data-team-id="${item.id}">
@@ -765,7 +728,7 @@ import TopBar from '../components/mw26/TopBar.astro';
           <div class="board-team-info">
             <div class="board-team-name-row">
               <strong class="board-team-name">${esc(item.name)}</strong>
-              <span class="board-meta-tag">🔥 ${votesCount} votos</span>
+              <span class="board-meta-tag">🔥 ${item.calculatedScore} ${item.calculatedScore === 1 ? 'voto' : 'votos'}</span>
             </div>
             <div class="board-track-bar">
               <div class="board-track-fill" style="width: ${percent}%;"></div>
@@ -780,37 +743,55 @@ import TopBar from '../components/mw26/TopBar.astro';
   }
 
   function updatePodium(sortedList: Array<TeamBoardData & { calculatedScore: number }>) {
+    const p1Bib = document.getElementById('pod1Bib');
+    const p1Name = document.getElementById('pod1Name');
+    const p1Score = document.getElementById('pod1Score');
+    const p1Avatar = document.getElementById('pod1Avatar');
+
+    const p2Bib = document.getElementById('pod2Bib');
+    const p2Name = document.getElementById('pod2Name');
+    const p2Score = document.getElementById('pod2Score');
+    const p2Avatar = document.getElementById('pod2Avatar');
+
+    const p3Bib = document.getElementById('pod3Bib');
+    const p3Name = document.getElementById('pod3Name');
+    const p3Score = document.getElementById('pod3Score');
+    const p3Avatar = document.getElementById('pod3Avatar');
+
     if (sortedList[0]) {
-      const p1Bib = document.getElementById('pod1Bib');
-      const p1Name = document.getElementById('pod1Name');
-      const p1Score = document.getElementById('pod1Score');
-      const p1Avatar = document.getElementById('pod1Avatar');
       if (p1Bib) p1Bib.textContent = `#${sortedList[0].bib}`;
       if (p1Name) p1Name.textContent = sortedList[0].name;
       if (p1Score) p1Score.textContent = String(sortedList[0].calculatedScore);
       if (p1Avatar) p1Avatar.textContent = getTeamInitials(sortedList[0].name);
+    } else {
+      if (p1Bib) p1Bib.textContent = '#--';
+      if (p1Name) p1Name.textContent = 'En disputa';
+      if (p1Score) p1Score.textContent = '0';
+      if (p1Avatar) p1Avatar.textContent = '—';
     }
 
     if (sortedList[1]) {
-      const p2Bib = document.getElementById('pod2Bib');
-      const p2Name = document.getElementById('pod2Name');
-      const p2Score = document.getElementById('pod2Score');
-      const p2Avatar = document.getElementById('pod2Avatar');
       if (p2Bib) p2Bib.textContent = `#${sortedList[1].bib}`;
       if (p2Name) p2Name.textContent = sortedList[1].name;
       if (p2Score) p2Score.textContent = String(sortedList[1].calculatedScore);
       if (p2Avatar) p2Avatar.textContent = getTeamInitials(sortedList[1].name);
+    } else {
+      if (p2Bib) p2Bib.textContent = '#--';
+      if (p2Name) p2Name.textContent = 'En disputa';
+      if (p2Score) p2Score.textContent = '0';
+      if (p2Avatar) p2Avatar.textContent = '—';
     }
 
     if (sortedList[2]) {
-      const p3Bib = document.getElementById('pod3Bib');
-      const p3Name = document.getElementById('pod3Name');
-      const p3Score = document.getElementById('pod3Score');
-      const p3Avatar = document.getElementById('pod3Avatar');
       if (p3Bib) p3Bib.textContent = `#${sortedList[2].bib}`;
       if (p3Name) p3Name.textContent = sortedList[2].name;
       if (p3Score) p3Score.textContent = String(sortedList[2].calculatedScore);
       if (p3Avatar) p3Avatar.textContent = getTeamInitials(sortedList[2].name);
+    } else {
+      if (p3Bib) p3Bib.textContent = '#--';
+      if (p3Name) p3Name.textContent = 'En disputa';
+      if (p3Score) p3Score.textContent = '0';
+      if (p3Avatar) p3Avatar.textContent = '—';
     }
   }
 
@@ -820,7 +801,8 @@ import TopBar from '../components/mw26/TopBar.astro';
       if (isConfigured && supabase) {
         const { data: gruposData, error: gErr } = await supabase
           .from('grupos')
-          .select('id, nombre, lider, categorias, color');
+          .select('id, nombre, lider, categorias, color')
+          .order('created_at', { ascending: true });
 
         const { data: votosData, error: vErr } = await supabase
           .from('votos')
@@ -831,13 +813,14 @@ import TopBar from '../components/mw26/TopBar.astro';
 
           (votosData || []).forEach(v => {
             const gId = v.grupo_id || v.equipo_id;
+            if (!gId) return;
             if (!voteCounts[gId]) voteCounts[gId] = { botargas: 0, stands: 0, enbanderamiento: 0 };
             if (v.categoria_id && voteCounts[gId][v.categoria_id] !== undefined) {
               voteCounts[gId][v.categoria_id] += 1;
             }
           });
 
-          const dynamicTeams: TeamBoardData[] = gruposData.map((g, idx) => {
+          teamsData = gruposData.map((g, idx) => {
             const gVotes = voteCounts[g.id] || { botargas: 0, stands: 0, enbanderamiento: 0 };
             const bibNum = String(idx + 1).padStart(2, '0');
 
@@ -846,20 +829,19 @@ import TopBar from '../components/mw26/TopBar.astro';
               bib: bibNum,
               name: g.nombre,
               leader: g.lider,
-              scores: {
-                botargas: gVotes.botargas,
-                stands: gVotes.stands,
-                enbanderamiento: gVotes.enbanderamiento
-              },
+              categories: g.categorias || [],
               votes: gVotes
             };
           });
-
-          teamsData = dynamicTeams.length > 0 ? dynamicTeams : teamsData;
+        } else {
+          teamsData = [];
         }
+      } else {
+        teamsData = [];
       }
     } catch (err) {
       console.warn('Operando con datos cacheados:', err);
+      teamsData = [];
     } finally {
       updateBoardWithAnimation(changedTeamId);
     }

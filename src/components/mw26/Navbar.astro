@@ -12,10 +12,7 @@
       <a href="#programa">Fixture</a>
       <a href="#mapa">Mapa</a>
       <a href="#competencias">Competencias</a>
-      <a href="#marcador" class="nav-link-marcador">
-        <span class="nav-live-dot"></span>
-        <span>Marcador</span>
-      </a>
+      <a href="#marcador">Marcador</a>
       <a href="#premios">Premios</a>
       <a href="#aliados">Aliados</a>
       <a href="#comunidad">Comunidad</a>
@@ -50,10 +47,7 @@
         <a href="#programa" class="mobile-nav-link">Fixture semanal</a>
         <a href="#mapa" class="mobile-nav-link">Mapa del campus</a>
         <a href="#competencias" class="mobile-nav-link">Competencias</a>
-        <a href="#marcador" class="mobile-nav-link mobile-nav-link--live">
-          <span class="nav-live-dot"></span>
-          <strong>Marcador en tiempo real</strong>
-        </a>
+        <a href="#marcador" class="mobile-nav-link">Marcador en tiempo real</a>
         <a href="#premios" class="mobile-nav-link">Premios del torneo</a>
         <a href="#aliados" class="mobile-nav-link">Marcas aliadas</a>
         <a href="#comunidad" class="mobile-nav-link">Comunidad & Redes</a>
@@ -64,39 +58,12 @@
         <a href="/inscribir" class="btn btn--orange btn--sm mobile-drawer-btn">
           Inscribir grupo
         </a>
-        <a href="/votar" class="btn btn--ghost btn--sm mobile-drawer-btn">
-          Votar en vivo &rarr;
-        </a>
       </div>
     </div>
   </div>
 </header>
 
 <style>
-  /* Enlace a Marcador con Punto Vivo */
-  .nav-link-marcador {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    position: relative;
-  }
-
-  .nav-live-dot {
-    width: 6px;
-    height: 6px;
-    border-radius: 50%;
-    background: var(--orange, #FE7B00);
-    display: inline-block;
-    flex-shrink: 0;
-    box-shadow: 0 0 0 0 rgba(254, 123, 0, 0.7);
-    animation: navPulseDot 1.6s infinite;
-  }
-
-  @keyframes navPulseDot {
-    0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(254, 123, 0, 0.7); }
-    70% { transform: scale(1.15); box-shadow: 0 0 0 4px rgba(254, 123, 0, 0); }
-    100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(254, 123, 0, 0); }
-  }
 
   .btn-inscribir-short {
     display: none;
