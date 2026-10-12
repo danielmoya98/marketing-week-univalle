@@ -79,23 +79,32 @@ function initHeroTextReveal() {
 
   const eyebrow = document.querySelector('.hero .eyebrow');
   const badge = document.querySelector('.hero .badge-rubberhose');
+  const pill = document.querySelector('.hero .hero-status-pill');
   const lead = document.querySelector('.hero .lead');
   const cta = document.querySelector('.hero__cta');
-  const facts = document.querySelector('.hero__facts');
+  const hudBoxes = document.querySelectorAll('.hero-stats-hud .stat-hud-box');
 
   if (eyebrow && badge) {
     gsap.fromTo(
-      [eyebrow, badge],
+      [eyebrow, badge, pill].filter(Boolean),
       { y: -18, opacity: 0 },
       { y: 0, opacity: 1, duration: 0.8, ease: 'power3.out', stagger: 0.1, delay: 0.05 }
     );
   }
 
-  if (lead && cta && facts) {
+  if (lead && cta) {
     gsap.fromTo(
-      [lead, cta, facts],
+      [lead, cta],
       { y: 24, opacity: 0 },
       { y: 0, opacity: 1, duration: 0.9, ease: 'power3.out', stagger: 0.12, delay: 0.45 }
+    );
+  }
+
+  if (hudBoxes.length > 0) {
+    gsap.fromTo(
+      hudBoxes,
+      { y: 20, opacity: 0 },
+      { y: 0, opacity: 1, duration: 0.8, ease: 'power3.out', stagger: 0.1, delay: 0.6 }
     );
   }
 }
@@ -106,7 +115,7 @@ function initHeroParallax() {
 
   const hero = document.querySelector('.hero');
   const bgNum = document.querySelector('.hero-bg-num');
-  const plate = document.querySelector('.plate');
+  const stage = document.querySelector('.hero-mascot-stage') || document.querySelector('.plate');
 
   if (hero && bgNum) {
     gsap.to(bgNum, {
@@ -121,9 +130,9 @@ function initHeroParallax() {
     });
   }
 
-  if (hero && plate) {
-    gsap.to(plate, {
-      yPercent: 18,
+  if (hero && stage) {
+    gsap.to(stage, {
+      yPercent: 12,
       ease: 'none',
       scrollTrigger: {
         trigger: hero,
@@ -135,77 +144,92 @@ function initHeroParallax() {
   }
 }
 
-// 3. 3D Mouse Tilt en la placa de Marki Valle
-function initPlateTilt() {
-  const plate = document.querySelector('.plate') as HTMLElement;
-  if (!plate || prefersReducedMotion) return;
+// 3. 3D Mouse Parallax interactivo en la Mascota y Stickers Orbitantes
+function initMascotStageTiltAndParallax() {
+  const hero = document.querySelector('.hero') as HTMLElement;
+  const stage = document.querySelector('.hero-mascot-stage') as HTMLElement;
+  if (!hero || prefersReducedMotion) return;
 
-  const img = plate.querySelector('.plate__img') as HTMLElement;
-  const tag = plate.querySelector('.plate__tag') as HTMLElement;
-  const back = plate.querySelector('.plate__back') as HTMLElement;
+  const pedestal = stage?.querySelector('.mascot-pedestal-card') as HTMLElement;
+  const mascotImg = stage?.querySelector('.hero-mascot-img') as HTMLElement;
+  const stickers = stage?.querySelectorAll<HTMLElement>('.floating-sticker');
 
-  let isHovered = false;
+  // Fallback si aún existe .plate
+  const legacyPlate = document.querySelector('.plate') as HTMLElement;
 
-  plate.addEventListener('mouseenter', () => {
-    isHovered = true;
-  });
+  if (stage && pedestal) {
+    let isHovered = false;
 
-  plate.addEventListener('mousemove', (e) => {
-    if (!isHovered) return;
-    const rect = plate.getBoundingClientRect();
-    const normX = (e.clientX - rect.left) / rect.width - 0.5; // -0.5 a 0.5
-    const normY = (e.clientY - rect.top) / rect.height - 0.5;
-
-    gsap.to(plate, {
-      rotationY: normX * 18,
-      rotationX: -normY * 18,
-      transformPerspective: 800,
-      ease: 'power2.out',
-      duration: 0.35
+    hero.addEventListener('mouseenter', () => {
+      isHovered = true;
     });
 
-    if (img) {
-      gsap.to(img, {
-        x: normX * 12 + 16,
-        y: normY * 12 - 10,
+    hero.addEventListener('mousemove', (e) => {
+      if (!isHovered) return;
+      const rect = hero.getBoundingClientRect();
+      const normX = (e.clientX - rect.left) / rect.width - 0.5; // -0.5 a 0.5
+      const normY = (e.clientY - rect.top) / rect.height - 0.5;
+
+      // Inclinación 3D del pedestal
+      gsap.to(pedestal, {
+        rotationY: normX * 14,
+        rotationX: -normY * 14,
+        transformPerspective: 900,
         ease: 'power2.out',
         duration: 0.35
       });
-    }
 
-    if (back) {
-      gsap.to(back, {
-        x: -normX * 8,
-        y: -normY * 8,
-        ease: 'power2.out',
-        duration: 0.35
-      });
-    }
+      // Movimiento suave de la mascota
+      if (mascotImg) {
+        gsap.to(mascotImg, {
+          x: normX * 16,
+          y: normY * 12,
+          ease: 'power2.out',
+          duration: 0.35
+        });
+      }
 
-    if (tag) {
-      gsap.to(tag, {
-        x: normX * 22,
-        y: normY * 22,
-        scale: 1.08,
-        ease: 'power2.out',
-        duration: 0.25
-      });
-    }
-  });
-
-  plate.addEventListener('mouseleave', () => {
-    isHovered = false;
-    gsap.to(plate, {
-      rotationY: 0,
-      rotationX: 0,
-      ease: 'elastic.out(1, 0.45)',
-      duration: 0.9
+      // Parallax multicapa en cada sticker orbitante según su data-depth
+      if (stickers) {
+        stickers.forEach(sticker => {
+          const depth = parseFloat(sticker.dataset.depth || '0.3');
+          gsap.to(sticker, {
+            x: normX * (depth * 90),
+            y: normY * (depth * 80),
+            ease: 'power2.out',
+            duration: 0.3
+          });
+        });
+      }
     });
 
-    if (img) gsap.to(img, { x: 16, y: -10, ease: 'power2.out', duration: 0.5 });
-    if (back) gsap.to(back, { x: 0, y: 0, ease: 'power2.out', duration: 0.5 });
-    if (tag) gsap.to(tag, { x: 0, y: 0, scale: 1, ease: 'power2.out', duration: 0.5 });
-  });
+    hero.addEventListener('mouseleave', () => {
+      isHovered = false;
+      gsap.to(pedestal, {
+        rotationY: 0,
+        rotationX: 0,
+        ease: 'elastic.out(1, 0.45)',
+        duration: 0.85
+      });
+
+      if (mascotImg) {
+        gsap.to(mascotImg, { x: 0, y: 0, ease: 'power2.out', duration: 0.5 });
+      }
+
+      if (stickers) {
+        stickers.forEach(sticker => {
+          gsap.to(sticker, { x: 0, y: 0, ease: 'power2.out', duration: 0.6 });
+        });
+      }
+    });
+  } else if (legacyPlate) {
+    legacyPlate.addEventListener('mousemove', (e) => {
+      const rect = legacyPlate.getBoundingClientRect();
+      const normX = (e.clientX - rect.left) / rect.width - 0.5;
+      const normY = (e.clientY - rect.top) / rect.height - 0.5;
+      gsap.to(legacyPlate, { rotationY: normX * 16, rotationX: -normY * 16, duration: 0.3 });
+    });
+  }
 }
 
 // 4. Marquee acelerado por inercia de scroll
@@ -308,7 +332,7 @@ function initSectionReveals() {
 function initMotion() {
   initHeroTextReveal();
   initHeroParallax();
-  initPlateTilt();
+  initMascotStageTiltAndParallax();
   initVelocityMarquee();
   initSectionReveals();
 }
