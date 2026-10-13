@@ -245,8 +245,8 @@
 
 <style is:global>
     /* =========================================================================
-       HERO MEJORADO: CHAMPIONSHIP HUD & FLOATING STICKERS (MW26)
-       ========================================================================= */
+        HERO MEJORADO: CHAMPIONSHIP HUD & FLOATING STICKERS (MW26)
+        ========================================================================= */
     .hero {
         position: relative;
         overflow: clip;
@@ -261,7 +261,42 @@
         align-items: center;
         gap: 12px;
         flex-wrap: wrap;
-        margin-bottom: 4px;
+        margin-bottom: 12px; /* Espacio debajo de las insignias superiores */
+    }
+
+    /* Título principal con tamaño responsivo y espaciado vertical corregido */
+    .hero__h {
+        font-family: var(--f-display, sans-serif);
+        font-size: clamp(3.8rem, 8.5vw, 7.8rem);
+        font-weight: 900;
+        line-height: 0.98; /* Altura de línea más holgada para evitar que se peguen las palabras */
+        text-transform: uppercase;
+        margin: 0 0 20px 0;
+        display: flex;
+        flex-direction: column;
+        gap: 4px; /* Separación limpia entre MARKETING y WEEK */
+        word-break: break-word;
+        overflow-wrap: break-word;
+    }
+
+    .word-mask {
+        display: block;
+        overflow: hidden;
+        width: 100%;
+    }
+
+    .hero__title-word {
+        display: inline-block;
+        color: var(--ink, #101010);
+    }
+
+    .hero__title-word.o {
+        color: var(--orange, #fe7b00);
+    }
+
+    .hero__uni {
+        margin-top: 8px;
+        margin-bottom: 16px;
     }
 
     .hero-status-pill {
@@ -364,8 +399,8 @@
     }
 
     /* =========================================================================
-       STAGE DE MASCOTA Y STICKERS ORBITANTES
-       ========================================================================= */
+        STAGE DE MASCOTA Y STICKERS ORBITANTES
+        ========================================================================= */
     .hero-mascot-stage {
         position: relative;
         width: 100%;
@@ -586,8 +621,8 @@
     }
 
     /* =========================================================================
-       SCOREBOARD ARENA (COUNTDOWN DE ESTADIO)
-       ========================================================================= */
+        SCOREBOARD ARENA (COUNTDOWN DE ESTADIO)
+        ========================================================================= */
     .score-clock-zone {
         display: flex;
         flex-direction: column;
