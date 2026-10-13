@@ -1,111 +1,239 @@
 ---
-// CampusMap.astro — Mapa ilustrado con pines interactivos y acordeón de zonas
+// CampusMap.astro — Mapa ilustrado con pines interactivos y acordeón de zonas según el plano arquitectónico
 ---
+
 <section class="sec sec--alt" id="mapa">
-  <div class="wrap">
-    <div class="sec-head">
-      <p class="eyebrow">Mapa de ubicaciones</p>
-      <h2 class="display">El terreno de juego.</h2>
-      <p class="sec-lead">
-        El Campus Central se transforma en el epicentro de la estrategia. Toca un punto del mapa o una zona de la lista para ver qué ocurre, cuándo y dónde.
-      </p>
-    </div>
-    <div class="map">
-      <figure class="map__plate">
-        <div class="map__stage" id="mapStage">
-          <img src="/img/campus.jpg" width="768" height="508" alt="Mapa ilustrado del Campus Central de Univalle" loading="lazy" />
-        </div>
-        <figcaption class="map__cap">Campus Central Univalle · Acceso libre comunidad universitaria</figcaption>
-      </figure>
-      <div class="map__side-col">
-        <div class="map-explorer-card">
-          <img src="/assets/img/marki-valle-map.jpg" alt="Marki Valle con el mapa del campus" class="map-explorer-img" />
-          <div class="map-explorer-info">
-            <span class="badge-rubberhose" style="font-size: 10px; padding: 2px 8px;">★ GUÍA DE ZONAS ★</span>
-            <b class="font-cartoon" style="font-size: 1.05rem; color: var(--ink); display: block; margin-top: 4px;">EXPLORA EL CAMPUS CENTRAL</b>
-            <p style="font-size: 0.8rem; color: var(--muted); margin: 4px 0 0; line-height: 1.4;">
-              Sigue a Marki Valle para ubicar las 3 zonas clave de competencia y no perderte ninguna actividad.
+    <div class="wrap">
+        <div class="sec-head">
+            <p class="eyebrow">Mapa de ubicaciones</p>
+            <h2 class="display">El terreno de juego.</h2>
+            <p class="sec-lead">
+                El Campus Central se transforma en el epicentro de la estrategia
+                según el plano oficial. Toca un punto del plano o una zona de la
+                lista para ver qué ocurre, cuándo y dónde.
             </p>
-          </div>
         </div>
-        <div class="zones" id="zones"></div>
-      </div>
+        <div class="map">
+            <figure class="map__plate">
+                <div class="map__stage" id="mapStage">
+                    <!-- Reemplaza la ruta por el nombre de archivo real de tu nuevo plano en /img/ o /assets/img/ -->
+                    <img
+                        src="/img/plano-campus.png"
+                        width="1280"
+                        height="900"
+                        alt="Plano arquitectónico del Campus Central con zonas de competencia"
+                        loading="lazy"
+                    />
+                </div>
+                <figcaption class="map__cap">
+                    Plano Oficial Campus Central Univalle · Áreas de Competencia
+                </figcaption>
+            </figure>
+            <div class="map__side-col">
+                <div class="map-explorer-card">
+                    <img
+                        src="/assets/img/marki-valle-map.jpg"
+                        alt="Marki Valle con el mapa del campus"
+                        class="map-explorer-img"
+                    />
+                    <div class="map-explorer-info">
+                        <span
+                            class="badge-rubberhose"
+                            style="font-size: 10px; padding: 2px 8px;"
+                        >
+                            ★ GUÍA DE ZONAS ★
+                        </span>
+                        <b
+                            class="font-cartoon"
+                            style="font-size: 1.05rem; color: var(--ink); display: block; margin-top: 4px;"
+                        >
+                            EXPLORA EL PLANO OFICIAL
+                        </b>
+                        <p style="font-size: 0.8rem; color: var(--muted); margin: 4px 0 0; line-height: 1.4;">
+                            Sigue a Marki Valle para ubicar las zonas exactas de
+                            Stands, Enbanderamiento y Botargas.
+                        </p>
+                    </div>
+                </div>
+                <div class="zones" id="zones"></div>
+            </div>
+        </div>
     </div>
-  </div>
 </section>
 
-<script>
-  const ZONES = [
-    {
-      n: '01', k: 'El Patio', x: 49, y: 44,
-      title: 'El Patio Central',
-      sub: 'Feria de stands y carrera de botargas',
-      desc: 'El corazón al aire libre de Marketing Week. Aquí cada equipo monta su stand oficial con activaciones interactivas para captar votos, y se instala el circuito de obstáculos para la carrera de botargas.',
-      f: [
-        ['Días clave', 'Martes 06 y miércoles 07'],
-        ['Horarios', '08:30 a 12:30 · 15:00 a 17:00'],
-        ['Actividad', 'Votación masiva, música en vivo y corredores']
-      ],
-      cta: 'Votar desde tu móvil',
-      href: '#marcador'
-    },
-    {
-      n: '02', k: 'E-Zone', x: 67, y: 25,
-      title: 'La E-Zone',
-      sub: 'Gran ceremonia de premiación y clausura',
-      desc: 'El espacio cubierto donde se anuncian los resultados del marcador oficial y donde se entregan los trofeos el jueves, con autoridades académicas y el campus presente.',
-      f: [
-        ['Día clave', 'Jueves 08'],
-        ['Horario', '10:30 a 12:00'],
-        ['Actividad', 'Cierre oficial, premiación de campeones y celebración']
-      ],
-      cta: 'Ver el fixture completo',
-      href: '#programa'
-    },
-    {
-      n: '03', k: 'Control', x: 38, y: 72,
-      title: 'Mesa de control',
-      sub: 'Acreditación y atención a grupos',
-      desc: 'El punto de entrada del campus. Aquí los grupos confirman su asistencia, resuelven dudas con la organización y se coordina el trabajo con el comité.',
-      f: [
-        ['Días clave', 'Lunes 05 a jueves 08'],
-        ['Horarios', 'Desde las 08:00'],
-        ['Actividad', 'Acreditación, dudas y atención al jurado']
-      ],
-      cta: 'Inscribir a mi grupo',
-      href: '#inscripcion'
+<style>
+    /* Contenedor principal de la imagen del mapa */
+    .map__plate {
+        margin: 0;
+        width: 100%;
+        background: #ffffff;
+        border: 2px solid var(--ink, #101010);
+        border-radius: 12px;
+        padding: 12px;
+        box-shadow: 6px 6px 0px var(--ink, #101010);
+        box-sizing: border-box;
     }
-  ];
 
-  let selZone = 0;
+    /* Escenario interactivo con posición relativa para los pines */
+    .map__stage {
+        position: relative;
+        width: 100%;
+        height: auto;
+        aspect-ratio: 4 / 3; /* Asegura la proporción natural del plano horizontal */
+        background: #fdfdfd;
+        border-radius: 8px;
+        overflow: hidden;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
 
-  function initZones() {
-    const zonesContainer = document.getElementById('zones');
-    const st = document.getElementById('mapStage');
-    if (!zonesContainer || !st) return;
+    /* Ajuste de la imagen para que encaje al 100% sin recortar ni deformar */
+    .map__stage img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain; /* Garantiza que el plano se vea completo dentro del marco */
+        display: block;
+    }
 
-    // Renderizar los pines en el mapa
-    st.querySelectorAll('.pin').forEach(p => p.remove());
-    ZONES.forEach((z, i) => {
-      const b = document.createElement('button');
-      b.type = 'button';
-      b.className = 'pin';
-      b.style.left = `${z.x}%`;
-      b.style.top = `${z.y}%`;
-      b.setAttribute('aria-pressed', String(i === selZone));
-      b.setAttribute('aria-label', `Zona ${z.n}: ${z.k}`);
-      b.innerHTML = `<span class="pin__n">${z.n}</span><span class="pin__l">${z.k}</span>`;
-      b.addEventListener('click', () => {
-        selectZone(i);
-      });
-      st.appendChild(b);
-    });
+    .map__cap {
+        font-family: var(--f-mono, monospace);
+        font-size: 0.74rem;
+        color: var(--muted, #666);
+        margin-top: 8px;
+        text-align: center;
+    }
 
-    // Renderizar estructura persistente para permitir transiciones suaves
-    zonesContainer.innerHTML = ZONES.map((z, i) => {
-      const on = i === selZone;
-      return `
-        <div class="zn${on ? ' is-on' : ''}" data-zone="${i}">
+    /* Estilo fluido y responsivo para los pines */
+    .pin {
+        position: absolute;
+        transform: translate(-50%, -50%);
+        background: var(--ink, #101010);
+        color: #ff7a00;
+        border: 2px solid #ff7a00;
+        border-radius: 6px;
+        padding: 4px 8px;
+        font-family: var(--f-mono, monospace);
+        font-size: 0.72rem;
+        font-weight: 800;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        box-shadow: 3px 3px 0px rgba(0, 0, 0, 0.4);
+        transition:
+            transform 0.15s ease,
+            background 0.15s ease,
+            color 0.15s ease;
+        z-index: 10;
+        white-space: nowrap;
+    }
+
+    .pin:hover,
+    .pin[aria-pressed="true"] {
+        background: #ff7a00;
+        color: var(--ink, #101010);
+        border-color: var(--ink);
+        transform: translate(-50%, -50%) scale(1.08);
+    }
+
+    .pin.pin--sub {
+        background: rgba(16, 16, 16, 0.85);
+        color: #ffffff;
+        border: 1.5px dashed #ff7a00;
+        padding: 2px 6px;
+        font-size: 0.65rem;
+        pointer-events: none;
+    }
+</style>
+
+<script>
+    const ZONES = [
+        {
+            n: "01",
+            k: "Stands",
+            x: 58,
+            y: 32, // Posicionado sobre la "Zona de Stands" del plano
+            title: "Zona de Stands",
+            sub: "Decoración y feria de stands",
+            desc: "El área designada para el montaje y exhibición de los stands oficiales. Aquí los grupos realizan sus activaciones comerciales y reciben las visitas del público para la votación.",
+            f: [
+                ["Día clave", "Martes 20"],
+                ["Horario", "08:30 a 12:20"],
+                ["Actividad", "Montaje, decoración y evaluación de stands"],
+            ],
+            cta: "Ver fixture completo",
+            href: "#programa",
+        },
+        {
+            n: "02",
+            k: "Enbanderamiento",
+            x: 42,
+            y: 15, // Posicionado en el "2do piso Área Económicas"
+            title: "Enbanderamiento",
+            sub: "2do piso Área Económicas",
+            desc: "Espacio asignado en el segundo nivel de la facultad para la presentación, izada y exposición visual de las banderas representativas de cada equipo en competencia.",
+            f: [
+                ["Día clave", "Lunes 19"],
+                ["Horario", "10:30 a 12:00"],
+                [
+                    "Actividad",
+                    "Exhibición y calificación de banderolas institucionales",
+                ],
+            ],
+            cta: "Inscribir a mi grupo",
+            href: "#inscripcion",
+        },
+        {
+            n: "03",
+            k: "Botargas",
+            x: 50,
+            y: 55, // Posicionado en el Patio Central y área abierta de botargas
+            title: "Carrera de Botargas",
+            sub: "Patio central y circuito de obstáculos",
+            desc: "La zona abierta principal del campus donde se instala el circuito dinámico de obstáculos. Los competidores corren y animan disfrazados con sus botargas frente a todo el público.",
+            f: [
+                ["Día clave", "Miércoles 21"],
+                ["Horario", "15:00 a 17:00"],
+                [
+                    "Actividad",
+                    "Circuito de velocidad y obstáculos con botargas",
+                ],
+            ],
+            cta: "Votar desde tu móvil",
+            href: "#marcador",
+        },
+    ];
+
+    let selZone = 0;
+
+    function initZones() {
+        const zonesContainer = document.getElementById("zones");
+        const st = document.getElementById("mapStage");
+        if (!zonesContainer || !st) return;
+
+        // Renderizar los pines sobre el plano
+        st.querySelectorAll(".pin").forEach((p) => p.remove());
+        ZONES.forEach((z, i) => {
+            const b = document.createElement("button");
+            b.type = "button";
+            b.className = "pin";
+            b.style.left = `${z.x}%`;
+            b.style.top = `${z.y}%`;
+            b.setAttribute("aria-pressed", String(i === selZone));
+            b.setAttribute("aria-label", `Zona ${z.n}: ${z.k}`);
+            b.innerHTML = `<span class="pin__n">${z.n}</span><span class="pin__l">${z.k}</span>`;
+            b.addEventListener("click", () => {
+                selectZone(i);
+            });
+            st.appendChild(b);
+        });
+
+        // Renderizar estructura del acordeón de zonas
+        zonesContainer.innerHTML = ZONES.map((z, i) => {
+            const on = i === selZone;
+            return `
+        <div class="zn${on ? " is-on" : ""}" data-zone="${i}">
           <button type="button" class="zn__h" aria-expanded="${on}" aria-controls="zb${i}" data-i="${i}">
             <b>${z.n}</b>
             <span>
@@ -117,42 +245,44 @@
             <div class="zn__b">
               <p>${z.desc}</p>
               <dl class="facts">
-                ${z.f.map(r => `<div><dt>${r[0]}</dt><dd>${r[1]}</dd></div>`).join('')}
+                ${z.f.map((r) => `<div><dt>${r[0]}</dt><dd>${r[1]}</dd></div>`).join("")}
               </dl>
               <div><a class="btn btn--sm" href="${z.href}">${z.cta}</a></div>
             </div>
           </div>
         </div>
       `;
-    }).join('');
+        }).join("");
 
-    zonesContainer.querySelectorAll<HTMLButtonElement>('.zn__h').forEach(b => {
-      b.addEventListener('click', () => {
-        const idx = +(b.getAttribute('data-i') || 0);
-        selectZone(idx);
-      });
-    });
-  }
+        zonesContainer
+            .querySelectorAll<HTMLButtonElement>(".zn__h")
+            .forEach((b) => {
+                b.addEventListener("click", () => {
+                    const idx = +(b.getAttribute("data-i") || 0);
+                    selectZone(idx);
+                });
+            });
+    }
 
-  function selectZone(index: number) {
-    selZone = index;
-    const st = document.getElementById('mapStage');
-    const zonesContainer = document.getElementById('zones');
-    if (!st || !zonesContainer) return;
+    function selectZone(index: number) {
+        selZone = index;
+        const st = document.getElementById("mapStage");
+        const zonesContainer = document.getElementById("zones");
+        if (!st || !zonesContainer) return;
 
-    // Actualizar pines
-    st.querySelectorAll<HTMLButtonElement>('.pin').forEach((pin, i) => {
-      pin.setAttribute('aria-pressed', String(i === selZone));
-    });
+        // Actualizar estado de los pines
+        st.querySelectorAll<HTMLButtonElement>(".pin").forEach((pin, i) => {
+            pin.setAttribute("aria-pressed", String(i === selZone));
+        });
 
-    // Actualizar acordeones sin destruir el DOM
-    zonesContainer.querySelectorAll<HTMLElement>('.zn').forEach((zn, i) => {
-      const isOn = i === selZone;
-      zn.classList.toggle('is-on', isOn);
-      const btn = zn.querySelector<HTMLButtonElement>('.zn__h');
-      if (btn) btn.setAttribute('aria-expanded', String(isOn));
-    });
-  }
+        // Actualizar acordeones visuales
+        zonesContainer.querySelectorAll<HTMLElement>(".zn").forEach((zn, i) => {
+            const isOn = i === selZone;
+            zn.classList.toggle("is-on", isOn);
+            const btn = zn.querySelector<HTMLButtonElement>(".zn__h");
+            if (btn) btn.setAttribute("aria-expanded", String(isOn));
+        });
+    }
 
-  initZones();
+    initZones();
 </script>

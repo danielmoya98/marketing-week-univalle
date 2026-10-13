@@ -2,805 +2,1009 @@
 // Hero.astro — Portada de campeonato con Championship HUD, stickers orbitantes y marcador de estadio
 ---
 
-<section class="hero" id="inicio" aria-label="Portada oficial de Marketing Week 2026">
-  <!-- Número 26 gigante de fondo con parallax -->
-  <div class="hero-bg-num" aria-hidden="true">26</div>
-
-  <div class="wrap">
-    <div class="hero__grid">
-      <!-- Columna Izquierda: Información Editorial y Championship Stats HUD -->
-      <div class="hero__content">
-        <div class="hero-badges-group">
-          <p class="eyebrow" style="margin: 0;">Univalle · Campus Central</p>
-          <span class="badge-rubberhose">★ EDICIÓN OFICIAL 2026 ★</span>
-          <span class="hero-status-pill mono">
-            <i class="dot dot--ok"></i>
-            <span>05 — 08 OCTUBRE</span>
-          </span>
-        </div>
-
-        <h1 class="hero__h">
-          <span class="word-mask"><span class="hero__title-word">Marketing</span></span>
-          <span class="word-mask"><span class="hero__title-word o">Week</span></span>
-        </h1>
-
-        <p class="hero__uni">Estrategia · Creatividad · Competencia en Pista</p>
-
-        <p class="lead">
-          Cuatro días para que tu grupo enbandere, corra, piense y decore. Tres competencias oficiales, un solo marcador en tiempo real y toda la comunidad universitaria votando.
-        </p>
-
-        <!-- Botones de Acción -->
-        <div class="hero__cta">
-          <a class="btn btn--orange btn--lg hero-btn-main" href="/inscribir">
-            <span>Inscribe a tu grupo</span>
-            <span class="btn-arrow">&rarr;</span>
-          </a>
-          <a class="btn btn--ghost btn--lg" href="/marcador">
-            Ver marcador oficial
-          </a>
-        </div>
-
-        <!-- Championship Stats HUD (Métricas deportivas directas) -->
-        <div class="hero-stats-hud">
-          <div class="stat-hud-box">
-            <div class="stat-hud-top">
-              <b class="stat-hud-num display">04</b>
-              <span class="stat-hud-badge mono">DÍAS</span>
-            </div>
-            <span class="stat-hud-label mono">Torneo en campus</span>
-          </div>
-
-          <div class="stat-hud-box highlight">
-            <div class="stat-hud-top">
-              <b class="stat-hud-num display" style="color: var(--orange);">03</b>
-              <span class="stat-hud-badge mono badge-orange">OFICIAL</span>
-            </div>
-            <span class="stat-hud-label mono">Competencias</span>
-          </div>
-
-          <div class="stat-hud-box">
-            <div class="stat-hud-top">
-              <b class="stat-hud-num display">100<small style="font-size: 0.6em;">%</small></b>
-              <span class="stat-hud-badge mono">EN VIVO</span>
-            </div>
-            <span class="stat-hud-label mono">Votación por QR</span>
-          </div>
-        </div>
-      </div>
-
-      <!-- Columna Derecha: Mascota Marki Valle en Pedestal con Stickers Orbitantes -->
-      <div class="hero__visual">
-        <div class="hero-mascot-stage" id="heroMascotStage">
-          <!-- Resplandor de Aura Deportivo Cálido de Fondo -->
-          <div class="mascot-aura-glow" aria-hidden="true"></div>
-
-          <!-- Pedestal Deportivo con Mascota -->
-          <div class="mascot-pedestal-card">
-            <div class="pedestal-card-inner">
-              <img 
-                src="/assets/img/marki-valle-official.png" 
-                width="420" 
-                height="510" 
-                alt="Marki Valle, mascota oficial de Marketing Week 2026" 
-                class="hero-mascot-img" 
-                loading="eager"
-              />
-            </div>
-          </div>
-
-          <!-- Stickers Deportivos Flotantes Orbitantes con Parallax 3D -->
-          <!-- Sticker 1: Botargas -->
-          <div class="floating-sticker sticker--botargas" data-depth="0.35">
-            <span class="sticker-emoji">🏃</span>
-            <div class="sticker-info">
-              <strong class="mono">BOTARGAS</strong>
-              <small class="mono">07 OCT · CIRCUITO</small>
-            </div>
-          </div>
-
-          <!-- Sticker 2: Dorsal Oficial -->
-          <div class="floating-sticker sticker--dorsal" data-depth="0.22">
-            <span class="badge-rubberhose sticker-badge">⚙️ MARKI VALLE #26</span>
-          </div>
-
-          <!-- Sticker 3: Stands -->
-          <div class="floating-sticker sticker--stands" data-depth="0.45">
-            <span class="sticker-emoji">🎪</span>
-            <div class="sticker-info">
-              <strong class="mono">STANDS</strong>
-              <small class="mono">06 OCT · FERIA</small>
-            </div>
-          </div>
-
-          <!-- Sticker 4: Enbanderamiento -->
-          <div class="floating-sticker sticker--bandera" data-depth="0.30">
-            <span class="sticker-emoji">🚩</span>
-            <div class="sticker-info">
-              <strong class="mono">BANDERAS</strong>
-              <small class="mono">05 OCT · APERTURA</small>
-            </div>
-          </div>
-
-          <!-- Sticker 5: Micro-Pin Trofeo -->
-          <div class="floating-sticker sticker--trophy" data-depth="0.18">
-            <span class="trophy-badge mono">🏆 1 PODIO GENERAL</span>
-          </div>
-        </div>
-      </div>
+<section
+    class="hero"
+    id="inicio"
+    aria-label="Portada oficial de Marketing Week 2026"
+>
+    <!-- Número 26 gigante de fondo con parallax -->
+    <div class="hero-bg-num" aria-hidden="true">
+        26
     </div>
-  </div>
 
-  <!-- Scoreboard Arena: Marcador de Cuenta Regresiva de Estadio (Full Width) -->
-  <div class="score-full">
-    <div class="score-full__in" role="group" aria-label="Cronómetro de inauguración">
-      <!-- Columna 1: Reloj de estadio digital -->
-      <div class="score-clock-zone">
-        <div class="score-clock-header">
-          <i class="dot dot--ok"></i>
-          <span class="mono" id="cdLab">CUENTA REGRESIVA PARA LA INAUGURACIÓN</span>
+    <div class="wrap">
+        <div class="hero__grid">
+            <!-- Columna Izquierda: Información Editorial y Championship Stats HUD -->
+            <div class="hero__content">
+                <div class="hero-badges-group">
+                    <p class="eyebrow" style="margin: 0;">
+                        Univalle · Campus Central
+                    </p>
+                    <span class="badge-rubberhose">
+                        ★ EDICIÓN OFICIAL 2026 ★
+                    </span>
+                    <span class="hero-status-pill mono">
+                        <i class="dot dot--ok"></i>
+                        <span>05 — 08 OCTUBRE</span>
+                    </span>
+                </div>
+
+                <h1 class="hero__h">
+                    <span class="word-mask">
+                        <span class="hero__title-word">Marketing</span>
+                    </span>
+                    <span class="word-mask">
+                        <span class="hero__title-word o">Week</span>
+                    </span>
+                </h1>
+
+                <p class="hero__uni">
+                    Estrategia · Creatividad · Competencia en Pista
+                </p>
+
+                <p class="lead">
+                    Cuatro días para que tu grupo enbandere, corra, piense y
+                    decore. Tres competencias oficiales, un solo marcador en
+                    tiempo real y toda la comunidad universitaria votando.
+                </p>
+
+                <!-- Botones de Acción -->
+                <div class="hero__cta">
+                    <a
+                        class="btn btn--orange btn--lg hero-btn-main"
+                        href="/inscribir"
+                    >
+                        <span>Inscribe a tu grupo</span>
+                        <span class="btn-arrow">&rarr;</span>
+                    </a>
+                    <a class="btn btn--ghost btn--lg" href="/marcador">
+                        Ver marcador oficial
+                    </a>
+                </div>
+
+                <!-- Championship Stats HUD (Métricas deportivas directas) -->
+                <div class="hero-stats-hud">
+                    <div class="stat-hud-box">
+                        <div class="stat-hud-top">
+                            <b class="stat-hud-num display">04</b>
+                            <span class="stat-hud-badge mono">DÍAS</span>
+                        </div>
+                        <span class="stat-hud-label mono">
+                            Torneo en campus
+                        </span>
+                    </div>
+
+                    <div class="stat-hud-box highlight">
+                        <div class="stat-hud-top">
+                            <b
+                                class="stat-hud-num display"
+                                style="color: var(--orange);"
+                            >
+                                03
+                            </b>
+                            <span class="stat-hud-badge mono badge-orange">
+                                OFICIAL
+                            </span>
+                        </div>
+                        <span class="stat-hud-label mono">Competencias</span>
+                    </div>
+
+                    <div class="stat-hud-box">
+                        <div class="stat-hud-top">
+                            <b class="stat-hud-num display">
+                                100<small style="font-size: 0.6em;">%</small>
+                            </b>
+                            <span class="stat-hud-badge mono">EN VIVO</span>
+                        </div>
+                        <span class="stat-hud-label mono">Votación por QR</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Columna Derecha: Mascota Marki Valle en Pedestal con Stickers Orbitantes -->
+            <div class="hero__visual">
+                <div class="hero-mascot-stage" id="heroMascotStage">
+                    <!-- Resplandor de Aura Deportivo Cálido de Fondo -->
+                    <div class="mascot-aura-glow" aria-hidden="true"></div>
+
+                    <!-- Pedestal Deportivo con Mascota -->
+                    <div class="mascot-pedestal-card">
+                        <div class="pedestal-card-inner">
+                            <img
+                                src="/assets/img/marki-valle-official.png"
+                                width="420"
+                                height="510"
+                                alt="Marki Valle, mascota oficial de Marketing Week 2026"
+                                class="hero-mascot-img"
+                                loading="eager"
+                            />
+                        </div>
+                    </div>
+
+                    <!-- Stickers Deportivos Flotantes Orbitantes con Parallax 3D -->
+                    <!-- Sticker 1: Botargas -->
+                    <div
+                        class="floating-sticker sticker--botargas"
+                        data-depth="0.35"
+                    >
+                        <span class="sticker-emoji">🏃</span>
+                        <div class="sticker-info">
+                            <strong class="mono">BOTARGAS</strong>
+                            <small class="mono">07 OCT · CIRCUITO</small>
+                        </div>
+                    </div>
+
+                    <!-- Sticker 2: Dorsal Oficial -->
+                    <div
+                        class="floating-sticker sticker--dorsal"
+                        data-depth="0.22"
+                    >
+                        <span class="badge-rubberhose sticker-badge">
+                            ⚙️ MARKI VALLE #26
+                        </span>
+                    </div>
+
+                    <!-- Sticker 3: Stands -->
+                    <div
+                        class="floating-sticker sticker--stands"
+                        data-depth="0.45"
+                    >
+                        <span class="sticker-emoji">🎪</span>
+                        <div class="sticker-info">
+                            <strong class="mono">STANDS</strong>
+                            <small class="mono">06 OCT · FERIA</small>
+                        </div>
+                    </div>
+
+                    <!-- Sticker 4: Enbanderamiento -->
+                    <div
+                        class="floating-sticker sticker--bandera"
+                        data-depth="0.30"
+                    >
+                        <span class="sticker-emoji">🚩</span>
+                        <div class="sticker-info">
+                            <strong class="mono">BANDERAS</strong>
+                            <small class="mono">05 OCT · APERTURA</small>
+                        </div>
+                    </div>
+
+                    <!-- Sticker 5: Micro-Pin Trofeo -->
+                    <div
+                        class="floating-sticker sticker--trophy"
+                        data-depth="0.18"
+                    >
+                        <span class="trophy-badge mono">
+                            🏆 1 PODIO GENERAL
+                        </span>
+                    </div>
+                </div>
+            </div>
         </div>
-
-        <div class="scoreboard-cards-grid" role="timer">
-          <div class="score-digit-card">
-            <b class="digit-value display" id="cdD">00</b>
-            <span class="digit-label mono">DÍAS</span>
-          </div>
-          <span class="digit-colon display">:</span>
-          <div class="score-digit-card">
-            <b class="digit-value display" id="cdH">00</b>
-            <span class="digit-label mono">HORAS</span>
-          </div>
-          <span class="digit-colon display">:</span>
-          <div class="score-digit-card">
-            <b class="digit-value display" id="cdM">00</b>
-            <span class="digit-label mono">MINUTOS</span>
-          </div>
-          <span class="digit-colon display">:</span>
-          <div class="score-digit-card highlight-sec">
-            <b class="digit-value display" id="cdS">00</b>
-            <span class="digit-label mono">SEGUNDOS</span>
-          </div>
-        </div>
-      </div>
-
-      <!-- Columna 2: Próxima Actividad -->
-      <div class="score-next-activity-card" id="nextBox" aria-live="polite"></div>
-
-      <!-- Columna 3: Enlace al Fixture -->
-      <div class="score-fixture-action">
-        <a class="btn btn--orange btn--sm" href="#programa">
-          <span>Ver fixture completo</span>
-          <span style="margin-left: 4px;">&rarr;</span>
-        </a>
-      </div>
     </div>
-  </div>
+
+    <!-- Scoreboard Arena: Marcador de Cuenta Regresiva de Estadio (Full Width) -->
+    <div class="score-full">
+        <div
+            class="score-full__in"
+            role="group"
+            aria-label="Cronómetro de inauguración"
+        >
+            <!-- Columna 1: Reloj de estadio digital -->
+            <div class="score-clock-zone">
+                <div class="score-clock-header">
+                    <i class="dot dot--ok"></i>
+                    <span class="mono" id="cdLab">
+                        CUENTA REGRESIVA PARA LA INAUGURACIÓN
+                    </span>
+                </div>
+
+                <div class="scoreboard-cards-grid" role="timer">
+                    <div class="score-digit-card">
+                        <b class="digit-value display" id="cdD">
+                            00
+                        </b>
+                        <span class="digit-label mono">DÍAS</span>
+                    </div>
+                    <span class="digit-colon display">:</span>
+                    <div class="score-digit-card">
+                        <b class="digit-value display" id="cdH">
+                            00
+                        </b>
+                        <span class="digit-label mono">HORAS</span>
+                    </div>
+                    <span class="digit-colon display">:</span>
+                    <div class="score-digit-card">
+                        <b class="digit-value display" id="cdM">
+                            00
+                        </b>
+                        <span class="digit-label mono">MINUTOS</span>
+                    </div>
+                    <span class="digit-colon display">:</span>
+                    <div class="score-digit-card highlight-sec">
+                        <b class="digit-value display" id="cdS">
+                            00
+                        </b>
+                        <span class="digit-label mono">SEGUNDOS</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Columna 2: Próxima Actividad -->
+            <div
+                class="score-next-activity-card"
+                id="nextBox"
+                aria-live="polite"
+            ></div>
+
+            <!-- Columna 3: Enlace al Fixture -->
+            <div class="score-fixture-action">
+                <a class="btn btn--orange btn--sm" href="#programa">
+                    <span>Ver fixture completo</span>
+                    <span style="margin-left: 4px;">&rarr;</span>
+                </a>
+            </div>
+        </div>
+    </div>
 </section>
 
 <style is:global>
-  /* =========================================================================
-     HERO MEJORADO: CHAMPIONSHIP HUD & FLOATING STICKERS (MW26)
-     ========================================================================= */
-  .hero {
-    position: relative;
-    overflow: clip;
-    padding-top: clamp(40px, 6vw, 76px);
-    padding-bottom: 0;
-    background: var(--white, #FEFFFA);
-    color: var(--ink, #101010);
-  }
-
-  .hero-badges-group {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    flex-wrap: wrap;
-    margin-bottom: 4px;
-  }
-
-  .hero-status-pill {
-    display: inline-flex;
-    align-items: center;
-    gap: 7px;
-    font-size: 0.65rem;
-    font-weight: 700;
-    letter-spacing: 0.12em;
-    padding: 3px 10px;
-    border-radius: 999px;
-    background: var(--paper, #EFEEE8);
-    border: 1px solid var(--line, rgba(16, 16, 16, 0.14));
-    color: var(--ink, #101010);
-  }
-
-  .hero-btn-main {
-    box-shadow: 0 4px 16px rgba(254, 123, 0, 0.35);
-  }
-
-  .hero-btn-main .btn-arrow {
-    transition: transform 0.2s ease;
-  }
-  .hero-btn-main:hover .btn-arrow {
-    transform: translateX(4px);
-  }
-
-  /* Championship Stats HUD */
-  .hero-stats-hud {
-    display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 12px;
-    margin-top: 36px;
-    padding-top: 24px;
-    border-top: 1.5px solid var(--line, rgba(16, 16, 16, 0.14));
-    max-width: 620px;
-  }
-
-  .stat-hud-box {
-    background: var(--paper, #EFEEE8);
-    border: 1px solid var(--line, rgba(16, 16, 16, 0.14));
-    border-radius: 6px;
-    padding: 12px 14px;
-    display: flex;
-    flex-direction: column;
-    gap: 2px;
-    transition: transform 0.2s ease, border-color 0.2s ease;
-  }
-
-  .stat-hud-box:hover {
-    transform: translateY(-2px);
-    border-color: var(--orange, #FE7B00);
-  }
-
-  .stat-hud-box.highlight {
-    background: var(--white, #FEFFFA);
-    border: 1.5px solid var(--orange, #FE7B00);
-    box-shadow: 0 4px 14px rgba(254, 123, 0, 0.12);
-  }
-
-  .stat-hud-top {
-    display: flex;
-    align-items: baseline;
-    justify-content: space-between;
-    gap: 6px;
-  }
-
-  .stat-hud-num {
-    font-size: clamp(2rem, 3.2vw, 2.7rem);
-    font-weight: 900;
-    line-height: 0.9;
-    color: var(--ink, #101010);
-    font-variant-numeric: tabular-nums;
-  }
-
-  .stat-hud-badge {
-    font-size: 0.6rem;
-    font-weight: 700;
-    letter-spacing: 0.08em;
-    padding: 2px 6px;
-    border-radius: 3px;
-    background: rgba(16, 16, 16, 0.06);
-    color: var(--muted, #5B5D62);
-  }
-
-  .stat-hud-badge.badge-orange {
-    background: var(--orange-soft, #FFCB8A);
-    color: var(--ink, #101010);
-  }
-
-  .stat-hud-label {
-    font-size: 0.65rem;
-    font-weight: 700;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    color: var(--muted, #5B5D62);
-    margin-top: 4px;
-  }
-
-  /* =========================================================================
-     STAGE DE MASCOTA Y STICKERS ORBITANTES
-     ========================================================================= */
-  .hero-mascot-stage {
-    position: relative;
-    width: 100%;
-    max-width: 480px;
-    margin-inline: auto;
-    padding: 30px 20px 20px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-
-  .mascot-aura-glow {
-    position: absolute;
-    width: 380px;
-    height: 380px;
-    border-radius: 50%;
-    background: radial-gradient(circle, rgba(254, 123, 0, 0.22) 0%, rgba(255, 203, 138, 0.12) 40%, transparent 70%);
-    filter: blur(20px);
-    z-index: 1;
-    pointer-events: none;
-    animation: auraPulse 6s ease-in-out infinite alternate;
-  }
-
-  @keyframes auraPulse {
-    0% { transform: scale(0.92); opacity: 0.7; }
-    100% { transform: scale(1.08); opacity: 1; }
-  }
-
-  .mascot-pedestal-card {
-    position: relative;
-    z-index: 2;
-    width: 100%;
-    max-width: 360px;
-    background: var(--white, #FEFFFA);
-    border: 2px solid var(--ink, #101010);
-    border-radius: 16px;
-    box-shadow: 8px 8px 0 var(--orange, #FE7B00);
-    overflow: hidden;
-    transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.3s ease;
-  }
-
-  .mascot-pedestal-card:hover {
-    transform: translateY(-4px) rotate(-0.5deg);
-    box-shadow: 10px 12px 0 var(--orange, #FE7B00);
-  }
-
-  .pedestal-card-inner {
-    position: relative;
-    background: linear-gradient(180deg, #FFFFFF 0%, var(--paper, #EFEEE8) 100%);
-    padding: 24px 20px 10px;
-    display: flex;
-    justify-content: center;
-    align-items: flex-end;
-  }
-
-  .hero-mascot-img {
-    width: 100%;
-    height: auto;
-    max-height: 420px;
-    object-fit: contain;
-    display: block;
-    filter: drop-shadow(0 12px 24px rgba(16, 16, 16, 0.12));
-    animation: mascotBreathing 4.8s ease-in-out infinite;
-    transform-origin: bottom center;
-  }
-
-  @keyframes mascotBreathing {
-    0%, 100% { transform: translateY(0) scale(1); }
-    50% { transform: translateY(-7px) scale(1.015); }
-  }
-
-  /* STICKERS FLOTANTES ORBITANTES */
-  .floating-sticker {
-    position: absolute;
-    z-index: 10;
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    background: var(--white, #FEFFFA);
-    border: 1.5px solid var(--ink, #101010);
-    border-radius: 8px;
-    padding: 8px 12px;
-    box-shadow: 3px 3px 0 var(--ink, #101010);
-    cursor: default;
-    user-select: none;
-    transition: transform 0.25s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.25s ease;
-    will-change: transform;
-  }
-
-  .floating-sticker:hover {
-    transform: scale(1.08) rotate(1deg) !important;
-    box-shadow: 5px 5px 0 var(--orange, #FE7B00) !important;
-    border-color: var(--orange, #FE7B00);
-  }
-
-  .sticker-emoji {
-    font-size: 1.25rem;
-    line-height: 1;
-  }
-
-  .sticker-info {
-    display: flex;
-    flex-direction: column;
-    line-height: 1.1;
-  }
-
-  .sticker-info strong {
-    font-size: 0.76rem;
-    font-weight: 800;
-    color: var(--ink, #101010);
-    letter-spacing: 0.05em;
-  }
-
-  .sticker-info small {
-    font-size: 0.58rem;
-    font-weight: 700;
-    color: var(--muted, #5B5D62);
-    letter-spacing: 0.06em;
-  }
-
-  /* Posicionamiento y oscilación individual de cada sticker */
-  .sticker--botargas {
-    top: 10px;
-    left: -20px;
-    animation: floatStickerA 4.2s ease-in-out infinite;
-  }
-
-  .sticker--dorsal {
-    top: 16px;
-    right: -15px;
-    padding: 0;
-    border: none;
-    box-shadow: none;
-    background: transparent;
-    animation: floatStickerB 3.8s ease-in-out infinite;
-  }
-
-  .sticker--stands {
-    bottom: 40px;
-    left: -25px;
-    animation: floatStickerC 4.6s ease-in-out infinite;
-  }
-
-  .sticker--bandera {
-    bottom: 24px;
-    right: -20px;
-    animation: floatStickerA 3.9s ease-in-out infinite reverse;
-  }
-
-  .sticker--trophy {
-    top: -14px;
-    left: 45%;
-    transform: translateX(-50%);
-    padding: 5px 12px;
-    background: var(--orange-soft, #FFCB8A);
-    animation: floatStickerB 4.4s ease-in-out infinite;
-  }
-
-  .trophy-badge {
-    font-size: 0.64rem;
-    font-weight: 800;
-    letter-spacing: 0.08em;
-    color: var(--ink, #101010);
-  }
-
-  @keyframes floatStickerA {
-    0%, 100% { transform: translateY(0) rotate(-1deg); }
-    50% { transform: translateY(-8px) rotate(1.5deg); }
-  }
-
-  @keyframes floatStickerB {
-    0%, 100% { transform: translateY(0) rotate(1.5deg); }
-    50% { transform: translateY(-6px) rotate(-1deg); }
-  }
-
-  @keyframes floatStickerC {
-    0%, 100% { transform: translateY(0) rotate(-2deg); }
-    50% { transform: translateY(-9px) rotate(0.5deg); }
-  }
-
-  /* =========================================================================
-     SCOREBOARD ARENA (COUNTDOWN DE ESTADIO)
-     ========================================================================= */
-  .score-clock-zone {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-  }
-
-  .score-clock-header {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    font-size: 0.65rem;
-    font-weight: 700;
-    letter-spacing: 0.14em;
-    color: var(--muted, #5B5D62);
-    text-transform: uppercase;
-  }
-
-  .scoreboard-cards-grid {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-  }
-
-  .score-digit-card {
-    background: var(--white, #FEFFFA);
-    border: 1.5px solid var(--line, rgba(16, 16, 16, 0.18));
-    border-radius: 8px;
-    padding: 8px 14px;
-    min-width: 68px;
-    text-align: center;
-    box-shadow: 0 2px 6px rgba(16, 16, 16, 0.04);
-    display: flex;
-    flex-direction: column;
-    gap: 2px;
-    transition: border-color 0.2s ease, transform 0.2s ease;
-  }
-
-  .score-digit-card:hover {
-    border-color: var(--orange, #FE7B00);
-    transform: translateY(-2px);
-  }
-
-  .score-digit-card.highlight-sec {
-    border-color: var(--orange, #FE7B00);
-    background: #FFF9F2;
-  }
-  .score-digit-card.highlight-sec .digit-value {
-    color: var(--orange-deep, #FE6E02);
-  }
-
-  .digit-value {
-    font-size: clamp(2.2rem, 4.2vw, 3.2rem);
-    font-weight: 900;
-    line-height: 0.9;
-    color: var(--ink, #101010);
-    font-variant-numeric: tabular-nums;
-  }
-
-  .digit-label {
-    font-size: 0.58rem;
-    font-weight: 700;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    color: var(--muted, #5B5D62);
-  }
-
-  .digit-colon {
-    font-size: 2.2rem;
-    font-weight: 900;
-    color: var(--orange, #FE7B00);
-    line-height: 1;
-    user-select: none;
-    opacity: 0.85;
-  }
-
-  .score-next-activity-card {
-    padding-left: clamp(20px, 3.5vw, 48px);
-    border-left: 1px solid var(--line, rgba(16, 16, 16, 0.14));
-    display: grid;
-    gap: 6px;
-    min-width: 0;
-  }
-
-  .score-next-activity-card h3 {
-    font-family: var(--f-display, sans-serif);
-    font-size: clamp(1.5rem, 2.4vw, 2.1rem);
-    font-weight: 900;
-    line-height: 1;
-    text-transform: uppercase;
-    color: var(--ink, #101010);
-    margin: 0;
-  }
-
-  .score-next-activity-card p {
-    font-size: 0.9rem;
-    color: var(--muted, #5B5D62);
-    margin: 0;
-  }
-
-  .score-fixture-action {
-    display: flex;
-    align-items: center;
-    justify-content: flex-end;
-  }
-
-  /* Breakpoints */
-  @media (max-width: 960px) {
-    .hero-stats-hud {
-      max-width: 100%;
+    /* =========================================================================
+       HERO MEJORADO: CHAMPIONSHIP HUD & FLOATING STICKERS (MW26)
+       ========================================================================= */
+    .hero {
+        position: relative;
+        overflow: clip;
+        padding-top: clamp(40px, 6vw, 76px);
+        padding-bottom: 0;
+        background: var(--white, #fefffa);
+        color: var(--ink, #101010);
     }
 
+    .hero-badges-group {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        flex-wrap: wrap;
+        margin-bottom: 4px;
+    }
+
+    .hero-status-pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 7px;
+        font-size: 0.65rem;
+        font-weight: 700;
+        letter-spacing: 0.12em;
+        padding: 3px 10px;
+        border-radius: 999px;
+        background: var(--paper, #efeee8);
+        border: 1px solid var(--line, rgba(16, 16, 16, 0.14));
+        color: var(--ink, #101010);
+    }
+
+    .hero-btn-main {
+        box-shadow: 0 4px 16px rgba(254, 123, 0, 0.35);
+    }
+
+    .hero-btn-main .btn-arrow {
+        transition: transform 0.2s ease;
+    }
+    .hero-btn-main:hover .btn-arrow {
+        transform: translateX(4px);
+    }
+
+    /* Championship Stats HUD */
+    .hero-stats-hud {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 12px;
+        margin-top: 36px;
+        padding-top: 24px;
+        border-top: 1.5px solid var(--line, rgba(16, 16, 16, 0.14));
+        max-width: 620px;
+    }
+
+    .stat-hud-box {
+        background: var(--paper, #efeee8);
+        border: 1px solid var(--line, rgba(16, 16, 16, 0.14));
+        border-radius: 6px;
+        padding: 12px 14px;
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+        transition:
+            transform 0.2s ease,
+            border-color 0.2s ease;
+    }
+
+    .stat-hud-box:hover {
+        transform: translateY(-2px);
+        border-color: var(--orange, #fe7b00);
+    }
+
+    .stat-hud-box.highlight {
+        background: var(--white, #fefffa);
+        border: 1.5px solid var(--orange, #fe7b00);
+        box-shadow: 0 4px 14px rgba(254, 123, 0, 0.12);
+    }
+
+    .stat-hud-top {
+        display: flex;
+        align-items: baseline;
+        justify-content: space-between;
+        gap: 6px;
+    }
+
+    .stat-hud-num {
+        font-size: clamp(2rem, 3.2vw, 2.7rem);
+        font-weight: 900;
+        line-height: 0.9;
+        color: var(--ink, #101010);
+        font-variant-numeric: tabular-nums;
+    }
+
+    .stat-hud-badge {
+        font-size: 0.6rem;
+        font-weight: 700;
+        letter-spacing: 0.08em;
+        padding: 2px 6px;
+        border-radius: 3px;
+        background: rgba(16, 16, 16, 0.06);
+        color: var(--muted, #5b5d62);
+    }
+
+    .stat-hud-badge.badge-orange {
+        background: var(--orange-soft, #ffcb8a);
+        color: var(--ink, #101010);
+    }
+
+    .stat-hud-label {
+        font-size: 0.65rem;
+        font-weight: 700;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        color: var(--muted, #5b5d62);
+        margin-top: 4px;
+    }
+
+    /* =========================================================================
+       STAGE DE MASCOTA Y STICKERS ORBITANTES
+       ========================================================================= */
     .hero-mascot-stage {
-      margin-top: 32px;
-      padding-inline: 10px;
+        position: relative;
+        width: 100%;
+        max-width: 480px;
+        margin-inline: auto;
+        padding: 30px 20px 20px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
     }
 
+    .mascot-aura-glow {
+        position: absolute;
+        width: 380px;
+        height: 380px;
+        border-radius: 50%;
+        background: radial-gradient(
+            circle,
+            rgba(254, 123, 0, 0.22) 0%,
+            rgba(255, 203, 138, 0.12) 40%,
+            transparent 70%
+        );
+        filter: blur(20px);
+        z-index: 1;
+        pointer-events: none;
+        animation: auraPulse 6s ease-in-out infinite alternate;
+    }
+
+    @keyframes auraPulse {
+        0% {
+            transform: scale(0.92);
+            opacity: 0.7;
+        }
+        100% {
+            transform: scale(1.08);
+            opacity: 1;
+        }
+    }
+
+    .mascot-pedestal-card {
+        position: relative;
+        z-index: 2;
+        width: 100%;
+        max-width: 360px;
+        background: var(--white, #fefffa);
+        border: 2px solid var(--ink, #101010);
+        border-radius: 16px;
+        box-shadow: 8px 8px 0 var(--orange, #fe7b00);
+        overflow: hidden;
+        transition:
+            transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1),
+            box-shadow 0.3s ease;
+    }
+
+    .mascot-pedestal-card:hover {
+        transform: translateY(-4px) rotate(-0.5deg);
+        box-shadow: 10px 12px 0 var(--orange, #fe7b00);
+    }
+
+    .pedestal-card-inner {
+        position: relative;
+        background: linear-gradient(
+            180deg,
+            #ffffff 0%,
+            var(--paper, #efeee8) 100%
+        );
+        padding: 24px 20px 10px;
+        display: flex;
+        justify-content: center;
+        align-items: flex-end;
+    }
+
+    .hero-mascot-img {
+        width: 100%;
+        height: auto;
+        max-height: 420px;
+        object-fit: contain;
+        display: block;
+        filter: drop-shadow(0 12px 24px rgba(16, 16, 16, 0.12));
+        animation: mascotBreathing 4.8s ease-in-out infinite;
+        transform-origin: bottom center;
+    }
+
+    @keyframes mascotBreathing {
+        0%,
+        100% {
+            transform: translateY(0) scale(1);
+        }
+        50% {
+            transform: translateY(-7px) scale(1.015);
+        }
+    }
+
+    /* STICKERS FLOTANTES ORBITANTES */
     .floating-sticker {
-      transform: scale(0.9) !important;
-    }
-    .sticker--botargas { left: -10px; top: 0; }
-    .sticker--stands { left: -10px; bottom: 20px; }
-    .sticker--bandera { right: -10px; bottom: 10px; }
-    .sticker--dorsal { right: -5px; }
-
-    .score-full__in {
-      grid-template-columns: minmax(0, 1fr) !important;
-      gap: 24px;
-      padding: 24px 20px;
-    }
-
-    .score-next-activity-card {
-      padding-left: 0;
-      border-left: 0;
-      padding-top: 18px;
-      border-top: 1px solid var(--line, rgba(16, 16, 16, 0.14));
+        position: absolute;
+        z-index: 10;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        background: var(--white, #fefffa);
+        border: 1.5px solid var(--ink, #101010);
+        border-radius: 8px;
+        padding: 8px 12px;
+        box-shadow: 3px 3px 0 var(--ink, #101010);
+        cursor: default;
+        user-select: none;
+        transition:
+            transform 0.25s cubic-bezier(0.2, 0.8, 0.2, 1),
+            box-shadow 0.25s ease;
+        will-change: transform;
     }
 
-    .score-fixture-action {
-      justify-content: flex-start;
+    .floating-sticker:hover {
+        transform: scale(1.08) rotate(1deg) !important;
+        box-shadow: 5px 5px 0 var(--orange, #fe7b00) !important;
+        border-color: var(--orange, #fe7b00);
     }
-  }
 
-  @media (max-width: 640px) {
-    .hero-stats-hud {
-      grid-template-columns: 1fr;
-      gap: 8px;
+    .sticker-emoji {
+        font-size: 1.25rem;
+        line-height: 1;
+    }
+
+    .sticker-info {
+        display: flex;
+        flex-direction: column;
+        line-height: 1.1;
+    }
+
+    .sticker-info strong {
+        font-size: 0.76rem;
+        font-weight: 800;
+        color: var(--ink, #101010);
+        letter-spacing: 0.05em;
+    }
+
+    .sticker-info small {
+        font-size: 0.58rem;
+        font-weight: 700;
+        color: var(--muted, #5b5d62);
+        letter-spacing: 0.06em;
+    }
+
+    /* Posicionamiento y oscilación individual de cada sticker */
+    .sticker--botargas {
+        top: 10px;
+        left: -20px;
+        animation: floatStickerA 4.2s ease-in-out infinite;
+    }
+
+    .sticker--dorsal {
+        top: 16px;
+        right: -15px;
+        padding: 0;
+        border: none;
+        box-shadow: none;
+        background: transparent;
+        animation: floatStickerB 3.8s ease-in-out infinite;
+    }
+
+    .sticker--stands {
+        bottom: 40px;
+        left: -25px;
+        animation: floatStickerC 4.6s ease-in-out infinite;
+    }
+
+    .sticker--bandera {
+        bottom: 24px;
+        right: -20px;
+        animation: floatStickerA 3.9s ease-in-out infinite reverse;
+    }
+
+    .sticker--trophy {
+        top: -14px;
+        left: 45%;
+        transform: translateX(-50%);
+        padding: 5px 12px;
+        background: var(--orange-soft, #ffcb8a);
+        animation: floatStickerB 4.4s ease-in-out infinite;
+    }
+
+    .trophy-badge {
+        font-size: 0.64rem;
+        font-weight: 800;
+        letter-spacing: 0.08em;
+        color: var(--ink, #101010);
+    }
+
+    @keyframes floatStickerA {
+        0%,
+        100% {
+            transform: translateY(0) rotate(-1deg);
+        }
+        50% {
+            transform: translateY(-8px) rotate(1.5deg);
+        }
+    }
+
+    @keyframes floatStickerB {
+        0%,
+        100% {
+            transform: translateY(0) rotate(1.5deg);
+        }
+        50% {
+            transform: translateY(-6px) rotate(-1deg);
+        }
+    }
+
+    @keyframes floatStickerC {
+        0%,
+        100% {
+            transform: translateY(0) rotate(-2deg);
+        }
+        50% {
+            transform: translateY(-9px) rotate(0.5deg);
+        }
+    }
+
+    /* =========================================================================
+       SCOREBOARD ARENA (COUNTDOWN DE ESTADIO)
+       ========================================================================= */
+    .score-clock-zone {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+    }
+
+    .score-clock-header {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 0.65rem;
+        font-weight: 700;
+        letter-spacing: 0.14em;
+        color: var(--muted, #5b5d62);
+        text-transform: uppercase;
     }
 
     .scoreboard-cards-grid {
-      gap: 4px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
     }
-    .score-digit-card {
-      min-width: 54px;
-      padding: 6px 8px;
-    }
-    .digit-value {
-      font-size: 1.8rem;
-    }
-    .digit-colon {
-      font-size: 1.6rem;
-    }
-  }
 
-  @media (prefers-reduced-motion: reduce) {
-    .hero-mascot-img,
-    .floating-sticker,
-    .mascot-aura-glow {
-      animation: none !important;
-      transition: none !important;
+    .score-digit-card {
+        background: var(--white, #fefffa);
+        border: 1.5px solid var(--line, rgba(16, 16, 16, 0.18));
+        border-radius: 8px;
+        padding: 8px 14px;
+        min-width: 68px;
+        text-align: center;
+        box-shadow: 0 2px 6px rgba(16, 16, 16, 0.04);
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+        transition:
+            border-color 0.2s ease,
+            transform 0.2s ease;
     }
-  }
+
+    .score-digit-card:hover {
+        border-color: var(--orange, #fe7b00);
+        transform: translateY(-2px);
+    }
+
+    .score-digit-card.highlight-sec {
+        border-color: var(--orange, #fe7b00);
+        background: #fff9f2;
+    }
+    .score-digit-card.highlight-sec .digit-value {
+        color: var(--orange-deep, #fe6e02);
+    }
+
+    .digit-value {
+        font-size: clamp(2.2rem, 4.2vw, 3.2rem);
+        font-weight: 900;
+        line-height: 0.9;
+        color: var(--ink, #101010);
+        font-variant-numeric: tabular-nums;
+    }
+
+    .digit-label {
+        font-size: 0.58rem;
+        font-weight: 700;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        color: var(--muted, #5b5d62);
+    }
+
+    .digit-colon {
+        font-size: 2.2rem;
+        font-weight: 900;
+        color: var(--orange, #fe7b00);
+        line-height: 1;
+        user-select: none;
+        opacity: 0.85;
+    }
+
+    .score-next-activity-card {
+        padding-left: clamp(20px, 3.5vw, 48px);
+        border-left: 1px solid var(--line, rgba(16, 16, 16, 0.14));
+        display: grid;
+        gap: 6px;
+        min-width: 0;
+    }
+
+    .score-next-activity-card h3 {
+        font-family: var(--f-display, sans-serif);
+        font-size: clamp(1.5rem, 2.4vw, 2.1rem);
+        font-weight: 900;
+        line-height: 1;
+        text-transform: uppercase;
+        color: var(--ink, #101010);
+        margin: 0;
+    }
+
+    .score-next-activity-card p {
+        font-size: 0.9rem;
+        color: var(--muted, #5b5d62);
+        margin: 0;
+    }
+
+    .score-fixture-action {
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+    }
+
+    /* Breakpoints */
+    @media (max-width: 960px) {
+        .hero-stats-hud {
+            max-width: 100%;
+        }
+
+        .hero-mascot-stage {
+            margin-top: 32px;
+            padding-inline: 10px;
+        }
+
+        .floating-sticker {
+            transform: scale(0.9) !important;
+        }
+        .sticker--botargas {
+            left: -10px;
+            top: 0;
+        }
+        .sticker--stands {
+            left: -10px;
+            bottom: 20px;
+        }
+        .sticker--bandera {
+            right: -10px;
+            bottom: 10px;
+        }
+        .sticker--dorsal {
+            right: -5px;
+        }
+
+        .score-full__in {
+            grid-template-columns: minmax(0, 1fr) !important;
+            gap: 24px;
+            padding: 24px 20px;
+        }
+
+        .score-next-activity-card {
+            padding-left: 0;
+            border-left: 0;
+            padding-top: 18px;
+            border-top: 1px solid var(--line, rgba(16, 16, 16, 0.14));
+        }
+
+        .score-fixture-action {
+            justify-content: flex-start;
+        }
+    }
+
+    @media (max-width: 640px) {
+        .hero-stats-hud {
+            grid-template-columns: 1fr;
+            gap: 8px;
+        }
+
+        .scoreboard-cards-grid {
+            gap: 4px;
+        }
+        .score-digit-card {
+            min-width: 54px;
+            padding: 6px 8px;
+        }
+        .digit-value {
+            font-size: 1.8rem;
+        }
+        .digit-colon {
+            font-size: 1.6rem;
+        }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        .hero-mascot-img,
+        .floating-sticker,
+        .mascot-aura-glow {
+            animation: none !important;
+            transition: none !important;
+        }
+    }
 </style>
 
 <script>
-  const pad = (n: number) => String(n).padStart(2, '0');
-  const esc = (t: string) => String(t).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c] || c));
-  const TZ = '-04:00';
+    const pad = (n: number) => String(n).padStart(2, "0");
+    const esc = (t: string) =>
+        String(t).replace(
+            /[&<>"']/g,
+            (c) =>
+                ({
+                    "&": "&amp;",
+                    "<": "&lt;",
+                    ">": "&gt;",
+                    '"': "&quot;",
+                    "'": "&#39;",
+                })[c] || c,
+        );
+    const TZ = "-04:00";
 
-  const EV_START = new Date('2026-10-05T08:00:00' + TZ);
-  const EV_END = new Date('2026-10-08T12:00:00' + TZ);
+    // Fechas actualizadas del evento (19 al 22 de octubre de 2026)
+    const EV_START = new Date("2026-10-19T08:00:00" + TZ);
+    const EV_END = new Date("2026-10-22T12:20:00" + TZ);
 
-  const DAYS = [
-    {
-      abbr: 'LUN', name: 'Lunes', d: '2026-10-05',
-      acts: [
-        { s: '08:00', e: '10:30', t: 'Inauguración', p: 'Patio', g: 'Apertura', x: 'Presentación de grupos, izada de banderas y arranque oficial de la semana.' },
-        { s: '10:30', e: '12:00', t: 'Enbanderamiento', p: 'Patio', g: 'Enbanderamiento', x: 'Cada grupo presenta su bandera y la planta frente a todo el campus.' }
-      ]
-    },
-    {
-      abbr: 'MAR', name: 'Martes', d: '2026-10-06',
-      acts: [
-        { s: '08:30', e: '12:30', t: 'Armado de stands', p: 'Patio', g: 'Stands', x: 'Montaje y decoración de los stands antes de abrir al público.' },
-        { s: '15:00', e: '17:00', t: 'Feria de stands', p: 'Patio', g: 'Stands', x: 'Stands abiertos al público, con activaciones y votación desde el móvil.' }
-      ]
-    },
-    {
-      abbr: 'MIÉ', name: 'Miércoles', d: '2026-10-07',
-      acts: [
-        { s: '08:30', e: '12:00', t: 'Preparación y pruebas de botargas', p: 'Patio', g: 'Botargas', x: 'Inspección técnica de disfraces, prueba de circuito y animación previa.' },
-        { s: '15:00', e: '17:00', t: 'Carrera de botargas', p: 'Patio', g: 'Botargas', x: 'Circuito de obstáculos en el Patio con la botarga de cada grupo.' }
-      ]
-    },
-    {
-      abbr: 'JUE', name: 'Jueves', d: '2026-10-08',
-      acts: [
-        { s: '10:30', e: '12:00', t: 'Premiación', p: 'E-Zone', g: 'Cierre', x: 'Cierre oficial de la semana y entrega de premios en la E-Zone.' }
-      ]
-    }
-  ];
+    const DAYS = [
+        {
+            abbr: "LUN",
+            name: "Lunes",
+            d: "2026-10-19",
+            acts: [
+                {
+                    s: "08:00",
+                    e: "10:30",
+                    t: "Inauguración",
+                    p: "Patio",
+                    g: "Apertura",
+                    x: "Presentación de grupos, izada de banderas y arranque oficial de la semana.",
+                },
+                {
+                    s: "10:30",
+                    e: "12:00",
+                    t: "Enbanderamiento",
+                    p: "Patio",
+                    g: "Enbanderamiento",
+                    x: "Cada grupo presenta su bandera y la planta frente a todo el campus.",
+                },
+            ],
+        },
+        {
+            abbr: "MAR",
+            name: "Martes",
+            d: "2026-10-20",
+            acts: [
+                {
+                    s: "08:30",
+                    e: "12:20",
+                    t: "Armado de stands",
+                    p: "Patio",
+                    g: "Stands",
+                    x: "Montaje y decoración de los stands antes de abrir al público.",
+                },
+            ],
+        },
+        {
+            abbr: "MIÉ",
+            name: "Miércoles",
+            d: "2026-10-21",
+            acts: [
+                {
+                    s: "08:30",
+                    e: "12:20",
+                    t: "Olimpiadas de marketing",
+                    p: "E-Zone",
+                    g: "Competencia",
+                    x: "Desafíos dinámicos y trivias académicas de marketing en la E-Zone.",
+                },
+                {
+                    s: "15:00",
+                    e: "17:00",
+                    t: "Carrera de botargas",
+                    p: "Patio",
+                    g: "Botargas",
+                    x: "Circuito de obstáculos en el Patio con la botarga de cada grupo.",
+                },
+            ],
+        },
+        {
+            abbr: "JUE",
+            name: "Jueves",
+            d: "2026-10-22",
+            acts: [
+                {
+                    s: "10:30",
+                    e: "12:20",
+                    t: "Premiación",
+                    p: "E-Zone",
+                    g: "Cierre",
+                    x: "Cierre oficial de la semana y entrega de premios en la E-Zone.",
+                },
+            ],
+        },
+    ];
 
-  type ActItem = {
-    s: string; e: string; t: string; p: string; g: string; x: string;
-    start: Date; end: Date; day: typeof DAYS[0];
-  };
-
-  const parsedDays = DAYS.map(day => {
-    return {
-      ...day,
-      acts: day.acts.map(a => ({
-        ...a,
-        start: new Date(`${day.d}T${a.s}:00${TZ}`),
-        end: new Date(`${day.d}T${a.e}:00${TZ}`),
-        day
-      }))
+    type ActItem = {
+        s: string;
+        e: string;
+        t: string;
+        p: string;
+        g: string;
+        x: string;
+        start: Date;
+        end: Date;
+        day: (typeof DAYS)[0];
     };
-  });
 
-  const fmtShort = (d: string) => {
-    const p = d.split('-');
-    return `${p[2]}/${p[1]}/${p[0].slice(2)}`;
-  };
+    const parsedDays = DAYS.map((day) => {
+        return {
+            ...day,
+            acts: day.acts.map((a) => ({
+                ...a,
+                start: new Date(`${day.d}T${a.s}:00${TZ}`),
+                end: new Date(`${day.d}T${a.e}:00${TZ}`),
+                day,
+            })),
+        };
+    });
 
-  function relText(ms: number) {
-    const m = Math.max(0, Math.floor(ms / 60000));
-    const d = Math.floor(m / 1440);
-    const h = Math.floor((m % 1440) / 60);
-    const mi = m % 60;
-    return d > 0 ? `${d} d ${h} h` : (h > 0 ? `${h} h ${mi} min` : `${mi} min`);
-  }
+    const fmtShort = (d: string) => {
+        const p = d.split("-");
+        return `${p[2]}/${p[1]}/${p[0].slice(2)}`;
+    };
 
-  function getNext(): { a: ActItem | null; live: boolean } {
-    const now = new Date();
-    let cur: ActItem | null = null;
-    let nxt: ActItem | null = null;
+    function relText(ms: number) {
+        const m = Math.max(0, Math.floor(ms / 60000));
+        const d = Math.floor(m / 1440);
+        const h = Math.floor((m % 1440) / 60);
+        const mi = m % 60;
+        return d > 0
+            ? `${d} d ${h} h`
+            : h > 0
+              ? `${h} h ${mi} min`
+              : `${mi} min`;
+    }
 
-    for (let i = 0; i < parsedDays.length && !cur; i++) {
-      for (let j = 0; j < parsedDays[i].acts.length; j++) {
-        const a = parsedDays[i].acts[j];
-        if (now >= a.start && now < a.end) {
-          cur = a;
-          break;
+    function getNext(): { a: ActItem | null; live: boolean } {
+        const now = new Date();
+        let cur: ActItem | null = null;
+        let nxt: ActItem | null = null;
+
+        for (let i = 0; i < parsedDays.length && !cur; i++) {
+            for (let j = 0; j < parsedDays[i].acts.length; j++) {
+                const a = parsedDays[i].acts[j];
+                if (now >= a.start && now < a.end) {
+                    cur = a;
+                    break;
+                }
+            }
         }
-      }
-    }
 
-    if (!cur) {
-      for (let i = 0; i < parsedDays.length && !nxt; i++) {
-        for (let j = 0; j < parsedDays[i].acts.length; j++) {
-          const a = parsedDays[i].acts[j];
-          if (a.start > now) {
-            nxt = a;
-            break;
-          }
+        if (!cur) {
+            for (let i = 0; i < parsedDays.length && !nxt; i++) {
+                for (let j = 0; j < parsedDays[i].acts.length; j++) {
+                    const a = parsedDays[i].acts[j];
+                    if (a.start > now) {
+                        nxt = a;
+                        break;
+                    }
+                }
+            }
         }
-      }
+
+        return { a: cur || nxt, live: !!cur };
     }
 
-    return { a: cur || nxt, live: !!cur };
-  }
+    function tickCd() {
+        const now = new Date();
+        let target = EV_START;
+        let mode = "pre";
 
-  function tickCd() {
-    const now = new Date();
-    let target = EV_START;
-    let mode = 'pre';
+        if (now >= EV_START && now < EV_END) {
+            target = EV_END;
+            mode = "live";
+        } else if (now >= EV_END) {
+            mode = "post";
+        }
 
-    if (now >= EV_START && now < EV_END) {
-      target = EV_END;
-      mode = 'live';
-    } else if (now >= EV_END) {
-      mode = 'post';
+        const s =
+            mode === "post"
+                ? 0
+                : Math.floor(
+                      Math.max(0, target.getTime() - now.getTime()) / 1000,
+                  );
+        const elD = document.getElementById("cdD");
+        const elH = document.getElementById("cdH");
+        const elM = document.getElementById("cdM");
+        const elS = document.getElementById("cdS");
+        const elLab = document.getElementById("cdLab");
+
+        if (elD) elD.textContent = pad(Math.floor(s / 86400));
+        if (elH) elH.textContent = pad(Math.floor((s % 86400) / 3600));
+        if (elM) elM.textContent = pad(Math.floor((s % 3600) / 60));
+        if (elS) elS.textContent = pad(s % 60);
+        if (elLab) {
+            elLab.textContent =
+                mode === "pre"
+                    ? "CUENTA REGRESIVA PARA LA INAUGURACIÓN"
+                    : mode === "live"
+                      ? "EN CURSO · TIEMPO RESTANTE PARA EL CIERRE"
+                      : "EDICIÓN 2026 FINALIZADA";
+        }
     }
 
-    const s = mode === 'post' ? 0 : Math.floor(Math.max(0, target.getTime() - now.getTime()) / 1000);
-    const elD = document.getElementById('cdD');
-    const elH = document.getElementById('cdH');
-    const elM = document.getElementById('cdM');
-    const elS = document.getElementById('cdS');
-    const elLab = document.getElementById('cdLab');
-
-    if (elD) elD.textContent = pad(Math.floor(s / 86400));
-    if (elH) elH.textContent = pad(Math.floor((s % 86400) / 3600));
-    if (elM) elM.textContent = pad(Math.floor((s % 3600) / 60));
-    if (elS) elS.textContent = pad(s % 60);
-    if (elLab) {
-      elLab.textContent = mode === 'pre'
-        ? 'CUENTA REGRESIVA PARA LA INAUGURACIÓN'
-        : (mode === 'live' ? 'EN CURSO · TIEMPO RESTANTE PARA EL CIERRE' : 'EDICIÓN 2026 FINALIZADA');
-    }
-  }
-
-  function renderNextBox() {
-    const n = getNext();
-    const el = document.getElementById('nextBox');
-    if (!el) return;
-    const a = n.a;
-    if (!a) {
-      el.innerHTML = '<span class="score-clock-header"><i class="dot dot--ok"></i> Estado oficial</span><h3>La semana concluyó</h3><p>Gracias por participar en Marketing Week 2026.</p>';
-      return;
-    }
-    el.innerHTML = `
-      <span class="score-clock-header"><i class="dot dot--ok"></i> ${n.live ? 'Actividad ahora en curso' : 'Siguiente actividad oficial'}</span>
+    function renderNextBox() {
+        const n = getNext();
+        const el = document.getElementById("nextBox");
+        if (!el) return;
+        const a = n.a;
+        if (!a) {
+            el.innerHTML =
+                '<span class="score-clock-header"><i class="dot dot--ok"></i> Estado oficial</span><h3>La semana concluyó</h3><p>Gracias por participar en Marketing Week 2026.</p>';
+            return;
+        }
+        el.innerHTML = `
+      <span class="score-clock-header"><i class="dot dot--ok"></i> ${n.live ? "Actividad ahora en curso" : "Siguiente actividad oficial"}</span>
       <h3>${esc(a.t)}</h3>
-      <p>${esc(a.day.name)} ${fmtShort(a.day.d)} · ${a.s} a ${a.e} · ${esc(a.p)}${n.live ? '' : ' · en ' + relText(a.start.getTime() - Date.now())}</p>
+      <p>${esc(a.day.name)} ${fmtShort(a.day.d)} · ${a.s} a ${a.e} · ${esc(a.p)}${n.live ? "" : " · en " + relText(a.start.getTime() - Date.now())}</p>
     `;
-  }
+    }
 
-  tickCd();
-  setInterval(tickCd, 1000);
-  renderNextBox();
-  setInterval(renderNextBox, 60000);
+    tickCd();
+    setInterval(tickCd, 1000);
+    renderNextBox();
+    setInterval(renderNextBox, 60000);
 </script>
