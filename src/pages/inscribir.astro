@@ -1377,7 +1377,7 @@ import TopBar from "../components/mw26/TopBar.astro";
         if (mMinus) {
             mMinus.addEventListener("click", () => {
                 F.members.value = String(
-                    Math.max(1, (+F.members.value || 1) - 1),
+                    Math.max(3, (+F.members.value || 3) - 1), // Mínimo 3
                 );
                 updateBib();
             });
@@ -1386,12 +1386,11 @@ import TopBar from "../components/mw26/TopBar.astro";
         if (mPlus) {
             mPlus.addEventListener("click", () => {
                 F.members.value = String(
-                    Math.min(30, (+F.members.value || 0) + 1),
+                    Math.min(6, (+F.members.value || 3) + 1), // Máximo 6
                 );
                 updateBib();
             });
         }
-
         updateBib();
     }
 
@@ -1669,7 +1668,7 @@ import TopBar from "../components/mw26/TopBar.astro";
             const d = setErr(
                 "eMembers",
                 F.members,
-                m >= 1 && m <= 30 ? "" : "Indica entre 1 y 30 integrantes.",
+                m >= 3 && m <= 6 ? "" : "Indica entre 1 y 30 integrantes.",
             );
 
             const selectedComps = comps();
