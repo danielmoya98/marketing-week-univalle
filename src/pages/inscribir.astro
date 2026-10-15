@@ -239,8 +239,8 @@ import TopBar from "../components/mw26/TopBar.astro";
                             </div>
 
                             <p class="hint" style="margin-top: 6px;">
-                                * Carrera de botargas y Decoración de stands se
-                                seleccionan juntas. Enbanderamiento es opcional.
+                                * Selecciona al menos una categoría para
+                                competir (puedes elegir 1, 2 o las 3).
                             </p>
                         </div>
 
@@ -1299,13 +1299,9 @@ import TopBar from "../components/mw26/TopBar.astro";
     const modalQrImage = document.getElementById(
         "modalQrImage",
     ) as HTMLImageElement | null;
-    const modalDirectVoteLink = document.getElementById(
-        "modalDirectVoteLink",
-    ) as HTMLAnchorElement | null;
     const closeModalBtn = document.getElementById("closeModalBtn");
     const closeModalCrossBtn = document.getElementById("closeModalCrossBtn");
     const modalReDownloadBtn = document.getElementById("modalReDownloadBtn");
-    const modalCopyLinkBtn = document.getElementById("modalCopyLinkBtn");
 
     let submitted = false;
     let currentTeamData: {
@@ -1337,15 +1333,6 @@ import TopBar from "../components/mw26/TopBar.astro";
             .map((item) => ({ id: item.id, name: item.name }));
     }
 
-    function getCategoryNamesText(catIds: string[]): string {
-        return catIds
-            .map((id) => {
-                const found = FALLBACK_CATEGORIAS.find((c) => c.id === id);
-                return found ? found.nombre : id;
-            })
-            .join(", ");
-    }
-
     function updateBib() {
         if (submitted) return;
         const bName = document.getElementById("bName");
@@ -1361,9 +1348,13 @@ import TopBar from "../components/mw26/TopBar.astro";
             bEmail.textContent = F.email?.value.trim() || "Por completar";
         if (bMembers) bMembers.textContent = F.members?.value || "5";
         if (bComps) {
-            bComps.innerHTML = comps()
-                .map((c) => `<span class="tag">${esc(c.name)}</span>`)
-                .join("");
+            const currentComps = comps();
+            bComps.innerHTML =
+                currentComps.length > 0
+                    ? currentComps
+                          .map((c) => `<span class="tag">${esc(c.name)}</span>`)
+                          .join("")
+                    : `<span style="font-size:0.7rem; opacity:0.7;">Ninguna seleccionada</span>`;
         }
     }
 
@@ -1404,32 +1395,6 @@ import TopBar from "../components/mw26/TopBar.astro";
         updateBib();
     }
 
-    document.addEventListener("DOMContentLoaded", () => {
-        const chkBotargas = document.getElementById(
-            "c_bot",
-        ) as HTMLInputElement | null;
-        const chkStands = document.getElementById(
-            "c_sta",
-        ) as HTMLInputElement | null;
-
-        // Función para vincular ambos checkboxes
-        function syncCheckboxes(
-            source: HTMLInputElement | null,
-            target: HTMLInputElement | null,
-        ) {
-            if (!source || !target) return;
-            source.addEventListener("change", () => {
-                target.checked = source.checked;
-                // Disparamos un evento 'input' o 'change' manual por si necesitas que se actualice el dorsal en vivo
-                target.dispatchEvent(new Event("change"));
-            });
-        }
-
-        // Al cambiar uno, se marca/desmarca el otro
-        syncCheckboxes(chkBotargas, chkStands);
-        syncCheckboxes(chkStands, chkBotargas);
-    });
-
     function setErr(id: string, input: HTMLInputElement, msg: string): boolean {
         const el = document.getElementById(id);
         if (el) el.textContent = msg;
@@ -1438,7 +1403,6 @@ import TopBar from "../components/mw26/TopBar.astro";
         return !msg;
     }
 
-    // Helper para cargar imágenes en el navegador antes de agregarlas a jsPDF
     function loadImage(url: string): Promise<HTMLImageElement | null> {
         return new Promise((resolve) => {
             const img = new Image();
@@ -1449,7 +1413,6 @@ import TopBar from "../components/mw26/TopBar.astro";
         });
     }
 
-    // Generador oficial del PDF en formato afiche A4 con estética Streetwear / Brutalista
     async function generateAndDownloadTeamPdf(
         team: NonNullable<typeof currentTeamData>,
     ) {
@@ -1460,49 +1423,41 @@ import TopBar from "../components/mw26/TopBar.astro";
                 format: "a4",
             });
 
-            const pw = doc.internal.pageSize.getWidth(); // 210mm
-            const ph = doc.internal.pageSize.getHeight(); // 297mm
+            const pw = doc.internal.pageSize.getWidth();
+            const ph = doc.internal.pageSize.getHeight();
 
-            // Cargar imagen oficial del Logo en paralelo
             const [logoImg] = await Promise.all([
                 loadImage("/img/logo-mw26.png"),
             ]);
 
-            // 1. Fondo de papel editorial marfil cálido
             doc.setFillColor(244, 243, 239);
             doc.rect(0, 0, pw, ph, "F");
 
-            // 2. Borde exterior deportivo / streetwear de 2mm
             doc.setDrawColor(13, 14, 16);
             doc.setLineWidth(2);
             doc.rect(10, 10, pw - 20, ph - 20);
 
-            // Borde interior fino
             doc.setLineWidth(0.6);
             doc.rect(13, 13, pw - 26, ph - 26);
 
-            // 3. Orificios de perforación de dorsal deportivo (esquinas superiores)
             doc.setFillColor(255, 255, 255);
             doc.setDrawColor(13, 14, 16);
             doc.setLineWidth(1);
             doc.circle(20, 20, 3.5, "FD");
             doc.circle(pw - 20, 20, 3.5, "FD");
 
-            // 4. Franja de Cabecera de Campeonato Naranja
             doc.setFillColor(255, 122, 0);
             doc.rect(13.6, 13.6, pw - 27.2, 24, "F");
             doc.setDrawColor(13, 14, 16);
             doc.setLineWidth(1.5);
             doc.line(13, 38, pw - 13, 38);
 
-            // Logo MW26 en cabecera
             if (logoImg) {
                 try {
                     doc.addImage(logoImg, "PNG", 18, 16, 19, 19);
                 } catch (e) {}
             }
 
-            // Título en cabecera
             doc.setFont("helvetica", "bold");
             doc.setFontSize(16);
             doc.setTextColor(13, 14, 16);
@@ -1517,7 +1472,6 @@ import TopBar from "../components/mw26/TopBar.astro";
                 32,
             );
 
-            // Insignia derecha en cabecera
             doc.setFillColor(13, 14, 16);
             doc.rect(pw - 58, 19, 41, 13, "F");
             doc.setTextColor(255, 122, 0);
@@ -1525,13 +1479,11 @@ import TopBar from "../components/mw26/TopBar.astro";
             doc.setFont("helvetica", "bold");
             doc.text("DORSAL OFICIAL", pw - 37.5, 27.5, { align: "center" });
 
-            // 5. Número de Dorsal Gigante de Campeonato
             doc.setFont("helvetica", "bold");
             doc.setFontSize(54);
             doc.setTextColor(13, 14, 16);
             doc.text(`N° ${team.num}`, pw / 2, 60, { align: "center" });
 
-            // Subtítulo dorsal
             doc.setFont("helvetica", "bold");
             doc.setFontSize(8.5);
             doc.setTextColor(120, 50, 0);
@@ -1542,23 +1494,19 @@ import TopBar from "../components/mw26/TopBar.astro";
                 { align: "center" },
             );
 
-            // 6. Tarjeta de Datos del Equipo con Sombra Neo-Brutalista
             const cardX = 18;
             const cardY = 70;
             const cardW = pw - 36;
             const cardH = 44;
 
-            // Sombra dura naranja
             doc.setFillColor(255, 122, 0);
             doc.rect(cardX + 2, cardY + 2, cardW, cardH, "F");
 
-            // Tarjeta blanca superior
             doc.setFillColor(255, 255, 255);
             doc.setDrawColor(13, 14, 16);
             doc.setLineWidth(1.5);
             doc.rect(cardX, cardY, cardW, cardH, "FD");
 
-            // Nombre del equipo
             doc.setFont("helvetica", "bold");
             doc.setFontSize(22);
             doc.setTextColor(255, 122, 0);
@@ -1566,12 +1514,10 @@ import TopBar from "../components/mw26/TopBar.astro";
                 align: "center",
             });
 
-            // Línea divisoria
             doc.setDrawColor(220, 220, 220);
             doc.setLineWidth(0.6);
             doc.line(cardX + 8, cardY + 16, cardX + cardW - 8, cardY + 16);
 
-            // Metadatos
             doc.setFont("helvetica", "normal");
             doc.setFontSize(10);
             doc.setTextColor(70, 70, 70);
@@ -1594,7 +1540,6 @@ import TopBar from "../components/mw26/TopBar.astro";
             doc.setTextColor(13, 14, 16);
             doc.text(team.correo, cardX + 42, cardY + 31);
 
-            // Competencias
             const catText = team.categorias.join(" · ");
             doc.setFont("helvetica", "bold");
             doc.setFontSize(9);
@@ -1606,25 +1551,20 @@ import TopBar from "../components/mw26/TopBar.astro";
                 { align: "center" },
             );
 
-            // 7. Zona Central del Código QR (centrado)
             const qrSize = 82;
             const qrX = (pw - qrSize) / 2;
             const qrY = 124;
 
-            // Sombra dura del marco QR
             doc.setFillColor(255, 122, 0);
             doc.rect(qrX - 1.5, qrY - 1.5, qrSize + 7, qrSize + 7, "F");
 
-            // Marco blanco del QR
             doc.setFillColor(255, 255, 255);
             doc.setDrawColor(13, 14, 16);
             doc.setLineWidth(1.6);
             doc.rect(qrX - 3.5, qrY - 3.5, qrSize + 7, qrSize + 7, "FD");
 
-            // Imagen QR
             doc.addImage(team.qrDataUrl, "PNG", qrX, qrY, qrSize, qrSize);
 
-            // 8. Llamada a la Acción Limpia (Sin localhost, sin caracteres rotos)
             doc.setFont("helvetica", "bold");
             doc.setFontSize(18);
             doc.setTextColor(255, 122, 0);
@@ -1645,7 +1585,6 @@ import TopBar from "../components/mw26/TopBar.astro";
                 { align: "center" },
             );
 
-            // 9. Franja Inferior Oficial de Campeonato
             const footH = 26;
             const footY = ph - 13 - footH;
 
@@ -1688,7 +1627,6 @@ import TopBar from "../components/mw26/TopBar.astro";
         }
     }
 
-    // Envío del Formulario
     if (regForm) {
         regForm.addEventListener("submit", async (e: Event) => {
             e.preventDefault();
@@ -1725,10 +1663,20 @@ import TopBar from "../components/mw26/TopBar.astro";
                 m >= 1 && m <= 30 ? "" : "Indica entre 1 y 30 integrantes.",
             );
 
-            if (!(a && b && c && d)) {
+            // Obtener y validar competencias (libertad total, al menos 1 obligatoria)
+            const selectedComps = comps();
+            const compIds = selectedComps.map((x) => x.id);
+            const compNames = selectedComps.map((x) => x.name);
+            const compsOk = selectedComps.length > 0;
+
+            if (!(a && b && c && d && compsOk)) {
                 if (!emailOk && formErrorAlert) {
                     formErrorAlert.textContent =
                         "⚠️ Formato de correo institucional inválido. Debe tener exactamente 7 números antes del @ (ej. xxx3005567@est.univalle.edu o xxx3005567@univalle.edu)";
+                    formErrorAlert.style.display = "block";
+                } else if (!compsOk && formErrorAlert) {
+                    formErrorAlert.textContent =
+                        "⚠️ Debes seleccionar al menos una competencia para registrar a tu equipo.";
                     formErrorAlert.style.display = "block";
                 }
                 const firstErr = regForm.querySelector(
@@ -1743,10 +1691,6 @@ import TopBar from "../components/mw26/TopBar.astro";
                 submitBtn.textContent = "Inscribiendo equipo en vivo...";
             }
 
-            const selectedComps = comps();
-            const compIds = selectedComps.map((x) => x.id);
-            const compNames = selectedComps.map((x) => x.name);
-            // 1. Cálculo correlativo del número de dorsal oficial (01, 02, 03...)
             let teamOrder = 1;
             if (isConfigured && supabase) {
                 try {
@@ -1773,7 +1717,6 @@ import TopBar from "../components/mw26/TopBar.astro";
 
             try {
                 if (isConfigured && supabase) {
-                    // Validar que el correo no esté ya registrado con otro equipo
                     const { data: existingGroup, error: checkError } =
                         await supabase
                             .from("grupos")
@@ -1787,7 +1730,6 @@ import TopBar from "../components/mw26/TopBar.astro";
                         );
                     }
 
-                    // 2. Inserción en tabla 'grupos'
                     const { data: grupoData, error: grupoError } =
                         await supabase
                             .from("grupos")
@@ -1821,7 +1763,6 @@ import TopBar from "../components/mw26/TopBar.astro";
 
                     grupoId = grupoData.id;
 
-                    // 3. Inserción en tabla 'equipos' para cada competencia admitida
                     const validDbCats = [
                         "botargas",
                         "stands",
@@ -1850,7 +1791,6 @@ import TopBar from "../components/mw26/TopBar.astro";
                         }
                     }
                 } else {
-                    // Fallback offline / demo
                     grupoId = "demo-" + Date.now();
                 }
 
@@ -1858,7 +1798,6 @@ import TopBar from "../components/mw26/TopBar.astro";
                 const baseSite = window.location.origin;
                 const voteUrl = `${baseSite}/votar?equipo=${grupoId}`;
 
-                // 4. Generar código QR
                 let qrDataUrl = "";
                 try {
                     qrDataUrl = await QRCode.toDataURL(voteUrl, {
@@ -1882,7 +1821,6 @@ import TopBar from "../components/mw26/TopBar.astro";
                     num: numFormatted,
                 };
 
-                // 5. Lanzar confeti de celebración
                 try {
                     confetti({
                         particleCount: 85,
@@ -1897,7 +1835,6 @@ import TopBar from "../components/mw26/TopBar.astro";
                     });
                 } catch (e) {}
 
-                // 6. Actualizar el Dorsal en la pantalla
                 const box = document.getElementById("bQr");
                 if (box) {
                     box.innerHTML = qrDataUrl
@@ -1928,7 +1865,6 @@ import TopBar from "../components/mw26/TopBar.astro";
                         "¡Equipo inscrito y registrado con éxito!";
                 if (bActions) bActions.style.display = "block";
 
-                // 7. Poblar datos en el modal
                 if (modalTeamName) modalTeamName.textContent = nombre;
                 if (modalTeamNum)
                     modalTeamNum.textContent = `N° ${numFormatted}`;
@@ -1937,10 +1873,8 @@ import TopBar from "../components/mw26/TopBar.astro";
                     modalTeamCats.textContent = compNames.join(", ");
                 if (modalQrImage) modalQrImage.src = qrDataUrl;
 
-                // 8. Abrir modal
                 if (modal) modal.style.display = "flex";
 
-                // 9. Descarga automática del PDF oficial
                 await generateAndDownloadTeamPdf(currentTeamData);
 
                 if (submitBtn) {
@@ -1962,14 +1896,12 @@ import TopBar from "../components/mw26/TopBar.astro";
         });
     }
 
-    // Acciones del Modal y del Dorsal
     function closeModal() {
         if (modal) modal.style.display = "none";
     }
     closeModalBtn?.addEventListener("click", closeModal);
     closeModalCrossBtn?.addEventListener("click", closeModal);
 
-    // Descargas manuales del PDF
     document.getElementById("bDownloadPdf")?.addEventListener("click", () => {
         if (currentTeamData) generateAndDownloadTeamPdf(currentTeamData);
     });
