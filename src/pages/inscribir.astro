@@ -1426,9 +1426,7 @@ import TopBar from "../components/mw26/TopBar.astro";
             const pw = doc.internal.pageSize.getWidth();
             const ph = doc.internal.pageSize.getHeight();
 
-            const [logoImg] = await Promise.all([
-                loadImage("/img/logo-mw26.png"),
-            ]);
+            const logoImg = await loadImage("/img/logo-mw26.png");
 
             doc.setFillColor(244, 243, 239);
             doc.rect(0, 0, pw, ph, "F");
@@ -1563,7 +1561,18 @@ import TopBar from "../components/mw26/TopBar.astro";
             doc.setLineWidth(1.6);
             doc.rect(qrX - 3.5, qrY - 3.5, qrSize + 7, qrSize + 7, "FD");
 
-            doc.addImage(team.qrDataUrl, "PNG", qrX, qrY, qrSize, qrSize);
+            if (team.qrDataUrl) {
+                try {
+                    doc.addImage(
+                        team.qrDataUrl,
+                        "PNG",
+                        qrX,
+                        qrY,
+                        qrSize,
+                        qrSize,
+                    );
+                } catch (e) {}
+            }
 
             doc.setFont("helvetica", "bold");
             doc.setFontSize(18);
@@ -1655,7 +1664,7 @@ import TopBar from "../components/mw26/TopBar.astro";
                 F.email,
                 emailOk
                     ? ""
-                    : "Debe tener exactamente 7 números antes del @ y terminar en @est.univalle.edu o @univalle.edu (ej. xxx3005567@est.univalle.edu)",
+                    : "Debe ser @est.univalle.edu (con 7 números) o @univalle.edu para docentes",
             );
             const d = setErr(
                 "eMembers",
@@ -1663,7 +1672,6 @@ import TopBar from "../components/mw26/TopBar.astro";
                 m >= 1 && m <= 30 ? "" : "Indica entre 1 y 30 integrantes.",
             );
 
-            // Obtener y validar competencias (libertad total, al menos 1 obligatoria)
             const selectedComps = comps();
             const compIds = selectedComps.map((x) => x.id);
             const compNames = selectedComps.map((x) => x.name);
@@ -1672,7 +1680,7 @@ import TopBar from "../components/mw26/TopBar.astro";
             if (!(a && b && c && d && compsOk)) {
                 if (!emailOk && formErrorAlert) {
                     formErrorAlert.textContent =
-                        "⚠️ Formato de correo institucional inválido. Debe tener exactamente 7 números antes del @ (ej. xxx3005567@est.univalle.edu o xxx3005567@univalle.edu)";
+                        "⚠️ Formato de correo institucional inválido. Debe ser @est.univalle.edu (con 7 números) o @univalle.edu para docentes.";
                     formErrorAlert.style.display = "block";
                 } else if (!compsOk && formErrorAlert) {
                     formErrorAlert.textContent =
@@ -1798,12 +1806,13 @@ import TopBar from "../components/mw26/TopBar.astro";
                 const baseSite = window.location.origin;
                 const voteUrl = `${baseSite}/votar?equipo=${grupoId}`;
 
+                // --- GENERACIÓN CORREGIDA DEL QR (Usando hexadecimal directo #101010 en lugar de var(--ink)) ---
                 let qrDataUrl = "";
                 try {
                     qrDataUrl = await QRCode.toDataURL(voteUrl, {
                         width: 600,
                         margin: 1.5,
-                        color: { dark: "var(--ink)", light: "#FFFFFF" },
+                        color: { dark: "#101010", light: "#FFFFFF" },
                     });
                 } catch (err) {
                     console.error("Error generando QR:", err);
@@ -1826,12 +1835,7 @@ import TopBar from "../components/mw26/TopBar.astro";
                         particleCount: 85,
                         spread: 75,
                         origin: { y: 0.55 },
-                        colors: [
-                            "var(--orange)",
-                            "#F4F3EF",
-                            "var(--ink)",
-                            "#0E7C3A",
-                        ],
+                        colors: ["#FF7A00", "#F4F3EF", "#101010", "#0E7C3A"],
                     });
                 } catch (e) {}
 
@@ -1871,7 +1875,7 @@ import TopBar from "../components/mw26/TopBar.astro";
                 if (modalTeamLeader) modalTeamLeader.textContent = lider;
                 if (modalTeamCats)
                     modalTeamCats.textContent = compNames.join(", ");
-                if (modalQrImage) modalQrImage.src = qrDataUrl;
+                if (modalQrImage && qrDataUrl) modalQrImage.src = qrDataUrl;
 
                 if (modal) modal.style.display = "flex";
 
