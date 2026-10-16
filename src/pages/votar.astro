@@ -33,7 +33,7 @@ import Layout from "../layouts/Layout.astro";
                     </h1>
                     <p id="customTeamSub" class="custom-team-sub">
                         Selecciona en cuál de sus competencias deseas otorgar tu
-                        voto a este equipo.{" "}
+                        voto a este equipo.
                         <strong>
                             (Solo puedes votar 1 vez por cada equipo en todo el
                             evento; en las demás competencias podrás apoyar a
@@ -51,7 +51,7 @@ import Layout from "../layouts/Layout.astro";
                     <h1 id="voteTitle">Vota por tu equipo</h1>
                     <p id="voteSub">
                         Selecciona la categoría, elige a tu equipo favorito e
-                        ingresa tu correo institucional.{" "}
+                        ingresa tu correo institucional.
                         <strong>
                             (1 voto por categoría y máximo 1 voto al mismo
                             equipo en todo el evento)
@@ -101,7 +101,7 @@ import Layout from "../layouts/Layout.astro";
                         </div>
                     </div>
 
-                    <!-- Correo Institucional -->
+                    <!-- Correo Institucional (Sin pattern HTML para evitar errores de navegador) -->
                     <div class="field" style="margin-top: 6px;">
                         <label for="voterEmail" class="section-label">
                             2. Tu correo institucional Univalle
@@ -110,7 +110,6 @@ import Layout from "../layouts/Layout.astro";
                             type="email"
                             id="voterEmail"
                             placeholder="estudiante: 3005567@est.univalle.edu | docente: correo@univalle.edu"
-                            title="Estudiantes: 7 números antes de @est.univalle.edu | Docentes: correo válido con @univalle.edu"
                             required
                         />
                         <div class="vote-rule-notice mono">
@@ -716,7 +715,7 @@ import Layout from "../layouts/Layout.astro";
             );
             const teamId = selectedRadio ? selectedRadio.value : "";
 
-            // Validación de correo institucional (Estudiantes con 7 dígitos o docentes con @univalle.edu)
+            // Validación segura con JS (Soporta estudiantes con 7 dígitos y docentes con @univalle.edu)
             if (!isValidUnivalleEmail(email)) {
                 showAlert(
                     "⚠️ Debes ingresar un correo institucional válido (@est.univalle.edu con 7 dígitos o @univalle.edu para docentes).",
