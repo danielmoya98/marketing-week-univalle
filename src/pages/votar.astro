@@ -101,7 +101,7 @@ import Layout from "../layouts/Layout.astro";
                         </div>
                     </div>
 
-                    <!-- Correo Institucional (Sin pattern HTML para evitar errores de navegador) -->
+                    <!-- Correo Institucional -->
                     <div class="field" style="margin-top: 6px;">
                         <label for="voterEmail" class="section-label">
                             2. Tu correo institucional Univalle
@@ -453,7 +453,7 @@ import Layout from "../layouts/Layout.astro";
     const urlParams = new URLSearchParams(window.location.search);
     const targetGrupoId = urlParams.get("equipo") || urlParams.get("grupo");
 
-    let selectedCategory = "botargas";
+    let selectedCategory = "enbanderamiento";
     let categoryTeams: Record<
         string,
         Array<{
@@ -470,7 +470,7 @@ import Layout from "../layouts/Layout.astro";
         categorias: string[];
     } | null = null;
 
-    // DOM Elements
+    // Elementos del DOM
     const catButtons =
         document.querySelectorAll<HTMLButtonElement>(".vote-cat-btn");
     const teamsContainer = document.getElementById("teamsRadioContainer");
@@ -498,13 +498,13 @@ import Layout from "../layouts/Layout.astro";
     }
 
     // =========================================================================
-    // LÓGICA DE DÍAS OFICIALES Y ACTIVACIÓN DE CATEGORÍAS (MW26)
+    // LÓGICA ESTRICTA DE FECHAS OFICIALES (MW26)
     // =========================================================================
     // 19/10/2026 -> enbanderamiento
     // 20/10/2026 -> stands
     // 21/10/2026 -> botargas
-    function getActiveCategoryByDate(): string | null {
-        // Permite forzar una fecha por URL (ej. ?fecha=19/10/2026) para hacer pruebas
+    function getActiveCategoryByDate(): string {
+        // Lee el parámetro de URL para hacer pruebas (?fecha=19/10/2026, ?fecha=20/10/2026, etc.)
         const urlDateParam = urlParams.get("fecha");
 
         const now = new Date();
@@ -521,18 +521,15 @@ import Layout from "../layouts/Layout.astro";
             return "botargas";
         }
 
-        // Por defecto (si estás en días previos de prueba sin parámetro ?fecha), activa enbanderamiento
+        // Por defecto en días de desarrollo o prueba sin parámetro toma "enbanderamiento"
         return "enbanderamiento";
     }
 
     const activeDailyCat = getActiveCategoryByDate();
+    selectedCategory = activeDailyCat;
 
-    // 1. Configurar pestañas según la fecha oficial
+    // 1. Mostrar únicamente el botón de la categoría asignada para el día actual
     function setupDailyCategoryLock() {
-        if (!activeDailyCat) return;
-
-        selectedCategory = activeDailyCat;
-
         catButtons.forEach((btn) => {
             const cat = btn.getAttribute("data-cat") || "";
             if (cat === activeDailyCat) {
@@ -545,7 +542,7 @@ import Layout from "../layouts/Layout.astro";
         });
     }
 
-    // 2. Configurar vista por QR si viene un equipo
+    // 2. Configurar la vista si el usuario accede mediante el QR de un equipo
     async function setupCustomTeamView() {
         if (!targetGrupoId) return;
 
@@ -568,26 +565,23 @@ import Layout from "../layouts/Layout.astro";
                             standardVoteHead.style.display = "none";
                     }
 
-                    // Verificar si el equipo compite en la categoría correspondiente al día actual
-                    if (
-                        activeDailyCat &&
-                        !allowedCats.includes(activeDailyCat)
-                    ) {
+                    // VALIDACIÓN CLAVE: Bloquea el botón si el equipo no compite en la categoría programada para el día
+                    if (!allowedCats.includes(activeDailyCat)) {
                         const catLabel = getCategoryName(activeDailyCat);
                         showAlert(
-                            `⚠️ El equipo "${grupo.nombre}" no participa en la competencia programada para hoy (${catLabel}).`,
+                            `⚠️ El equipo "${grupo.nombre}" no participa en la competencia programada para el día de hoy (${catLabel}).`,
                             "error",
                         );
                         if (submitVoteBtn) submitVoteBtn.disabled = true;
                     }
                 }
             } catch (e) {
-                console.error("Error cargando grupo:", e);
+                console.error("Error al cargar datos del grupo:", e);
             }
         }
     }
 
-    // 3. Cargar equipos desde Supabase
+    // 3. Cargar listado de equipos desde Supabase
     async function loadTeamsFromSupabase() {
         if (!isConfigured || !supabase) {
             renderTeams();
@@ -643,21 +637,23 @@ import Layout from "../layouts/Layout.astro";
             categoryTeams = newCategoryTeams;
             renderTeams();
         } catch (err) {
-            console.error("Error cargando equipos:", err);
+            console.error("Error al obtener equipos:", err);
             renderTeams();
         }
     }
 
-    // 4. Renderizar equipos en la categoría activa
+    // 4. Renderizar las opciones de radio para votar únicamente en la categoría del día
     function renderTeams() {
         if (!teamsContainer) return;
+
+        selectedCategory = activeDailyCat;
         const teams = categoryTeams[selectedCategory] || [];
         teamsContainer.innerHTML = "";
 
         if (teams.length === 0) {
             teamsContainer.innerHTML = `
         <div style="padding: 24px 12px; text-align: center; color: var(--ink); opacity: 0.65; font-family: 'Space Mono', monospace; font-size: 13px; background: var(--paper); border: 2px dashed var(--ink); border-radius: 8px;">
-          Aún no hay equipos inscritos en esta categoría.
+          Aún no hay equipos inscritos en la competencia de hoy (${getCategoryName(activeDailyCat)}).
         </div>
       `;
             return;
@@ -688,22 +684,22 @@ import Layout from "../layouts/Layout.astro";
 
         if (chooseTeamLabel) {
             const catLabel = getCategoryName(selectedCategory);
-            chooseTeamLabel.textContent = `1. Elige a tu equipo en "${catLabel}"`;
+            chooseTeamLabel.textContent = `1. Elige a tu equipo para "${catLabel}" (Competencia de Hoy)`;
         }
     }
 
-    // Cambio de Categoría al pulsar botones
+    // Eventos de botones de categoría
     catButtons.forEach((btn) => {
         btn.addEventListener("click", () => {
             catButtons.forEach((b) => b.classList.remove("active"));
             btn.classList.add("active");
-            selectedCategory = btn.getAttribute("data-cat") || "botargas";
+            selectedCategory = btn.getAttribute("data-cat") || activeDailyCat;
             renderTeams();
             if (voteAlert) voteAlert.style.display = "none";
         });
     });
 
-    // 5. Enviar Voto
+    // 5. Procesamiento del Envío del Voto
     if (voteForm) {
         voteForm.addEventListener("submit", async (e) => {
             e.preventDefault();
@@ -715,10 +711,10 @@ import Layout from "../layouts/Layout.astro";
             );
             const teamId = selectedRadio ? selectedRadio.value : "";
 
-            // Validación segura con JS (Soporta estudiantes con 7 dígitos y docentes con @univalle.edu)
+            // Validación con la regex de JavaScript (Estudiantes con 7 números o Docentes @univalle.edu)
             if (!isValidUnivalleEmail(email)) {
                 showAlert(
-                    "⚠️ Debes ingresar un correo institucional válido (@est.univalle.edu con 7 dígitos o @univalle.edu para docentes).",
+                    "⚠️ Debes ingresar un correo institucional válido (@est.univalle.edu con 7 números o @univalle.edu para docentes).",
                     "error",
                 );
                 voterEmailInput.focus();
@@ -739,13 +735,29 @@ import Layout from "../layouts/Layout.astro";
             if (isConfigured && supabase) {
                 try {
                     const currentTeam = (
-                        categoryTeams[selectedCategory] || []
+                        categoryTeams[activeDailyCat] || []
                     ).find((t) => t.id === teamId);
                     const teamGroupId =
                         currentTeam?.grupo_id || targetGrupoId || null;
 
+                    // Bloqueo si el grupo no pertenece a la categoría activa del día
+                    if (
+                        customGroupData &&
+                        customGroupData.categorias &&
+                        !customGroupData.categorias.includes(activeDailyCat)
+                    ) {
+                        showAlert(
+                            `🚫 Este equipo no participa en la competencia de hoy (${getCategoryName(activeDailyCat)}).`,
+                            "error",
+                        );
+                        submitVoteBtn.disabled = false;
+                        submitVoteBtn.textContent =
+                            "Confirmar y Emitir mi Voto →";
+                        return;
+                    }
+
                     const { error } = await supabase.from("votos").insert({
-                        categoria_id: selectedCategory,
+                        categoria_id: activeDailyCat,
                         equipo_id: teamId,
                         grupo_id: teamGroupId,
                         correo_institucional: email,
@@ -754,14 +766,14 @@ import Layout from "../layouts/Layout.astro";
                     if (error) {
                         if (error.message.includes("unique_voto_por_grupo")) {
                             showAlert(
-                                `🚫 Ya emitiste un voto por este equipo en otra categoría. Para que la competencia sea justa, solo puedes votar 1 vez al mismo equipo en todo el evento. ¡Apoya a otro equipo en esta competencia!`,
+                                `🚫 Ya emitiste un voto por este equipo en otra categoría. Solo puedes votar 1 vez al mismo equipo en todo el evento.`,
                                 "error",
                             );
                         } else if (
                             error.message.includes("unique_voto_por_categoria")
                         ) {
                             showAlert(
-                                `🚫 Este correo ya emitió su voto en la categoría de "${getCategoryName(selectedCategory)}". Solo se permite 1 voto por categoría por persona, pero aún puedes votar en tus demás categorías.`,
+                                `🚫 Este correo ya emitió su voto en la categoría de "${getCategoryName(activeDailyCat)}". Solo se permite 1 voto por categoría por persona.`,
                                 "error",
                             );
                         } else if (
@@ -769,12 +781,7 @@ import Layout from "../layouts/Layout.astro";
                             error.message.includes("unique")
                         ) {
                             showAlert(
-                                `🚫 Voto duplicado: Ya votaste en esta categoría o ya votaste por este equipo en otra competencia.`,
-                                "error",
-                            );
-                        } else if (error.message.includes("check_correo")) {
-                            showAlert(
-                                "⚠️ Formato de correo no válido. Debe ser @est.univalle.edu (con 7 dígitos) o @univalle.edu.",
+                                `🚫 Voto duplicado: Ya votaste en esta categoría o por este equipo.`,
                                 "error",
                             );
                         } else {
@@ -789,14 +796,14 @@ import Layout from "../layouts/Layout.astro";
                         return;
                     }
 
-                    handleVoteSuccess(selectedCategory, teamId);
+                    handleVoteSuccess(activeDailyCat, teamId);
                 } catch (err: any) {
                     showAlert(`Error de conexión: ${err.message}`, "error");
                     submitVoteBtn.disabled = false;
                     submitVoteBtn.textContent = "Confirmar y Emitir mi Voto →";
                 }
             } else {
-                handleVoteSuccess(selectedCategory, teamId);
+                handleVoteSuccess(activeDailyCat, teamId);
             }
         });
     }
@@ -825,38 +832,13 @@ import Layout from "../layouts/Layout.astro";
             successTeamMessage.innerHTML = `
         Tu voto por <strong>"${teamName}"</strong> en la competencia de <strong>"${catName}"</strong> fue registrado exitosamente.<br><br>
         <span class="mono" style="font-size:12.5px; display:inline-block; background:rgba(0,0,0,0.05); padding:8px 12px; border-radius:6px; line-height:1.4;">
-          📌 <strong>Aviso del torneo:</strong> Ya utilizaste tu voto para este equipo. Ahora puedes apoyar a <strong>otros equipos</strong> en tus competencias restantes.
+          📌 <strong>Aviso del torneo:</strong> Tu voto para la categoría de hoy ha sido contabilizado con éxito.
         </span>
       `;
         }
 
         if (voteForm) voteForm.style.display = "none";
         if (voteSuccessScreen) voteSuccessScreen.style.display = "block";
-    }
-
-    if (voteAnotherCatBtn) {
-        voteAnotherCatBtn.addEventListener("click", () => {
-            if (voteForm) voteForm.style.display = "block";
-            if (voteSuccessScreen) voteSuccessScreen.style.display = "none";
-            submitVoteBtn.disabled = false;
-            submitVoteBtn.textContent = "Confirmar y Emitir mi Voto →";
-            if (voteAlert) voteAlert.style.display = "none";
-
-            if (teamCustomBanner) teamCustomBanner.style.display = "none";
-            if (standardVoteHead) standardVoteHead.style.display = "block";
-            catButtons.forEach((btn) => (btn.style.display = "block"));
-
-            const allCats = ["botargas", "stands", "enbanderamiento"];
-            const nextCat =
-                allCats.find((c) => c !== selectedCategory) || "botargas";
-
-            const nextBtn = document.querySelector<HTMLButtonElement>(
-                `.vote-cat-btn[data-cat="${nextCat}"]`,
-            );
-            if (nextBtn) {
-                nextBtn.click();
-            }
-        });
     }
 
     async function init() {
