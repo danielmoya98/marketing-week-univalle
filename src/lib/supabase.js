@@ -4,9 +4,9 @@ const supabaseUrl = import.meta.env.PUBLIC_SUPABASE_URL;
 const supabaseAnonKey = import.meta.env.PUBLIC_SUPABASE_ANON_KEY;
 
 export const isConfigured = Boolean(
-  supabaseUrl && 
-  supabaseAnonKey && 
-  !supabaseUrl.includes('tu-proyecto') && 
+  supabaseUrl &&
+  supabaseAnonKey &&
+  !supabaseUrl.includes('tu-proyecto') &&
   !supabaseAnonKey.includes('tu-anon-key')
 );
 
@@ -33,5 +33,9 @@ export const UNIVALLE_EMAIL_REGEX = /^[a-zA-Z0-9._%+-]*[0-9]{7}@(est\.)?univalle
 
 export function isValidUnivalleEmail(email) {
   if (!email || typeof email !== 'string') return false;
-  return UNIVALLE_EMAIL_REGEX.test(email.trim());
+  email = email.trim().toLowerCase();
+
+  const univalleRegex = /^([a-zA-Z0-9._%\+\-]*[0-9]{7}@est\.univalle\.edu|[a-zA-Z0-9._%\+\-]+@univalle\.edu)$/;
+
+  return univalleRegex.test(email);
 }
